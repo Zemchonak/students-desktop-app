@@ -1,61 +1,72 @@
-﻿using StudentsManagement.DataAccess.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using StudentsManagement.DataAccess.Entities;
+using System.Linq.Expressions;
 
 namespace StudentsManagement.DataAccess.Repositories
 {
     public class GenericRepository<TEntity> : IRepository<TEntity>
          where TEntity : class, IEntity
     {
-        private readonly CatalogServiceContext _catalogContext;
+        private readonly StudentsAppContext _context;
 
-        public GenericRepository(CatalogServiceContext catalogContext)
+        public GenericRepository(StudentsAppContext context)
         {
-            _catalogContext = catalogContext ?? throw new ArgumentNullException(nameof(catalogContext));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<int> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task<string> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            await _catalogContext.AddAsync(entity, cancellationToken);
-            await _catalogContext.SaveChangesAsync(cancellationToken);
-            _catalogContext.Entry(entity).State = EntityState.Detached;
+            await _context.AddAsync(entity, cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            _context.Entry(entity).State = EntityState.Detached;
             return entity.Id;
         }
 
-        public async Task<TEntity> GetByIdAsync(int entityId, CancellationToken cancellationToken = default)
+        public virtual async Task<TEntity> GetByIdAsync(string entityId, CancellationToken cancellationToken = default)
         {
-            var entity = await _catalogContext.Set<TEntity>()
+            var entity = await _context.Set<TEntity>()
                 .FirstOrDefaultAsync(e => e.Id == entityId, cancellationToken)
                 ?? throw new ArgumentException(nameof(entityId));
 
-            _catalogContext.Entry(entity).State = EntityState.Detached;
+            _context.Entry(entity).State = EntityState.Detached;
 
             return entity;
         }
 
-        public IQueryable<TEntity> GetAll()
+        public virtual IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
         {
-            return _catalogContext.Set<TEntity>().AsNoTracking();
+            var entities = _context.Set<TEntity>();
+
+            if (filter != null)
+            {
+                return entities.Where(filter).AsNoTracking();
+            }
+            else
+            { 
+                return entities.AsNoTracking();
+            }
         }
 
-        public async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            if (!_catalogContext.Set<TEntity>().Any(e => e.Id == entity.Id))
+            if (!_context.Set<TEntity>().Any(e => e.Id == entity.Id))
             {
                 throw new ArgumentException(nameof(entity));
             }
 
-            _catalogContext.Update(entity);
-            await _catalogContext.SaveChangesAsync(cancellationToken);
-            _catalogContext.Entry(entity).State = EntityState.Detached;
+            _context.Update(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            _context.Entry(entity).State = EntityState.Detached;
         }
 
-        public async Task DeleteAsync(int entityId, CancellationToken cancellationToken = default)
+        public virtual async Task DeleteAsync(string entityId, CancellationToken cancellationToken = default)
         {
             var entity = await GetByIdAsync(entityId, cancellationToken)
                 ?? throw new ArgumentException(nameof(entityId));
 
-            _catalogContext.Remove(entity);
-            await _catalogContext.SaveChangesAsync(cancellationToken);
-            _catalogContext.Entry(entity).State = EntityState.Detached;
+            _context.Remove(entity);
+            await _context.SaveChangesAsync(cancellationToken);
+            _context.Entry(entity).State = EntityState.Detached;
         }
     }
 }

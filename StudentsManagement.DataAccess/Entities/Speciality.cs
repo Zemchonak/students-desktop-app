@@ -4,18 +4,21 @@ namespace StudentsManagement.DataAccess.Entities
 {
     public class Speciality : BaseEntity
     {
-        public string Name { get; set; }
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
         public string FacultyId { get; set; }
     }
 
     public class Faculty : BaseEntity
     {
-        public string Name { get; set; }
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
     }
 
     public class Discipline : BaseEntity
     {
-        public string Name { get; set; }
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
     }
 
     public class User : BaseEntity

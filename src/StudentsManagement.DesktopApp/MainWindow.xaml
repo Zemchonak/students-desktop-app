@@ -4,9 +4,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp"
-        mc:Ignorable="d"
+        mc:Ignorable="d" MinHeight="800" MinWidth="1200"
         Title="Учёт успеваемости студентов" Height="450" Width="800" Background="AntiqueWhite">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.35*"/>
+            <ColumnDefinition Width="0.30*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
 
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Ближайшие аттестационные мероприятия специальности</TextBlock>
+        <ComboBox Name="SpecialitiesComboBox" Grid.Column="2" Grid.Row="1" FontSize="15"></ComboBox>
+        <DataGrid Name="MainDataGrid" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Binding="{Binding Path=Date}"/>
+                <DataGridTextColumn Header="Вид аттестации" Binding="{Binding Path=Type}"/>
+                <DataGridHyperlinkColumn Header="Факультет, специальность" Binding="{Binding Path=FacultySpecialityInfo}"/>
+                <DataGridHyperlinkColumn Header="Группа" Binding="{Binding Path=GroupName}"/>
+                <DataGridTextColumn Header="Преподаватель" Binding="{Binding Path=TeacherInfo}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
