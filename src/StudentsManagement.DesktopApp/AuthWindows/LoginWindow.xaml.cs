@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Helpers;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace StudentsManagement.DesktopApp.AuthWindows
 {
@@ -19,9 +11,42 @@ namespace StudentsManagement.DesktopApp.AuthWindows
     /// </summary>
     public partial class LoginWindow : Window
     {
-        public LoginWindow()
+        private readonly IAuthService _authService;
+
+        public event CustomEventHandler OnSuccess;
+
+        public LoginWindow(IAuthService authService)
         {
             InitializeComponent();
+            _authService = authService;
+        }
+
+        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(string.IsNullOrEmpty(EmailInput.Text))
+            {
+                MessageBox.Show(Localization.NotFilledInMessageText + "\"Email\"");
+            }
+
+            if(string.IsNullOrEmpty(PasswordInput.Password))
+            {
+                MessageBox.Show(Localization.NotFilledInMessageText + "\"Password\"");
+            }
+
+            try
+            {
+                var result = await _authService.SignIn(
+                    EmailInput.Text, 
+                    AuthHelper.CreateSha256Hash(PasswordInput.Password));
+
+                OnSuccess?.Invoke(this, new CustomEventArgs { Id = result });
+
+                this.Close();
+            }
+            catch(BusinessLogicException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

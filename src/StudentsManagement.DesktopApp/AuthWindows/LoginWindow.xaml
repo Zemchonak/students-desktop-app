@@ -5,8 +5,31 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp.AuthWindows"
         mc:Ignorable="d"
-        Title="LoginWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Вход в учётную запись" ResizeMode="NoResize" Height="200" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="AntiqueWhite">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Text="Войдите в систему, используя эл. почту и пароль"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="Email"/>
+        <TextBox Name="EmailInput" Grid.Column="2" Grid.Row="2"/>
+        <TextBlock Grid.Column="1" Grid.Row="4" Text="Пароль"/>
+        <PasswordBox PasswordChar="*" x:Name="PasswordInput" Grid.Column="2" Grid.Row="4" />
+
+        <Button x:Name="LoginButton" Content="Войти" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Click="LoginButton_Click"/>
     </Grid>
 </Window>

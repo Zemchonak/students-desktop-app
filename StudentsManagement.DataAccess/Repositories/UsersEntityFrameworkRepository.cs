@@ -1,21 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsManagement.DataAccess.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentsManagement.DataAccess.Repositories
 {
-    public class UsersEntityFrameworkRepository : GenericRepository<User>
+    public class UsersEntityFrameworkRepository : GenericRepository<User>, IUsersRepository
     {
         private readonly StudentsAppContext _context;
 
         public UsersEntityFrameworkRepository(StudentsAppContext context)
             : base(context)
         {
+            _context = context;
         }
 
         public override async Task<string> CreateAsync(User entity, CancellationToken cancellationToken = default)
@@ -71,6 +67,17 @@ namespace StudentsManagement.DataAccess.Repositories
             _context.Remove(entity);
             await _context.SaveChangesAsync(cancellationToken);
             _context.Entry(entity).State = EntityState.Detached;
+        }
+
+        public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        {
+            var entity = await _context.Set<User>()
+                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken)
+                ?? throw new ArgumentException(nameof(email));
+
+            _context.Entry(entity).State = EntityState.Detached;
+
+            return entity;
         }
     }
 }

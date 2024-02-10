@@ -9,6 +9,30 @@ namespace StudentsManagement.DataAccess
             : base(options)
         { }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Speciality>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Faculty>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Discipline>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<User>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Group>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<CurriculumUnit>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Attestation>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Mark>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<RetakeResult>().Property(e => e.Id)
+                .HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+        }
+
         public DbSet<Speciality> Specialities { get; set; }
 
         public DbSet<Faculty> Faculties { get; set; }
@@ -25,6 +49,6 @@ namespace StudentsManagement.DataAccess
 
         public DbSet<Mark> Marks { get; set; }
 
-        public DbSet<Mark> RetakeResult { get; set; }
+        public DbSet<RetakeResult> RetakeResult { get; set; }
     }
 }

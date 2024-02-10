@@ -6,7 +6,7 @@ namespace StudentsManagement.BusinessLogic.Validators
     {
         public Task Validate(UserDto entity, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
