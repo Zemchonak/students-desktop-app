@@ -1,8 +1,10 @@
 ﻿using StudentsManagement.DataAccess.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentsManagement.DataAccess.Entities
 {
+    [Table("Specialities")]
     public class Speciality : BaseEntity
     {
         [Required]
@@ -15,6 +17,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string FacultyId { get; set; }
     }
 
+    [Table("Faculties")]
     public class Faculty : BaseEntity
     {
         [Required]
@@ -24,6 +27,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string FullName { get; set; }
     }
 
+    [Table("Disciplines")]
     public class Discipline : BaseEntity
     {
         [Required]
@@ -33,6 +37,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string FullName { get; set; }
     }
 
+    [Table("Users")]
     public class User : BaseEntity
     {
         [Required]
@@ -57,6 +62,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string GroupId { get; set; }
     }
 
+    [Table("Groups")]
     public class Group : BaseEntity
     {
         [Required]
@@ -69,6 +75,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string SpecialityId { get; set; }
     }
 
+    [Table("CurriculumUnits")]
     public class CurriculumUnit : BaseEntity
     {
         [Required]
@@ -84,6 +91,7 @@ namespace StudentsManagement.DataAccess.Entities
         public MonitoringType Type { get; set; }
     }
 
+    [Table("Attestations")]
     public class Attestation : BaseEntity
     {
         [Required]
@@ -99,6 +107,7 @@ namespace StudentsManagement.DataAccess.Entities
         public DateTime Date { get; set; }
     }
 
+    [Table("Marks")]
     public class Mark : BaseEntity
     {
         [Required]
@@ -111,6 +120,7 @@ namespace StudentsManagement.DataAccess.Entities
         public int Value { get; set; }
     }
 
+    [Table("RetakeResults")]
     public class RetakeResult : BaseEntity
     {
         [Required]

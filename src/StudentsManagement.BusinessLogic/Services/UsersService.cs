@@ -29,6 +29,7 @@ namespace StudentsManagement.BusinessLogic.Services
             }
         }
 
+
         private Task CreateAdminUser()
         {
             return _usersRepository.CreateAsync(new User

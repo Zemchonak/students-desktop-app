@@ -1,4 +1,5 @@
 ﻿using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
 
 namespace StudentsManagement.BusinessLogic.Services
@@ -7,9 +8,9 @@ namespace StudentsManagement.BusinessLogic.Services
     {
         public Task<string> SignIn(string email, string passwordhash);
 
-        public Task<string> Register(string user, string passwordhash);
+        public Task<string> Register(string email, string passwordhash);
 
-        public Task<string> ChangePassword(string user, string oldPasswordhash, string newPasswordHash);
+        public Task<string> ChangePassword(string email, string oldPasswordhash, string newPasswordHash);
     }
 
     public class AuthService : IAuthService
@@ -21,21 +22,36 @@ namespace StudentsManagement.BusinessLogic.Services
             _userRepository = userRepository;
         }
 
-        public Task<string> ChangePassword(string user, string oldPasswordhash, string newPasswordHash)
+        public Task<string> ChangePassword(string email, string oldPasswordhash, string newPasswordHash)
         {
             throw new NotImplementedException();
         }
 
-        public Task<string> Register(string user, string passwordhash)
+        public async Task<string> Register(string email, string passwordhash)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var createdUserId = await _userRepository.CreateAsync(new User { Email = email, PasswordHash = passwordhash  });
+
+                return createdUserId;
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessLogicException(ex);
+            }
         }
 
+        /// <summary>
+        /// Позволяет осуществлять вход в аккаунт
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="passwordhash"></param>
+        /// <returns>Id пользователя, для которого осуществлён вход</returns>
+        /// <exception cref="BusinessLogicException"/>
         public async Task<string> SignIn(string email, string passwordhash)
         {
             try
             {
-
                 var user = await _userRepository.GetByEmailAsync(email);
 
                 if (user.PasswordHash != passwordhash)

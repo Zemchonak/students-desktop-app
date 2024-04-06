@@ -6,6 +6,7 @@ using StudentsManagement.BusinessLogic;
 using StudentsManagement.BusinessLogic.Mapper;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DataAccess;
+using StudentsManagement.DataAccess.Repositories;
 using StudentsManagement.DesktopApp.AuthWindows;
 using StudentsManagement.DesktopApp.Mapper;
 using StudentsManagement.DesktopApp.Utils;
@@ -31,6 +32,8 @@ namespace StudentsManagement.DesktopApp
                     var mapper = mapperConfig.CreateMapper();
                     services.AddSingleton(mapper);
 
+                    var connectionString = "Server=tcp:studentsmanagement.database.windows.net,1433;Initial Catalog=studentsmanagement-db;Persist Security Info=False;" +
+                    "User ID=aaddmin_1Db;Password=jt0Xlb#r2A#zkVPT;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
                     services.AddBusinessLogicServices(connectionString);
 
@@ -39,6 +42,7 @@ namespace StudentsManagement.DesktopApp
                     services.AddSingleton<App>();
                     services.AddSingleton<MainWindow>();
                     services.AddSingleton<LoginWindow>();
+
                 })
                 .Build();
 
@@ -48,6 +52,7 @@ namespace StudentsManagement.DesktopApp
                 {
                     var services = scope.ServiceProvider;
 
+                    var usersRepository = services.GetRequiredService<IUsersRepository>();
                     var usersService = services.GetRequiredService<IUsersService>();
 
                     await DatabaseInitializer.EnsureAdminExistsAsync(usersService);

@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp"
         mc:Ignorable="d" MinHeight="800" MinWidth="1200"
         Title="Учёт успеваемости студентов" Height="450" Width="800" Background="AntiqueWhite"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.03*"/>

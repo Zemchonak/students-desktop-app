@@ -3,6 +3,7 @@ using StudentsManagement.BusinessLogic.Enums;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.AuthWindows;
 using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Helpers;
 using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,14 +27,28 @@ namespace StudentsManagement.DesktopApp
             ProfileButton.Content = Localization.LoginButtonText;
 
             _authService = authService;
+
             _usersService = usersService;
             CurrentUserId = null;
+
+            /*
+             TODO
+                
+               Load faculties, specitialities, groups
+            
+                Fill SpecialitiesComboBox with options
+             */
         }
 
-        private void ProfileButton_Click(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private async void ProfileButton_Click(object sender, RoutedEventArgs e)
         {
             if(CurrentUserId == null)
             {
+
                 var loginWindow = new LoginWindow(_authService);
                 loginWindow.OnSuccess += HandleSuccessfulLogin;
                 loginWindow.Show();

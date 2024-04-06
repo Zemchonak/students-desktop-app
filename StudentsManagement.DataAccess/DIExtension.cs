@@ -13,7 +13,10 @@ namespace StudentsManagement.DataAccess
             return services
                 .AddDbContext<StudentsAppContext>(options =>
                 {
-                    options.UseSqlServer(connectionString);
+                    options.UseSqlServer(connectionString, builder =>
+                    {
+                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                    });
                 })
                 .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>))
                 .AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();

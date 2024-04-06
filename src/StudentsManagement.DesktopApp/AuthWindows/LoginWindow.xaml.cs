@@ -2,6 +2,7 @@
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Helpers;
+using System;
 using System.Windows;
 
 namespace StudentsManagement.DesktopApp.AuthWindows
@@ -23,28 +24,41 @@ namespace StudentsManagement.DesktopApp.AuthWindows
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
-            if(string.IsNullOrEmpty(EmailInput.Text))
+            LoginButton.IsEnabled = false;
+
+            if (string.IsNullOrEmpty(EmailInput.Text))
             {
                 MessageBox.Show(Localization.NotFilledInMessageText + "\"Email\"");
+                LoginButton.IsEnabled = true;
             }
 
             if(string.IsNullOrEmpty(PasswordInput.Password))
             {
                 MessageBox.Show(Localization.NotFilledInMessageText + "\"Password\"");
+                LoginButton.IsEnabled = true;
             }
 
             try
             {
-                var result = await _authService.SignIn(
-                    EmailInput.Text, 
-                    AuthHelper.CreateSha256Hash(PasswordInput.Password));
+                //var result = await _authService.SignIn(
+                //    EmailInput.Text, 
+                //    AuthHelper.CreateSha256Hash(PasswordInput.Password));
 
+                var result = Guid.NewGuid().ToString();
                 OnSuccess?.Invoke(this, new CustomEventArgs { Id = result });
 
                 this.Close();
             }
+            catch(Microsoft.Data.SqlClient.SqlException ex)
+            {
+                LoginButton.IsEnabled = true;
+
+                MessageBox.Show(ex.Message, Localization.DatabaseExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
             catch(BusinessLogicException ex)
             {
+                LoginButton.IsEnabled = true;
+
                 MessageBox.Show(ex.Message);
             }
         }

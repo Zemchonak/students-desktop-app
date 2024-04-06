@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsManagement.DataAccess.Entities;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace StudentsManagement.DataAccess.Repositories
 {
@@ -12,6 +13,11 @@ namespace StudentsManagement.DataAccess.Repositories
             : base(context)
         {
             _context = context;
+        }
+
+        public Task EnsureUsersTableAvailable()
+        {
+            return _context.Database.EnsureCreatedAsync();
         }
 
         public override async Task<string> CreateAsync(User entity, CancellationToken cancellationToken = default)
