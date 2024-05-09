@@ -2,60 +2,37 @@
 using Microsoft.EntityFrameworkCore;
 using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Exceptions;
-using StudentsManagement.BusinessLogic.Validators;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
 using System.Linq.Expressions;
 
 namespace StudentsManagement.BusinessLogic.Services
 {
-    public class GenericEntityService<TEntity, TEntityDto> : IService<TEntityDto>
+    public abstract class  GenericEntityService<TEntity, TEntityDto> : IService<TEntityDto>
         where TEntity : class, IEntity
         where TEntityDto : class, IDto
     {
-        private protected readonly IValidator<TEntityDto> _validator;
-        private protected readonly IRepository<TEntity> _repository;
-        private protected readonly IMapper _mapper;
+        private protected IRepository<TEntity> _repository;
+        private protected IMapper _mapper;
 
-        public GenericEntityService(IValidator<TEntityDto> validator, IRepository<TEntity> repository, IMapper mapper)
+        public Guid Create(TEntityDto entity)
         {
-            _validator = validator;
-            _repository = repository;
-            _mapper = mapper;
+            return _repository.Create(_mapper.Map<TEntity>(entity));
         }
 
-        public Task<string> CreateAsync(TEntityDto entity, CancellationToken cancellationToken = default)
+        public IReadOnlyCollection<TEntityDto> GetAll(Expression<Func<TEntityDto, bool>> filter = null)
         {
-            _validator.Validate(entity);
-            return _repository.CreateAsync(_mapper.Map<TEntity>(entity), cancellationToken);
-        }
-
-        public Task DeleteAsync(string entityId, CancellationToken cancellationToken = default)
-        {
-            try
-            {
-                return _repository.DeleteAsync(entityId, cancellationToken);
-            }
-            catch (ArgumentException)
-            {
-                throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entityId}' to delete.");
-            }
-        }
-
-        public async Task<IReadOnlyCollection<TEntityDto>> GetAllAsync(Expression<Func<TEntityDto, bool>> filter = null,
-            CancellationToken cancellationToken = default)
-        {
-            var allItems = await _repository.GetAll().ToListAsync();
+            var allItems = _repository.GetAll().ToList();
 
             return _mapper.Map<List<TEntityDto>>(allItems.AsReadOnly());
         }
 
-        public async Task<TEntityDto> GetById(string entityId, CancellationToken cancellationToken = default)
+        public TEntityDto GetById(Guid entityId)
         {
             try
             {
                 return _mapper.Map<TEntityDto>(
-                    await _repository.GetByIdAsync(entityId, cancellationToken));
+                    _repository.GetById(entityId));
             }
             catch (ArgumentException)
             {
@@ -63,19 +40,32 @@ namespace StudentsManagement.BusinessLogic.Services
             }
         }
 
-        public Task UpdateAsync(TEntityDto entity, CancellationToken cancellationToken = default)
+        public void Update(TEntityDto entity)
         {
             try
             {
-                _validator.Validate(entity, cancellationToken);
                 var mappedEntity = _mapper.Map<TEntity>(entity);
 
-                return _repository.CreateAsync(mappedEntity, cancellationToken);
+                _repository.Update(mappedEntity);
             }
             catch (ArgumentException)
             {
                 throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entity.Id}' to update.");
             }
         }
+
+        public void Delete(Guid entityId)
+        {
+            try
+            {
+                _repository.Delete(entityId);
+            }
+            catch (ArgumentException)
+            {
+                throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entityId}' to delete.");
+            }
+        }
+
+        public abstract void Validate(TEntityDto entity);
     }
 }

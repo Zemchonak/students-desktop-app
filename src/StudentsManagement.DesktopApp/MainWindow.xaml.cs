@@ -1,12 +1,12 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
-using StudentsManagement.BusinessLogic.Enums;
 using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DesktopApp.AuthWindows;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Helpers;
-using System.ComponentModel;
+using StudentsManagement.DesktopApp.Utils;
+using StudentsManagement.DesktopApp.Windows;
+using StudentsManagement.DesktopApp.Windows.Auth;
+using StudentsManagement.DesktopApp.Windows.Profile;
+using System;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace StudentsManagement.DesktopApp
@@ -16,69 +16,95 @@ namespace StudentsManagement.DesktopApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string CurrentUserId;
+        private Guid? CurrentUserId;
 
         private readonly IAuthService _authService;
         private readonly IUsersService _usersService;
+        private readonly IFacultiesService _facultiesService;
+        private readonly ISpecialitiesService _specialitiesService;
+        private readonly IDisciplinesService _disciplinesService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly IGroupsService _groupsService;
+        private readonly IAttestationsService _attestationsService;
+        private readonly IMarksService _marksService;
+        private readonly IRetakeResultsService _retakeResultsService;
 
-        public MainWindow(IAuthService authService, IUsersService usersService)
+        public MainWindow(
+            IAuthService authService,
+            IUsersService usersService,
+            IFacultiesService facultiesService,
+            ISpecialitiesService specialitiesService,
+            IDisciplinesService disciplinesService,
+            ICurriculumUnitsService curriculumUnitsService,
+            IGroupsService groupsService,
+            IAttestationsService attestationsService,
+            IMarksService marksService,
+            IRetakeResultsService retakeResultsService)
         {
             InitializeComponent();
-            ProfileButton.Content = Localization.LoginButtonText;
+            ProfileButton.Content = AppLocalization.LoginButtonText;
 
             _authService = authService;
-
             _usersService = usersService;
+            _facultiesService = facultiesService;
+            _specialitiesService = specialitiesService;
+            _disciplinesService = disciplinesService;
+            _curriculumUnitsService = curriculumUnitsService;
+            _groupsService = groupsService;
+            _attestationsService = attestationsService;
+            _marksService = marksService;
+            _retakeResultsService = retakeResultsService;
+
             CurrentUserId = null;
 
-            /*
-             TODO
-                
-               Load faculties, specitialities, groups
-            
-                Fill SpecialitiesComboBox with options
-             */
-        }
+            FillSpecialitiesComboBox();
+    }
 
-        private async void Window_Loaded(object sender, RoutedEventArgs e)
+    private void FillSpecialitiesComboBox()
+    {
+        /*
+         TODO
+
+           Load faculties, specitialities, groups
+
+            Fill SpecialitiesComboBox with options
+         */
+    }
+
+    private void ProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (CurrentUserId == null)
         {
+            var loginWindow = new LoginWindow(_authService);
+            loginWindow.OnSuccess += HandleSuccessfulLogin;
+            loginWindow.Show();
         }
-
-        private async void ProfileButton_Click(object sender, RoutedEventArgs e)
+        else
         {
-            if(CurrentUserId == null)
-            {
-
-                var loginWindow = new LoginWindow(_authService);
-                loginWindow.OnSuccess += HandleSuccessfulLogin;
-                loginWindow.Show();
-            }
-            else
-            {
-                // Profile window
-                MessageBox.Show("PROFILE WINDOW!");
-            }
-        }
-
-        private async void HandleSuccessfulLogin(object sender, CustomEventArgs e)
-        {
-            ProfileButton.Content = Localization.ProfileButtonText;
-
-            CurrentUserId = e.Id;
-
-            var user = await _usersService.GetById(CurrentUserId);
-
-            // получить ФИО пользователя
-            var userName = new StringBuilder($"{user.FirstName} ");
-            if(!string.IsNullOrEmpty(user.MiddleName))
-            {
-                userName.Append($"{user.MiddleName[0]}.");
-            }
-            userName.Append($"{user.LastName[0]}.");
-
-            CurrentUser.Text = Localization.SignedInAsText + userName.ToString();
-
-            MessageBox.Show(Localization.WelcomeMessageText + userName.ToString());
+            var profileWindow = new ProfileWindow(CurrentUserId.Value, _facultiesService);
+            profileWindow.Show();
         }
     }
+
+    private void HandleSuccessfulLogin(object sender, CustomEventArgs e)
+    {
+        ProfileButton.Content = AppLocalization.ProfileButtonText;
+
+        CurrentUserId = e.Id;
+
+        var user = _usersService.GetById(CurrentUserId.Value);
+
+        // получить ФИО пользователя
+        var userName = new StringBuilder($"{user.FirstName} ");
+        if (!string.IsNullOrEmpty(user.MiddleName))
+        {
+            userName.Append($"{user.MiddleName[0]}.");
+        }
+        userName.Append($"{user.LastName[0]}.");
+
+        CurrentUser.Text = AppLocalization.SignedInAsText + userName.ToString();
+
+        MessageBox.Show(AppLocalization.WelcomeMessageText + userName.ToString());
+    }
+}
 }

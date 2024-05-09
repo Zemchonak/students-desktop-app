@@ -14,18 +14,19 @@ namespace StudentsManagement.DataAccess.Repositories
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public virtual async Task<string> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual Guid Create(TEntity entity)
         {
-            await _context.AddAsync(entity, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.Add(entity);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
+
             return entity.Id;
         }
 
-        public virtual async Task<TEntity> GetByIdAsync(string entityId, CancellationToken cancellationToken = default)
+        public virtual TEntity GetById(Guid entityId)
         {
-            var entity = await _context.Set<TEntity>()
-                .FirstOrDefaultAsync(e => e.Id == entityId, cancellationToken)
+            var entity = _context.Set<TEntity>()
+                .FirstOrDefault(e => e.Id == entityId)
                 ?? throw new ArgumentException(nameof(entityId));
 
             _context.Entry(entity).State = EntityState.Detached;
@@ -42,30 +43,30 @@ namespace StudentsManagement.DataAccess.Repositories
                 return entities.Where(filter).AsNoTracking();
             }
             else
-            { 
+            {
                 return entities.AsNoTracking();
             }
         }
 
-        public virtual async Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public virtual void Update(TEntity entity)
         {
             if (!_context.Set<TEntity>().Any(e => e.Id == entity.Id))
             {
-                throw new ArgumentException(nameof(entity));
+                throw new ArgumentException(null, nameof(entity));
             }
 
             _context.Update(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
         }
 
-        public virtual async Task DeleteAsync(string entityId, CancellationToken cancellationToken = default)
+        public virtual void Delete(Guid entityId)
         {
-            var entity = await GetByIdAsync(entityId, cancellationToken)
+            var entity = GetById(entityId)
                 ?? throw new ArgumentException(nameof(entityId));
 
             _context.Remove(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
         }
     }

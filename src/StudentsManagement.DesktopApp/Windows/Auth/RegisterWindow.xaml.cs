@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.AuthWindows
+namespace StudentsManagement.DesktopApp.Windows.Auth
 {
     /// <summary>
     /// Interaction logic for RegisterWindow.xaml

@@ -4,14 +4,6 @@ using StudentsManagement.DataAccess.Repositories;
 
 namespace StudentsManagement.BusinessLogic.Services
 {
-    public interface IAuthService
-    {
-        public Task<string> SignIn(string email, string passwordhash);
-
-        public Task<string> Register(string email, string passwordhash);
-
-        public Task<string> ChangePassword(string email, string oldPasswordhash, string newPasswordHash);
-    }
 
     public class AuthService : IAuthService
     {
@@ -22,16 +14,16 @@ namespace StudentsManagement.BusinessLogic.Services
             _userRepository = userRepository;
         }
 
-        public Task<string> ChangePassword(string email, string oldPasswordhash, string newPasswordHash)
+        public void ChangePassword(string email, string oldPasswordhash, string newPasswordHash)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<string> Register(string email, string passwordhash)
+        public Guid Register(string email, string passwordhash)
         {
             try
             {
-                var createdUserId = await _userRepository.CreateAsync(new User { Email = email, PasswordHash = passwordhash  });
+                var createdUserId = _userRepository.Create(new User { Email = email, PasswordHash = passwordhash  });
 
                 return createdUserId;
             }
@@ -48,11 +40,11 @@ namespace StudentsManagement.BusinessLogic.Services
         /// <param name="passwordhash"></param>
         /// <returns>Id пользователя, для которого осуществлён вход</returns>
         /// <exception cref="BusinessLogicException"/>
-        public async Task<string> SignIn(string email, string passwordhash)
+        public Guid SignIn(string email, string passwordhash)
         {
             try
             {
-                var user = await _userRepository.GetByEmailAsync(email);
+                var user = _userRepository.GetByEmail(email);
 
                 if (user.PasswordHash != passwordhash)
                 {

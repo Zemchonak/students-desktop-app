@@ -15,23 +15,24 @@ namespace StudentsManagement.DataAccess.Repositories
             _context = context;
         }
 
-        public Task EnsureUsersTableAvailable()
+        public void EnsureUsersTableAvailable()
         {
-            return _context.Database.EnsureCreatedAsync();
+            _context.Database.EnsureCreated();
         }
 
-        public override async Task<string> CreateAsync(User entity, CancellationToken cancellationToken = default)
+        public override Guid Create(User entity)
         {
-            await _context.AddAsync(entity, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.Add(entity);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
+
             return entity.Id;
         }
 
-        public override async Task<User> GetByIdAsync(string entityId, CancellationToken cancellationToken = default)
+        public override User GetById(Guid entityId)
         {
-            var entity = await _context.Set<User>()
-                .FirstOrDefaultAsync(e => e.Id == entityId, cancellationToken)
+            var entity = _context.Set<User>()
+                .FirstOrDefault(e => e.Id == entityId)
                 ?? throw new ArgumentException(nameof(entityId));
 
             _context.Entry(entity).State = EntityState.Detached;
@@ -53,7 +54,7 @@ namespace StudentsManagement.DataAccess.Repositories
             }
         }
 
-        public override async Task UpdateAsync(User entity, CancellationToken cancellationToken = default)
+        public override void Update(User entity)
         {
             if (!_context.Set<User>().Any(e => e.Id == entity.Id))
             {
@@ -61,24 +62,24 @@ namespace StudentsManagement.DataAccess.Repositories
             }
 
             _context.Update(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
         }
 
-        public override async Task DeleteAsync(string entityId, CancellationToken cancellationToken = default)
+        public override void Delete(Guid entityId)
         {
-            var entity = await GetByIdAsync(entityId, cancellationToken)
+            var entity = GetById(entityId)
                 ?? throw new ArgumentException(nameof(entityId));
 
             _context.Remove(entity);
-            await _context.SaveChangesAsync(cancellationToken);
+            _context.SaveChanges();
             _context.Entry(entity).State = EntityState.Detached;
         }
 
-        public async Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+        public User GetByEmail(string email)
         {
-            var entity = await _context.Set<User>()
-                .FirstOrDefaultAsync(u => u.Email == email, cancellationToken)
+            var entity = _context.Set<User>()
+                .FirstOrDefault(u => u.Email == email)
                 ?? throw new ArgumentException(nameof(email));
 
             _context.Entry(entity).State = EntityState.Detached;

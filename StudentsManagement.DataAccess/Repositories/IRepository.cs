@@ -6,14 +6,14 @@ namespace StudentsManagement.DataAccess.Repositories
     public interface IRepository<TEntity>
         where TEntity : class, IEntity
     {
-        Task<string> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
+        Guid Create(TEntity entity);
 
         IQueryable<TEntity> GetAll(Expression<Func<TEntity,bool>> filter = null);
 
-        Task<TEntity> GetByIdAsync(string entityId, CancellationToken cancellationToken = default);
+        TEntity GetById(Guid entityId);
 
-        Task UpdateAsync(TEntity entity, CancellationToken cancellationToken = default);
+        void Update(TEntity entity);
 
-        Task DeleteAsync(string entityId, CancellationToken cancellationToken = default);
+        void Delete(Guid entityId);
     }
 }

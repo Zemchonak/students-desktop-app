@@ -5,9 +5,9 @@ namespace StudentsManagement.DesktopApp.Utils
 {
     public static class DatabaseInitializer
     {
-        public static async Task EnsureAdminExistsAsync(IUsersService usersService)
+        public static void EnsureAdminExists(IUsersService usersService)
         {
-            await usersService.EnsureAdminExists();
+            usersService.EnsureAdminExists();
         }
     }
 }

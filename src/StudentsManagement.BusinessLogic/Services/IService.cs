@@ -6,15 +6,16 @@ namespace StudentsManagement.BusinessLogic.Services
     public interface IService<TEntityDto>
         where TEntityDto : class, IDto
     {
-        Task<string> CreateAsync(TEntityDto entity, CancellationToken cancellationToken = default);
+        Guid Create(TEntityDto entity);
 
-        Task<IReadOnlyCollection<TEntityDto>> GetAllAsync(Expression<Func<TEntityDto, bool>> filter = null,
-            CancellationToken cancellationToken = default);
+        IReadOnlyCollection<TEntityDto> GetAll(Expression<Func<TEntityDto, bool>> filter = null);
 
-        Task<TEntityDto> GetById(string entityId, CancellationToken cancellationToken = default);
+        TEntityDto GetById(Guid entityId);
 
-        Task UpdateAsync(TEntityDto entity, CancellationToken cancellationToken = default);
+        void Update(TEntityDto entity);
 
-        Task DeleteAsync(string entityId, CancellationToken cancellationToken = default);
+        void Delete(Guid entityId);
+
+        void Validate(TEntityDto entity);
     }
 }

@@ -4,7 +4,7 @@ namespace StudentsManagement.DataAccess.Repositories
 {
     public interface IUsersRepository : IRepository<User>
     {
-        public Task<User> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
-        public Task EnsureUsersTableAvailable();
+        public User GetByEmail(string email);
+        public void EnsureUsersTableAvailable();
     }
 }

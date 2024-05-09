@@ -4,10 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp"
-        mc:Ignorable="d" MinHeight="800" MinWidth="1200"
+        mc:Ignorable="d"
+        MinHeight="800" MinWidth="1200"
         Title="Учёт успеваемости студентов" Height="450" Width="800" Background="AntiqueWhite"
-        WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded">
+        WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.03*"/>

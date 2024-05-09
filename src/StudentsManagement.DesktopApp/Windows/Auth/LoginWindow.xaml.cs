@@ -2,10 +2,10 @@
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Helpers;
-using System;
+using StudentsManagement.DesktopApp.Utils;
 using System.Windows;
 
-namespace StudentsManagement.DesktopApp.AuthWindows
+namespace StudentsManagement.DesktopApp.Windows.Auth
 {
     /// <summary>
     /// Interaction logic for LoginWindow.xaml
@@ -22,30 +22,29 @@ namespace StudentsManagement.DesktopApp.AuthWindows
             _authService = authService;
         }
 
-        private async void LoginButton_Click(object sender, RoutedEventArgs e)
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             LoginButton.IsEnabled = false;
 
             if (string.IsNullOrEmpty(EmailInput.Text))
             {
-                MessageBox.Show(Localization.NotFilledInMessageText + "\"Email\"");
+                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Email\"");
                 LoginButton.IsEnabled = true;
             }
 
             if(string.IsNullOrEmpty(PasswordInput.Password))
             {
-                MessageBox.Show(Localization.NotFilledInMessageText + "\"Password\"");
+                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Password\"");
                 LoginButton.IsEnabled = true;
             }
 
             try
             {
-                //var result = await _authService.SignIn(
-                //    EmailInput.Text, 
-                //    AuthHelper.CreateSha256Hash(PasswordInput.Password));
+                var result = _authService.SignIn(
+                    EmailInput.Text,
+                    AuthHelper.CreateSha256Hash(PasswordInput.Password));
 
-                var result = Guid.NewGuid().ToString();
-                OnSuccess?.Invoke(this, new CustomEventArgs { Id = result });
+                OnSuccess?.Invoke(this, new CustomEventArgs(result));
 
                 this.Close();
             }
@@ -53,7 +52,7 @@ namespace StudentsManagement.DesktopApp.AuthWindows
             {
                 LoginButton.IsEnabled = true;
 
-                MessageBox.Show(ex.Message, Localization.DatabaseExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, AppLocalization.DatabaseExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch(BusinessLogicException ex)
             {
@@ -61,6 +60,15 @@ namespace StudentsManagement.DesktopApp.AuthWindows
 
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void LoginAsAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO REMOVE THIS WINDOW
+            EmailInput.Text = "admin@ya.ru";
+            PasswordInput.Password = "123456_Aa";
+
+            LoginButton_Click(sender, e);
         }
     }
 }

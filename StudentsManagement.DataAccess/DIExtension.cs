@@ -8,15 +8,20 @@ namespace StudentsManagement.DataAccess
     {
         public static IServiceCollection AddDataAccessServices(
             this IServiceCollection services,
-            string connectionString)
+            string connectionString = null)
         {
             return services
                 .AddDbContext<StudentsAppContext>(options =>
                 {
-                    options.UseSqlServer(connectionString, builder =>
+                    if (string.IsNullOrEmpty(connectionString))
                     {
-                        builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
-                    });
+                        options.UseInMemoryDatabase("StudentsDb");
+                    }
+                    else
+                    {
+                        options.UseSqlServer(connectionString);
+                        // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    }
                 })
                 .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>))
                 .AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();

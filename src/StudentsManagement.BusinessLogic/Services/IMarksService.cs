@@ -2,8 +2,8 @@
 
 namespace StudentsManagement.BusinessLogic.Services
 {
-    public interface IUsersService : IService<UserDto>
+    public interface IMarksService : IService<MarkDto>
     {
-        public void EnsureAdminExists();
+        public void Validate(MarkDto entity);
     }
 }

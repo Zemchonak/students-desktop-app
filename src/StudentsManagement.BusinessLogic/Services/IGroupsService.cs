@@ -2,8 +2,8 @@
 
 namespace StudentsManagement.BusinessLogic.Services
 {
-    public interface IUsersService : IService<UserDto>
+    public interface IGroupsService : IService<GroupDto>
     {
-        public void EnsureAdminExists();
+        public void Validate(GroupDto entity);
     }
 }

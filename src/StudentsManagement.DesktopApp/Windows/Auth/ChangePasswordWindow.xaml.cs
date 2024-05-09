@@ -12,14 +12,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.ManagementWindows
+namespace StudentsManagement.DesktopApp.Windows.Auth
 {
     /// <summary>
-    /// Interaction logic for ManagementWindow.xaml
+    /// Interaction logic for ChangePasswordWindow.xaml
     /// </summary>
-    public partial class ManagementWindow : Window
+    public partial class ChangePasswordWindow : Window
     {
-        public ManagementWindow()
+        public ChangePasswordWindow()
         {
             InitializeComponent();
         }
