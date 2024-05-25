@@ -1,44 +1,53 @@
-﻿
-using StudentsManagement.BusinessLogic.Dtos;
+﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
 using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Specialities;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 
-namespace StudentsManagement.DesktopApp.Windows.Faculties
+namespace StudentsManagement.DesktopApp.Windows.Specialities
 {
     /// <summary>
-    /// Interaction logic for FacultiesWindow.xaml
+    /// Interaction logic for SpecialitiesWindow.xaml
     /// </summary>
-    public partial class FacultiesWindow : Window
+    public partial class SpecialitiesWindow : Window
     {
-        private readonly ISpecialitiesService _specialitiesService;
-        private readonly IFacultiesService _entityService;
+        private InfoModel _facultyInfo;
 
-        public FacultiesWindow(IFacultiesService facultiesService, ISpecialitiesService specialitiesService)
+        private readonly ISpecialitiesService _entityService;
+
+        public SpecialitiesWindow(InfoModel facultyInfo, ISpecialitiesService specialitiesService)
         {
             InitializeComponent();
-            _entityService = facultiesService;
-            _specialitiesService = specialitiesService;
+
+            Title += facultyInfo.Info;
+            HeaderText.Text += facultyInfo.Info;
+
+            _facultyInfo = facultyInfo;
+            _entityService = specialitiesService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new FacultyForm(AppLocalization.AddFacultyForm, _entityService);
+            var form = new SpecialitiesForm(AppLocalization.AddSpecialityForm,
+                _facultyInfo,
+                _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
 
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            // get selected faculty
-            var selectedItem = MainDataGrid.SelectedItem as FacultyDto;
+            var selectedItem = GetSelectedItem<SpecialityDto>();
+            if (selectedItem != null) { return; }
 
-            var form = new FacultyForm(AppLocalization.UpdateFacultyForm, _entityService, selectedItem);
+            var form = new SpecialitiesForm(AppLocalization.UpdateFacultyForm,
+                _facultyInfo,
+                _entityService,
+                selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -47,12 +56,14 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
         {
             try
             {
-                var selectedItem = MainDataGrid.SelectedItem as FacultyDto;
+                var selectedItem = GetSelectedItem<SpecialityDto>();
+                if (selectedItem != null) { return; }
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
                     {
-                        $"Факультет",
+                        $"Специальность",
+                        $"Факультет: {_facultyInfo.Info}",
                         $"Кр. назв.: {selectedItem.ShortName}",
                         $"Полное назв.: {selectedItem.FullName}",
                     });
@@ -67,13 +78,15 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
             }
         }
 
-        private void MainDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void MainDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var selectedItem = GetSelectedItem<FacultyDto>();
-            if (selectedItem == null) { return; }
+            var selectedItem = GetSelectedItem<SpecialityDto>();
+            if (selectedItem != null) { return; }
 
-            var specialitiesWindow = new SpecialitiesWindow(new InfoModel(selectedItem.Id, selectedItem.ShortName), _specialitiesService);
-            specialitiesWindow.Show();
+            var childWindow = new SpecialitiesWindow(
+                new InfoModel(selectedItem.Id, selectedItem.ShortName),
+                _entityService);
+            childWindow.Show();
         }
 
         // Common logic
@@ -93,11 +106,11 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
         }
 
         private T GetSelectedItem<T>()
-            where T : class, IDto
+            where T: class, IDto
         {
             var selectedItem = MainDataGrid.SelectedItem as T;
 
-            if (selectedItem == null)
+            if(selectedItem == null)
             {
                 MessageBox.Show(
                     AppLocalization.SelectSomethingMessageText,

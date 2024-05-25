@@ -14,7 +14,7 @@ namespace StudentsManagement.DataAccess.Entities
         public string FullName { get; set; }
 
         [Required]
-        public string FacultyId { get; set; }
+        public Guid FacultyId { get; set; }
     }
 
     [Table("Faculties")]
@@ -54,12 +54,14 @@ namespace StudentsManagement.DataAccess.Entities
         [Required]
         public string LastName { get; set; }
 
+        public bool? IsDisabled { get; set; }
+
         [Required]
         public UserRole Role { get; set; }
 
         public string Info { get; set; }
 
-        public string GroupId { get; set; }
+        public Guid? GroupId { get; set; }
     }
 
     [Table("Groups")]
@@ -72,20 +74,20 @@ namespace StudentsManagement.DataAccess.Entities
         public int Cource { get; set; }
 
         [Required]
-        public string SpecialityId { get; set; }
+        public Guid SpecialityId { get; set; }
     }
 
     [Table("CurriculumUnits")]
     public class CurriculumUnit : BaseEntity
     {
         [Required]
-        public string SpecialityId { get; set; }
+        public Guid SpecialityId { get; set; }
 
         [Required]
         public int Cource { get; set; }
 
         [Required]
-        public string DisciplineId { get; set; }
+        public Guid DisciplineId { get; set; }
 
         [Required]
         public MonitoringType Type { get; set; }
@@ -95,13 +97,13 @@ namespace StudentsManagement.DataAccess.Entities
     public class Attestation : BaseEntity
     {
         [Required]
-        public string TeacherId { get; set; }
+        public Guid? TeacherId { get; set; }
 
         [Required]
-        public string GroupId { get; set; }
+        public Guid? GroupId { get; set; }
 
         [Required]
-        public string CurriculumUnitId { get; set; }
+        public Guid? CurriculumUnitId { get; set; }
 
         [Required]
         public DateTime Date { get; set; }
@@ -111,13 +113,11 @@ namespace StudentsManagement.DataAccess.Entities
     public class Mark : BaseEntity
     {
         [Required]
-        public string StudentId { get; set; }
+        public Guid StudentId { get; set; }
 
-        [Required]
-        public string AttestationId { get; set; }
+        public Guid AttestationId { get; set; }
 
-        [Required]
-        public int Value { get; set; }
+        public int? Value { get; set; }
     }
 
     [Table("RetakeResults")]
@@ -129,8 +129,7 @@ namespace StudentsManagement.DataAccess.Entities
         [Required]
         public string AttestationId { get; set; }
 
-        [Required]
-        public int Value { get; set; }
+        public int? Value { get; set; }
 
         [Required]
         public DateTime Date { get; set; }

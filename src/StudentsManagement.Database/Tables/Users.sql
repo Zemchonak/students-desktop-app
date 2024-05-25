@@ -1,0 +1,14 @@
+﻿CREATE TABLE [dbo].[Users]
+(
+    Id UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
+    Email NVARCHAR(255) NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    FirstName NVARCHAR(100) NOT NULL,
+    MiddleName NVARCHAR(100),
+    LastName NVARCHAR(100) NOT NULL,
+    IsDisabled BIT,
+    Role INT NOT NULL,
+    Info NVARCHAR(100),
+    GroupId UNIQUEIDENTIFIER NULL,
+    FOREIGN KEY (GroupId) REFERENCES Groups(Id),
+)

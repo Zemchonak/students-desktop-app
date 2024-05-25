@@ -5,10 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Profile"
         mc:Ignorable="d"
-        MinHeight="800" MinWidth="1200"
-        Title="Личный кабинет " Height="450" Width="800" Background="AntiqueWhite"
+        MinHeight="200" MinWidth="400"
+        Title="Личный кабинет " Height="200" Width="400" Background="AntiqueWhite"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Button Name="FacultiesBtn" Content="Факультеты" Margin="43,37,1060,704" Click="FacultiesBtn_Click"/>
+        <Menu Height="25" VerticalAlignment="Top">
+            <MenuItem Header="Данные">
+                <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
+                <Separator />
+                <MenuItem Header="Факультеты и специальности" Click="FacultiesMenuItem_Click"></MenuItem>
+                <MenuItem Header="Дисциплины" Click="DisciplinesMenuItem_Click"></MenuItem>
+                <MenuItem Header="выф" ></MenuItem>
+                <Separator />
+                <MenuItem Header="Exit" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Статистика" ></MenuItem>
+        </Menu>
     </Grid>
 </Window>

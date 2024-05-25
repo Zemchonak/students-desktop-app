@@ -1,0 +1,8 @@
+﻿CREATE TABLE [dbo].[CurriculumUnits]
+(
+    Id UNIQUEIDENTIFIER PRIMARY KEY DEFAULT NEWID(),
+    SpecialityId UNIQUEIDENTIFIER NOT NULL,
+    Cource INT NOT NULL,
+    DisciplineId UNIQUEIDENTIFIER NOT NULL,
+    Type INT NOT NULL
+)

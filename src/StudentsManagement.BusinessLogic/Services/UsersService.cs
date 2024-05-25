@@ -2,7 +2,6 @@
 using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Exceptions;
 using StudentsManagement.DataAccess.Entities;
-using StudentsManagement.DataAccess.Enums;
 using StudentsManagement.DataAccess.Repositories;
 
 namespace StudentsManagement.BusinessLogic.Services
@@ -44,30 +43,6 @@ namespace StudentsManagement.BusinessLogic.Services
             {
                 throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Пароль"));
             }
-        }
-
-        public void EnsureAdminExists()
-        {
-            try
-            {
-                _usersRepository.GetByEmail(Constants.AdminEmail);
-            }
-            catch (Exception)
-            {
-                CreateAdminUser();
-            }
-        }
-
-        private void CreateAdminUser()
-        {
-            _usersRepository.Create(new User
-            {
-                Email = Constants.AdminEmail,
-                PasswordHash = Constants.AdminPasswordHash,
-                FirstName = Constants.AdminFirstName,
-                LastName = Constants.AdminLastName,
-                Role = UserRole.Admin
-            });
         }
     }
 }

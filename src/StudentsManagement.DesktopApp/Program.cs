@@ -46,15 +46,15 @@ namespace StudentsManagement.DesktopApp
                 })
                 .Build();
 
-            using (var scope = host.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
+            //using (var scope = host.Services.CreateScope())
+            //{
+            //    var services = scope.ServiceProvider;
 
-                var usersRepository = services.GetRequiredService<IUsersRepository>();
-                var usersService = services.GetRequiredService<IUsersService>();
+            //    var usersRepository = services.GetRequiredService<IUsersRepository>();
+            //    var usersService = services.GetRequiredService<IUsersService>();
 
-                DatabaseInitializer.EnsureAdminExists(usersService);
-            }
+            //    DatabaseInitializer.EnsureAdminExists(usersService);
+            //}
 
             var app = host.Services.GetService<App>();
 

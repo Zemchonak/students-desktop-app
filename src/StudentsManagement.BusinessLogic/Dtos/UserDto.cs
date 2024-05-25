@@ -8,9 +8,10 @@ namespace StudentsManagement.BusinessLogic.Dtos
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
+        public bool? IsDisabled { get; set; }
         public string PasswordHash { get; set; }
         public UserRole Role { get; set; }
         public string Info { get; set; }
-        public string GroupId { get; set; }
+        public Guid? GroupId { get; set; }
     }
 }

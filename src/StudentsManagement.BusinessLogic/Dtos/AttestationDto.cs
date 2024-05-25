@@ -2,9 +2,9 @@
 {
     public class AttestationDto : BaseDto
     {
-        public string TeacherId { get; set; }
-        public string GroupId { get; set; }
-        public string CurriculumUnitId { get; set; }
+        public Guid TeacherId { get; set; }
+        public Guid GroupId { get; set; }
+        public Guid CurriculumUnitId { get; set; }
         public DateTime Date { get; set; }
     }
 }

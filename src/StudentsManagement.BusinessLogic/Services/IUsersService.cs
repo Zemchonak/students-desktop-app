@@ -3,7 +3,5 @@
 namespace StudentsManagement.BusinessLogic.Services
 {
     public interface IUsersService : IService<UserDto>
-    {
-        public void EnsureAdminExists();
-    }
+    { }
 }
