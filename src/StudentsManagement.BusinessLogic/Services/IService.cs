@@ -8,7 +8,7 @@ namespace StudentsManagement.BusinessLogic.Services
     {
         Guid Create(TEntityDto entity);
 
-        IReadOnlyCollection<TEntityDto> GetAll(Expression<Func<TEntityDto, bool>> filter = null);
+        IReadOnlyCollection<TEntityDto> GetAll(Func<TEntityDto, bool> filter = null);
 
         TEntityDto GetById(Guid entityId);
 

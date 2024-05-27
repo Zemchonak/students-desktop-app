@@ -6,6 +6,7 @@
 
         public static string ErrorMessageText = "Ошибка";
         public static string SelectSomethingMessageText = "Не выбрана строка в таблице. Пожалуйста, сделайте выбор и повторите попытку!";
+        public static string SelectDropdownSomethingMessageText = "Пожалуйста, сделайте выбор в выпадающем списке и повторите попытку!";
 
         public static string LoginButtonText = "Войти в учётную запись";
         public static string ProfileButtonText = "Личный кабинет";

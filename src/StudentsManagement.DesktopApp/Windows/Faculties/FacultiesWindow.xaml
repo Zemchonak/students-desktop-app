@@ -42,7 +42,9 @@
         </DataGrid>
         <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
         <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
-        <Button x:Name="DeleteSelected" Content="Удаить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
-
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+        <TextBlock Name="Hint" Grid.Column="2" Grid.Row="8" FontSize="15" Grid.ColumnSpan="3" Margin="24,10,24,8" Grid.RowSpan="2">
+            Для просмотра<LineBreak/>специальностей<LineBreak/>используйте<LineBreak/>двойной щелчок
+        </TextBlock>
     </Grid>
 </Window>

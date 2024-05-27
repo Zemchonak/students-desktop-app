@@ -68,10 +68,18 @@ namespace StudentsManagement.DataAccess.Entities
     public class Group : BaseEntity
     {
         [Required]
-        public string Name { get; set; }
+        public string SpecialityShortName { get; set; }
+
+        public int Cource { get; set; }
 
         [Required]
-        public int Cource { get; set; }
+        public int Number { get; set; }
+
+        [Required]
+        public bool Graduated { get; set; }
+
+        [Required]
+        public int EnrollYear { get; set; }
 
         [Required]
         public Guid SpecialityId { get; set; }

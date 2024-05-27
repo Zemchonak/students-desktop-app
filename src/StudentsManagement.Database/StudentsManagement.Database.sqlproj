@@ -73,4 +73,7 @@
   <ItemGroup>
     <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SeedData.sql" />
+  </ItemGroup>
 </Project>

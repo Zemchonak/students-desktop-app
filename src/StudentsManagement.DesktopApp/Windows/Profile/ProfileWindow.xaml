@@ -12,10 +12,13 @@
         <Menu Height="25" VerticalAlignment="Top">
             <MenuItem Header="Данные">
                 <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
+                <MenuItem Header="Учебные группы" Click="GroupsMenuItem_Click"></MenuItem>
+                <Separator />
+                <MenuItem Header="Учебные планы" Click="CurriculumUnitsMenuItem_Click"></MenuItem>
+                <MenuItem Header="Аттестационные мероприятия" Click="AttestationsMenuItem_Click"></MenuItem>
                 <Separator />
                 <MenuItem Header="Факультеты и специальности" Click="FacultiesMenuItem_Click"></MenuItem>
                 <MenuItem Header="Дисциплины" Click="DisciplinesMenuItem_Click"></MenuItem>
-                <MenuItem Header="выф" ></MenuItem>
                 <Separator />
                 <MenuItem Header="Exit" ></MenuItem>
             </MenuItem>

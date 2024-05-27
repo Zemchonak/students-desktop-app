@@ -3,7 +3,5 @@
 namespace StudentsManagement.BusinessLogic.Services
 {
     public interface IMarksService : IService<MarkDto>
-    {
-        public void Validate(MarkDto entity);
-    }
+    { }
 }

@@ -6,8 +6,14 @@ namespace StudentsManagement.DataAccess
 {
     public class StudentsAppContext : DbContext
     {
-        public StudentsAppContext(DbContextOptions<StudentsAppContext> options)
+        public StudentsAppContext(DbContextOptions options)
             : base(options)
+        {
+            Database.EnsureCreated();
+        }
+
+        public StudentsAppContext(DbContextOptionsBuilder optionsBulder)
+            : base(optionsBulder.Options)
         {
             Database.EnsureCreated();
         }

@@ -20,11 +20,18 @@ namespace StudentsManagement.BusinessLogic.Services
             return _repository.Create(_mapper.Map<TEntity>(entity));
         }
 
-        public IReadOnlyCollection<TEntityDto> GetAll(Expression<Func<TEntityDto, bool>> filter = null)
+        public IReadOnlyCollection<TEntityDto> GetAll(Func<TEntityDto, bool> filter = null)
         {
-            var allItems = _repository.GetAll().ToList();
+            var allItems = _mapper.Map<List<TEntityDto>>(_repository.GetAll().ToList());
 
-            return _mapper.Map<List<TEntityDto>>(allItems.AsReadOnly());
+            if(filter != null)
+            {
+                return allItems.Where(filter).ToList().AsReadOnly();
+            }
+            else
+            {
+                return allItems.AsReadOnly();
+            }
         }
 
         public TEntityDto GetById(Guid entityId)

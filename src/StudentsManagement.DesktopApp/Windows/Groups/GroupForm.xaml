@@ -1,0 +1,54 @@
+﻿<Window x:Class="StudentsManagement.DesktopApp.Windows.Groups.GroupForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Groups"
+        mc:Ignorable="d"
+        MinHeight="400" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Label Name="GraduatedGroupMessage" Content="Группа выпустилась, обновления невозможны"
+               Grid.Column="0" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="5"
+               FontSize="14" FontWeight="Bold" Foreground="#FFB70909"/>
+
+        <Label Content="Специальность:" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Name="SpecialityInfo" IsEnabled="False" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+
+        <Label Content="Год поступления:" Grid.Column="1" Grid.Row="2"/>
+        <TextBox Name="EnrollYear" IsEnabled="False" Grid.Row="2" Grid.Column="2"/>
+
+        <Label Content="Курс:" Grid.Column="1" Grid.Row="3"/>
+        <TextBox Name="Cource" IsEnabled="False" Grid.Row="3" Grid.Column="2"/>
+        <Button Content="Повысить курс" Name="PromoteButton" Grid.Column="3" Grid.Row="3" Click="PromoteButton_Click"/>
+
+        <Label Content="Номер:" Grid.Column="1" Grid.Row="4"/>
+        <TextBox Name="Number" IsEnabled="False" Grid.Row="4" Grid.Column="2"/>
+
+        <Button Content="Перевести в выпустившиеся" Name="GraduateButton"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" Click="GraduateButton_Click"/>
+
+        <Button Name="CreateButton" Content="Создать"  Grid.Column="1" Grid.Row="8" Click="CreateButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="8" Click="CancelButton_Click"/>
+    </Grid>
+</Window>

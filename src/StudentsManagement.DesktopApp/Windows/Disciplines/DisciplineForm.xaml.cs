@@ -1,32 +1,27 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Models;
 using System;
 using System.Windows;
 
-namespace StudentsManagement.DesktopApp.Windows.Specialities
+namespace StudentsManagement.DesktopApp.Windows.Disciplines
 {
     /// <summary>
-    /// Interaction logic for SpecialitiesForm.xaml
+    /// Interaction logic for DisciplineForm.xaml
     /// </summary>
-    public partial class SpecialitiesForm : Window
+    public partial class DisciplineForm : Window
     {
-        private InfoModel _facultyInfo;
         private Guid? entityId;
 
-        private readonly ISpecialitiesService _service;
+        private readonly IDisciplinesService _service;
 
         public event CustomEventHandler OnSuccess;
 
-        public SpecialitiesForm(string title, InfoModel facultyInfo, ISpecialitiesService service, SpecialityDto entityToUpdate = null)
+        public DisciplineForm(string title, IDisciplinesService service, DisciplineDto entityToUpdate = null)
         {
             InitializeComponent();
 
             Title = title;
-            FacultyInfoTextBox.Text = facultyInfo.Info;
-
-            _facultyInfo = facultyInfo;
             _service = service;
 
             if (entityToUpdate != null)
@@ -35,21 +30,20 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
             }
         }
 
-        private void FillForm(SpecialityDto entity)
+        private void FillForm(DisciplineDto entity)
         {
             entityId = entity.Id;
             ShortNameTextBox.Text = entity.ShortName;
             FullNameTextBox.Text = entity.FullName;
         }
 
-        private SpecialityDto ParseForm()
+        private DisciplineDto ParseForm()
         {
-            return new SpecialityDto()
+            return new DisciplineDto()
             {
                 Id = entityId ?? Guid.Empty,
                 ShortName = ShortNameTextBox.Text,
                 FullName = FullNameTextBox.Text,
-                FacultyId = _facultyInfo.Id,
             };
         }
 

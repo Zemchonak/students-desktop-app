@@ -1,44 +1,52 @@
-﻿
-using StudentsManagement.BusinessLogic.Dtos;
+﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
 using StudentsManagement.DesktopApp.Utils;
+using StudentsManagement.DesktopApp.Windows.Faculties;
 using StudentsManagement.DesktopApp.Windows.Specialities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.Windows.Faculties
+namespace StudentsManagement.DesktopApp.Windows.Disciplines
 {
     /// <summary>
-    /// Interaction logic for FacultiesWindow.xaml
+    /// Interaction logic for DisciplinesWindow.xaml
     /// </summary>
-    public partial class FacultiesWindow : Window
+    public partial class DisciplinesWindow : Window
     {
-        private readonly ISpecialitiesService _specialitiesService;
-        private readonly IFacultiesService _entityService;
+        private readonly IDisciplinesService _entityService;
 
-        public FacultiesWindow(IFacultiesService facultiesService, ISpecialitiesService specialitiesService)
+        public DisciplinesWindow(IDisciplinesService disciplinesService)
         {
             InitializeComponent();
-            _entityService = facultiesService;
-            _specialitiesService = specialitiesService;
+            _entityService = disciplinesService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new FacultyForm(AppLocalization.AddFacultyForm, _entityService);
+            var form = new DisciplineForm(AppLocalization.AddDisciplineForm, _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
 
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = GetSelectedItem<FacultyDto>();
+            var selectedItem = GetSelectedItem<DisciplineDto>();
             if (selectedItem == null) { return; }
 
-            var form = new FacultyForm(AppLocalization.UpdateFacultyForm, _entityService, selectedItem);
+            var form = new DisciplineForm(AppLocalization.UpdateDisciplineForm, _entityService, selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -47,13 +55,12 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
         {
             try
             {
-                var selectedItem = GetSelectedItem<FacultyDto>();
-                if (selectedItem == null) { return; }
+                var selectedItem = GetSelectedItem<DisciplineDto>();
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
                     {
-                        $"Факультет",
+                        $"Дисциплина",
                         $"Кр. назв.: {selectedItem.ShortName}",
                         $"Полное назв.: {selectedItem.FullName}",
                     });
@@ -66,15 +73,6 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void MainDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var selectedItem = GetSelectedItem<FacultyDto>();
-            if (selectedItem == null) { return; }
-
-            var specialitiesWindow = new SpecialitiesWindow(new InfoModel(selectedItem.Id, selectedItem.ShortName), _specialitiesService);
-            specialitiesWindow.Show();
         }
 
         // Common logic

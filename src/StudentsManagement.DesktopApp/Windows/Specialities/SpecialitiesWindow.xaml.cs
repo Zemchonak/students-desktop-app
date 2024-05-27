@@ -5,6 +5,7 @@ using StudentsManagement.DesktopApp.Models;
 using StudentsManagement.DesktopApp.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 
@@ -23,8 +24,8 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
         {
             InitializeComponent();
 
-            Title += facultyInfo.Info;
-            HeaderText.Text += facultyInfo.Info;
+            Title = $"Cпециальности факультета {facultyInfo.Info}";
+            HeaderText.Text = Title;
 
             _facultyInfo = facultyInfo;
             _entityService = specialitiesService;
@@ -42,7 +43,7 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
             var selectedItem = GetSelectedItem<SpecialityDto>();
-            if (selectedItem != null) { return; }
+            if (selectedItem == null) { return; }
 
             var form = new SpecialitiesForm(AppLocalization.UpdateFacultyForm,
                 _facultyInfo,
@@ -57,7 +58,7 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
             try
             {
                 var selectedItem = GetSelectedItem<SpecialityDto>();
-                if (selectedItem != null) { return; }
+                if (selectedItem == null) { return; }
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
@@ -81,7 +82,7 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
         private void MainDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var selectedItem = GetSelectedItem<SpecialityDto>();
-            if (selectedItem != null) { return; }
+            if (selectedItem == null) { return; }
 
             var childWindow = new SpecialitiesWindow(
                 new InfoModel(selectedItem.Id, selectedItem.ShortName),
@@ -100,7 +101,7 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
 
         private void UpdateDatagrid()
         {
-            var items = _entityService.GetAll();
+            var items = _entityService.GetAll().OrderBy(x => x.FullName);
 
             MainDataGrid.ItemsSource = items;
         }

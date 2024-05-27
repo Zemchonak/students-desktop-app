@@ -20,11 +20,11 @@ namespace StudentsManagement.DataAccess
                     else
                     {
                         options.UseSqlServer(connectionString);
-                        // options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
                     }
                 })
                 .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>))
-                .AddScoped<IUsersRepository, UsersEntityFrameworkRepository>();
+                .AddScoped<IUsersRepository, UsersRepository>();
         }
     }
 }

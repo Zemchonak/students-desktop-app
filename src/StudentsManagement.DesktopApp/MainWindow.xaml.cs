@@ -81,7 +81,7 @@ namespace StudentsManagement.DesktopApp
         }
         else
         {
-            var profileWindow = new ProfileWindow(CurrentUserId.Value, _facultiesService, _specialitiesService);
+            var profileWindow = new ProfileWindow(CurrentUserId.Value, _facultiesService, _specialitiesService, _disciplinesService, _groupsService);
             profileWindow.Show();
         }
     }
