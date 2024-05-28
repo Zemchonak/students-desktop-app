@@ -1,34 +1,26 @@
-﻿
-using StudentsManagement.BusinessLogic.Dtos;
-using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Models;
-using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Specialities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows;
 
-namespace StudentsManagement.DesktopApp.Windows.Faculties
+namespace StudentsManagement.DesktopApp.Windows.Subjects
 {
     /// <summary>
-    /// Interaction logic for FacultiesWindow.xaml
+    /// Interaction logic for SubjectWindow.xaml
     /// </summary>
-    public partial class FacultiesWindow : Window
+    public partial class SubjectWindow : Window
     {
         private readonly ISpecialitiesService _specialitiesService;
         private readonly IFacultiesService _entityService;
 
-        public FacultiesWindow(IFacultiesService facultiesService, ISpecialitiesService specialitiesService)
+        public SubjectWindow(ISubjectsService subjectsService)
         {
             InitializeComponent();
-            _entityService = facultiesService;
+            _entityService = subjectsService;
             _specialitiesService = specialitiesService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new FacultyForm(AppLocalization.AddFacultyForm, _entityService);
+            var form = new SubjectForm(AppLocalization.AddFacultyForm, _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }

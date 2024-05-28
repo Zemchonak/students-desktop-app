@@ -2,6 +2,6 @@
 
 namespace StudentsManagement.BusinessLogic.Services
 {
-    public interface IFacultiesService : IService<FacultyDto>
+    public interface IWorkTypesService : IService<WorkTypeDto>
     { }
 }

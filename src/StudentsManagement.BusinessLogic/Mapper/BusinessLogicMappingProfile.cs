@@ -11,7 +11,7 @@ namespace StudentsManagement.BusinessLogic.Mapper
         {
             CreateMap<Speciality, SpecialityDto>().ReverseMap();
             CreateMap<Faculty, FacultyDto>().ReverseMap();
-            CreateMap<Discipline, DisciplineDto>().ReverseMap();
+            CreateMap<Subject, SubjectDto>().ReverseMap();
             CreateMap<User, UserDto>().ReverseMap();
             CreateMap<Group, GroupDto>().ReverseMap();
             CreateMap<CurriculumUnit, CurriculumUnitDto>().ReverseMap();

@@ -6,7 +6,7 @@ namespace StudentsManagement.BusinessLogic.Dtos
     {
         public Guid SpecialityId { get; set; }
         public int Cource { get; set; }
-        public Guid DisciplineId { get; set; }
+        public Guid SubjectId { get; set; }
         public MonitoringType Type { get; set; }
     }
 }

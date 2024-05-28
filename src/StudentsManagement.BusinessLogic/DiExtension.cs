@@ -18,7 +18,7 @@ namespace StudentsManagement.BusinessLogic
 
                 .AddTransient<IFacultiesService, FacultiesService>()
                 .AddTransient<ISpecialitiesService, SpecialitiesService>()
-                .AddTransient<IDisciplinesService, DisciplinesService>()
+                .AddTransient<ISubjectsService, SubjectsService>()
                 .AddTransient<ICurriculumUnitsService, CurriculumUnitsService>()
                 .AddTransient<IGroupsService, GroupsService>()
                 .AddTransient<IAttestationsService, AttestationsService>()

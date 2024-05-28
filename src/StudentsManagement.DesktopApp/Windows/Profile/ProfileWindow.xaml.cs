@@ -1,6 +1,6 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DesktopApp.Windows.Disciplines;
+using StudentsManagement.DesktopApp.Windows.Subjects;
 using StudentsManagement.DesktopApp.Windows.Faculties;
 using StudentsManagement.DesktopApp.Windows.Groups;
 using System;
@@ -14,24 +14,24 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
     public partial class ProfileWindow : Window
     {
         private readonly Guid _currentUserId;
-        private readonly IFacultiesService _facultiesService;
+        private readonly IFacultiesService _workTypesService;
         private readonly IGroupsService _groupsService;
         private readonly ISpecialitiesService _specialitiesService;
-        private readonly IDisciplinesService _disciplinesService;
+        private readonly ISubjectsService _SubjectsService;
 
         public ProfileWindow(Guid currentUserId,
-            IFacultiesService facultiesService,
+            IWorkTypesService workTypesService,
             ISpecialitiesService specialitiesService,
-            IDisciplinesService disciplinesService,
+            ISubjectsService SubjectsService,
             IGroupsService groupsService)
         {
             InitializeComponent();
 
             _currentUserId = currentUserId;
 
-            _facultiesService = facultiesService;
+            _workTypesService = workTypesService;
             _specialitiesService = specialitiesService;
-            _disciplinesService = disciplinesService;
+            _SubjectsService = SubjectsService;
             _groupsService = groupsService;
         }
 
@@ -52,14 +52,14 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
 
         private void FacultiesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var facultiesWindow = new FacultiesWindow(_facultiesService, _specialitiesService);
-            facultiesWindow.Show();
+        //    var facultiesWindow = new FacultiesWindow(_facultiesService, _specialitiesService);
+        //    facultiesWindow.Show();
         }
 
-        private void DisciplinesMenuItem_Click(object sender, RoutedEventArgs e)
+        private void SubjectsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var disciplinesWindow = new DisciplinesWindow(_disciplinesService);
-            disciplinesWindow.Show();
+            var SubjectsWindow = new SubjectsWindow(_SubjectsService);
+            SubjectsWindow.Show();
         }
     }
 }

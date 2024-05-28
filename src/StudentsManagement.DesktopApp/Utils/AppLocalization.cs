@@ -18,8 +18,8 @@
         public static string UpdateFacultyForm = "Обновление факультета";
         public static string AddSpecialityForm = "Добавление специальности";
         public static string UpdateSpecialityForm = "Обновление специальности";
-        public static string AddDisciplineForm = "Добавление дисциплины";
-        public static string UpdateDisciplineForm = "Обновление дисциплины";
+        public static string AddSubjectForm = "Добавление дисциплины";
+        public static string UpdateSubjectForm = "Обновление дисциплины";
         public static string AddUserForm = "Добавление пользователя";
         public static string UpdateUserForm = "Обновление пользователя";
         public static string AddGroupForm = "Добавление группы";

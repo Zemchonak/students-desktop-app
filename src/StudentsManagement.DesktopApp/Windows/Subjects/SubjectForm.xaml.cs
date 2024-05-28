@@ -2,22 +2,33 @@
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.Windows.Faculties
+namespace StudentsManagement.DesktopApp.Windows.Subjects
 {
     /// <summary>
-    /// Interaction logic for FacultyForm.xaml
+    /// Interaction logic for SubjectForm.xaml
     /// </summary>
-    public partial class FacultyForm : Window
+    public partial class SubjectForm : Window
     {
         private Guid? entityId;
 
-        private readonly IFacultiesService _service;
+        private readonly ISubjectsService _service;
 
         public event CustomEventHandler OnSuccess;
 
-        public FacultyForm(string title, IFacultiesService service, FacultyDto entityToUpdate = null)
+        public SubjectForm(string title, ISubjectsService service, SubjectDto entityToUpdate = null)
         {
             InitializeComponent();
 
@@ -30,16 +41,16 @@ namespace StudentsManagement.DesktopApp.Windows.Faculties
             }
         }
 
-        private void FillForm(FacultyDto entity)
+        private void FillForm(SubjectDto entity)
         {
             entityId = entity.Id;
             ShortNameTextBox.Text = entity.ShortName;
             FullNameTextBox.Text = entity.FullName;
         }
 
-        private FacultyDto ParseForm()
+        private SubjectDto ParseForm()
         {
-            return new FacultyDto()
+            return new SubjectDto()
             {
                 Id = entityId ?? Guid.Empty,
                 ShortName = ShortNameTextBox.Text,

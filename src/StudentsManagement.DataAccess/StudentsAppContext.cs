@@ -24,9 +24,9 @@ namespace StudentsManagement.DataAccess
                 //s => { s.HasKey(p => p.FacultyId); s.ToTable("Faculties")
                 )
                 .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
-            modelBuilder.Entity<Faculty>()
+            modelBuilder.Entity<WorkType>()
                 .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
-            modelBuilder.Entity<Discipline>()
+            modelBuilder.Entity<Subject>()
                 .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
             modelBuilder.Entity<User>()
                 .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
@@ -55,9 +55,9 @@ namespace StudentsManagement.DataAccess
 
         public DbSet<Speciality> Specialities { get; set; }
 
-        public DbSet<Faculty> Faculties { get; set; }
+        public DbSet<WorkType> WorkTypes { get; set; }
 
-        public DbSet<Discipline> Disciplines { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
 
         public DbSet<User> Users { get; set; }
 

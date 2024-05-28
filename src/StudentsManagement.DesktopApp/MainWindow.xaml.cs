@@ -20,9 +20,9 @@ namespace StudentsManagement.DesktopApp
 
         private readonly IAuthService _authService;
         private readonly IUsersService _usersService;
-        private readonly IFacultiesService _facultiesService;
+        private readonly IWorkTypesService _workTypesService;
         private readonly ISpecialitiesService _specialitiesService;
-        private readonly IDisciplinesService _disciplinesService;
+        private readonly ISubjectsService _SubjectsService;
         private readonly ICurriculumUnitsService _curriculumUnitsService;
         private readonly IGroupsService _groupsService;
         private readonly IAttestationsService _attestationsService;
@@ -32,9 +32,9 @@ namespace StudentsManagement.DesktopApp
         public MainWindow(
             IAuthService authService,
             IUsersService usersService,
-            IFacultiesService facultiesService,
+            IWorkTypesService workTypesService,
             ISpecialitiesService specialitiesService,
-            IDisciplinesService disciplinesService,
+            ISubjectsService SubjectsService,
             ICurriculumUnitsService curriculumUnitsService,
             IGroupsService groupsService,
             IAttestationsService attestationsService,
@@ -46,9 +46,9 @@ namespace StudentsManagement.DesktopApp
 
             _authService = authService;
             _usersService = usersService;
-            _facultiesService = facultiesService;
+            _workTypesService = workTypesService;
             _specialitiesService = specialitiesService;
-            _disciplinesService = disciplinesService;
+            _SubjectsService = SubjectsService;
             _curriculumUnitsService = curriculumUnitsService;
             _groupsService = groupsService;
             _attestationsService = attestationsService;
@@ -65,7 +65,7 @@ namespace StudentsManagement.DesktopApp
         /*
          TODO
 
-           Load faculties, specitialities, groups
+           Load specitialities, groups
 
             Fill SpecialitiesComboBox with options
          */
@@ -81,7 +81,7 @@ namespace StudentsManagement.DesktopApp
         }
         else
         {
-            var profileWindow = new ProfileWindow(CurrentUserId.Value, _facultiesService, _specialitiesService, _disciplinesService, _groupsService);
+            var profileWindow = new ProfileWindow(CurrentUserId.Value, _workTypesService, _specialitiesService, _SubjectsService, _groupsService);
             profileWindow.Show();
         }
     }
