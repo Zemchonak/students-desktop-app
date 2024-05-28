@@ -22,7 +22,7 @@ namespace StudentsManagement.DesktopApp
         private readonly IUsersService _usersService;
         private readonly IWorkTypesService _workTypesService;
         private readonly ISpecialitiesService _specialitiesService;
-        private readonly ISubjectsService _SubjectsService;
+        private readonly ISubjectsService _subjectsService;
         private readonly ICurriculumUnitsService _curriculumUnitsService;
         private readonly IGroupsService _groupsService;
         private readonly IAttestationsService _attestationsService;
@@ -34,7 +34,7 @@ namespace StudentsManagement.DesktopApp
             IUsersService usersService,
             IWorkTypesService workTypesService,
             ISpecialitiesService specialitiesService,
-            ISubjectsService SubjectsService,
+            ISubjectsService subjectsService,
             ICurriculumUnitsService curriculumUnitsService,
             IGroupsService groupsService,
             IAttestationsService attestationsService,
@@ -48,7 +48,7 @@ namespace StudentsManagement.DesktopApp
             _usersService = usersService;
             _workTypesService = workTypesService;
             _specialitiesService = specialitiesService;
-            _SubjectsService = SubjectsService;
+            _subjectsService = subjectsService;
             _curriculumUnitsService = curriculumUnitsService;
             _groupsService = groupsService;
             _attestationsService = attestationsService;
@@ -65,7 +65,7 @@ namespace StudentsManagement.DesktopApp
         /*
          TODO
 
-           Load specitialities, groups
+           Load faculties, specitialities, groups
 
             Fill SpecialitiesComboBox with options
          */
@@ -81,7 +81,12 @@ namespace StudentsManagement.DesktopApp
         }
         else
         {
-            var profileWindow = new ProfileWindow(CurrentUserId.Value, _workTypesService, _specialitiesService, _SubjectsService, _groupsService);
+            var profileWindow = new ProfileWindow(CurrentUserId.Value,
+                _specialitiesService,
+                _subjectsService,
+                _groupsService,
+                _workTypesService,
+                _curriculumUnitsService);
             profileWindow.Show();
         }
     }

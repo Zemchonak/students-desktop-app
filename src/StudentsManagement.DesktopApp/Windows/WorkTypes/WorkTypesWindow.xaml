@@ -1,12 +1,12 @@
-﻿<Window x:Class="StudentsManagement.DesktopApp.Windows.Groups.GroupsWindow"
+﻿<Window x:Class="StudentsManagement.DesktopApp.Windows.WorkTypes.WorkTypesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Groups"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.WorkTypes"
         mc:Ignorable="d"
         MinHeight="500" MinWidth="800"
-        Title="Учебные группы" Height="450" Width="800" Background="AntiqueWhite"
+        Title="Виды работ" Height="450" Width="800" Background="AntiqueWhite"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <Grid>
@@ -29,18 +29,14 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="0.03*"/>
         </Grid.RowDefinitions>
-        <ComboBox Name="SpecialitiesComboBox" DisplayMemberPath="Info"
-                  Grid.Column="1" FontSize="15" Grid.ColumnSpan="4" Margin="233,8,24,27" Grid.RowSpan="3"
-                  SelectionChanged="SpecialitiesComboBox_SelectionChanged"/>
-        <TextBlock Grid.Row="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="24,0,338,0">Учебные группы специальности</TextBlock>
+        <TextBlock x:Name="CurrentUser" Grid.Column="3" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Виды работ</TextBlock>
         <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
                   Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=Name}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Path=Cource}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Год поступления" Width="Auto" Binding="{Binding Path=EnrollYear}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Выпустилась" Width="Auto" Binding="{Binding Path=GraduatedText}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Короткое название" Width="Auto" Binding="{Binding Path=ShortName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=FullName}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>

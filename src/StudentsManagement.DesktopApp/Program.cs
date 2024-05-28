@@ -42,7 +42,6 @@ namespace StudentsManagement.DesktopApp
 
                     services.AddSingleton<App>();
                     services.AddSingleton<MainWindow>();
-                    services.AddSingleton<LoginWindow>();
                 })
                 .Build();
 

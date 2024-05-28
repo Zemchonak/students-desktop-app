@@ -3,78 +3,85 @@ using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
 using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Specialities;
+using StudentsManagement.DesktopApp.Windows.Groups;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.Windows.Groups
+namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
 {
     /// <summary>
-    /// Interaction logic for GroupsWindow.xaml
+    /// Interaction logic for CurriculumUnitsWindow.xaml
     /// </summary>
-    public partial class GroupsWindow : Window
+    public partial class CurriculumUnitsWindow : Window
     {
-        private Guid? _selectedSpecialityId;
-        private string _selectedSpecialityName;
+        private InfoModel? _selectedSpeciality;
 
-        private readonly IGroupsService _entityService;
+        private readonly List<InfoModel> _workTypes;
+        private readonly List<InfoModel> _subjects;
+
+        private readonly ICurriculumUnitsService _entityService;
+        private readonly IWorkTypesService _workTypesService;
+        private readonly ISubjectsService _subjectsService;
         private readonly ISpecialitiesService _specialitiesService;
 
-        public GroupsWindow(IGroupsService entityService, ISpecialitiesService specialitiesService)
+        public CurriculumUnitsWindow(
+            ICurriculumUnitsService entityService,
+            IWorkTypesService workTypesService,
+            ISpecialitiesService specialitiesService,
+            ISubjectsService subjectsService)
         {
             InitializeComponent();
 
             _entityService = entityService;
+            _workTypesService = workTypesService;
             _specialitiesService = specialitiesService;
+            _subjectsService = subjectsService;
 
-            _selectedSpecialityId = null;
+            _workTypes = _workTypesService.GetAll().Select(x => new InfoModel(x.Id, x.ShortName)).ToList();
+            _subjects = _subjectsService.GetAll().Select(x => new InfoModel(x.Id, x.ShortName)).ToList();
+
+            _selectedSpeciality = null;
 
             var specialities = _specialitiesService.GetAll();
             var specialitiesItems = specialities.Select(x => new InfoModel(x.Id, x.FullName)).ToList();
 
             SpecialitiesComboBox.ItemsSource = specialitiesItems;
+            _subjectsService = subjectsService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_selectedSpecialityId == null)
+            if (_selectedSpeciality == null)
             {
                 SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
                 return;
             }
 
-            var form = new GroupForm(AppLocalization.AddGroupForm,
-                _entityService, _specialitiesService, _selectedSpecialityId.Value);
+            var form = new CurriculumUnitForm(AppLocalization.AddCurriculumUnitForm,
+                _entityService, _workTypes, _subjects, _selectedSpeciality);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
 
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            if (_selectedSpecialityId == null)
+            if (_selectedSpeciality == null)
             {
                 SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
                 MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
                 return;
             }
 
-            var selectedGroup = GetSelectedItem<GroupDto>();
-            if (selectedGroup == null) { return; }
+            var selectedItem = GetSelectedItem<CurriculumUnitDto>();
+            if (selectedItem == null) { return; }
 
-            var form = new GroupForm(AppLocalization.UpdateGroupForm,
-                _entityService, _specialitiesService, _selectedSpecialityId.Value, selectedGroup);
+            var form = new CurriculumUnitForm(AppLocalization.UpdateCurriculumUnitForm,
+                _entityService, _workTypes, _subjects, _selectedSpeciality, selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -83,17 +90,17 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
         {
             try
             {
-                var selectedItem = GetSelectedItem<GroupDto>();
+                var selectedItem = GetSelectedItem<CurriculumUnitDto>();
                 if (selectedItem == null) { return; }
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
                     {
-                        $"Группа (специальность: {_selectedSpecialityName})",
+                        $"Единица учебного плана",
+                        $"Специальность: {_selectedSpeciality.Info}",
+                        $"Семестр: {selectedItem.Semester}",
+                        $"{selectedItem.WorkTypeName} по предмету {selectedItem.SubjectName}",
                         $"Название: {selectedItem.Name}",
-                        $"Курс: {selectedItem.Cource}",
-                        $"Год поступления: {selectedItem.EnrollYear}",
-                        $"Выпустилась: {selectedItem.GraduatedText}",
                     });
 
                 form.OnConfirm += HandleDelete;
@@ -110,8 +117,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.White);
 
             var selected = SpecialitiesComboBox.SelectedItem as InfoModel;
-            _selectedSpecialityId = selected.Id;
-            _selectedSpecialityName = selected.Info;
+            _selectedSpeciality = selected;
 
             UpdateDatagrid();
         }
@@ -127,9 +133,15 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
 
         private void UpdateDatagrid()
         {
-            var groupsList = _entityService.GetGroupsBySpecialityId(_selectedSpecialityId.Value);
+            var entities = _entityService.GetUnitsBySpecialityId(_selectedSpeciality.Id);
 
-            MainDataGrid.ItemsSource = groupsList;
+            foreach (var entity in entities)
+            {
+                entity.SubjectName = _subjects.FirstOrDefault(x => x.Id == entity.SubjectId).Info;
+                entity.WorkTypeName = _workTypes.FirstOrDefault(x => x.Id == entity.WorkTypeId).Info;
+            }
+
+            MainDataGrid.ItemsSource = entities;
         }
 
         private T GetSelectedItem<T>()

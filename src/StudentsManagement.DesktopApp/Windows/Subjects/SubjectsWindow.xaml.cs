@@ -2,45 +2,49 @@
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Utils;
+using StudentsManagement.DesktopApp.Windows.Subjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.Windows.Specialities
+namespace StudentsManagement.DesktopApp.Windows.Subjects
 {
     /// <summary>
-    /// Interaction logic for SpecialitiesWindow.xaml
+    /// Interaction logic for SubjectsWindow.xaml
     /// </summary>
-    public partial class SpecialitiesWindow : Window
+    public partial class SubjectsWindow : Window
     {
-        private readonly ISpecialitiesService _entityService;
+        private readonly ISubjectsService _entityService;
 
-        public SpecialitiesWindow(ISpecialitiesService specialitiesService)
+        public SubjectsWindow(ISubjectsService SubjectsService)
         {
             InitializeComponent();
-
-            Title = $"Cпециальности";
-            HeaderText.Text = Title;
-
-            _entityService = specialitiesService;
+            _entityService = SubjectsService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new SpecialitiesForm(AppLocalization.AddSpecialityForm, _entityService);
+            var form = new SubjectForm(AppLocalization.AddSubjectForm, _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
 
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = GetSelectedItem<SpecialityDto>();
+            var selectedItem = GetSelectedItem<SubjectDto>();
             if (selectedItem == null) { return; }
 
-            var form = new SpecialitiesForm(AppLocalization.UpdateSpecialityForm,
-                _entityService,
-                selectedItem);
+            var form = new SubjectForm(AppLocalization.UpdateSubjectForm, _entityService, selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -49,13 +53,12 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
         {
             try
             {
-                var selectedItem = GetSelectedItem<SpecialityDto>();
-                if (selectedItem == null) { return; }
+                var selectedItem = GetSelectedItem<SubjectDto>();
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
                     {
-                        $"Специальность",
+                        $"Дисциплина",
                         $"Кр. назв.: {selectedItem.ShortName}",
                         $"Полное назв.: {selectedItem.FullName}",
                     });
@@ -81,17 +84,17 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
 
         private void UpdateDatagrid()
         {
-            var items = _entityService.GetAll().OrderBy(x => x.FullName);
+            var items = _entityService.GetAll();
 
             MainDataGrid.ItemsSource = items;
         }
 
         private T GetSelectedItem<T>()
-            where T: class, IDto
+            where T : class, IDto
         {
             var selectedItem = MainDataGrid.SelectedItem as T;
 
-            if(selectedItem == null)
+            if (selectedItem == null)
             {
                 MessageBox.Show(
                     AppLocalization.SelectSomethingMessageText,

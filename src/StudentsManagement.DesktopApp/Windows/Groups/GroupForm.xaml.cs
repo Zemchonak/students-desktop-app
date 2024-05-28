@@ -28,8 +28,6 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             InitializeComponent();
             GraduatedGroupMessage.Visibility = Visibility.Hidden;
 
-            CreateButton.Visibility = Visibility.Hidden;
-
             Title = title;
 
             _groupService = groupService;
@@ -44,22 +42,19 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             }
             else
             {
-                var currentYear = DateTime.Now.Year;
+                PromoteButton.IsEnabled = false;
+                GraduateButton.IsEnabled = false;
 
-                var groups = _groupService.GetGroupsBySpecialityId(specialityId)
-                    .Where(x => x.EnrollYear == currentYear).ToArray();
+                var currentYear = DateTime.Now.Year;
 
                 _group = new GroupDto
                 {
-                    SpecialityShortName = speciality.ShortName,
+                    Name = "",
+                    Cource = 1,
                     EnrollYear = currentYear,
                     Graduated = false,
                     SpecialityId = _specialityId,
-                    Cource = 1,
-                    Number = groups.Length + 1,
                 };
-
-                CreateButton.Visibility = Visibility.Visible;
             }
 
             FillForm(speciality.FullName);
@@ -68,6 +63,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             {
                 PromoteButton.IsEnabled = false;
                 GraduateButton.IsEnabled = false;
+                SaveButton.IsEnabled = false;
 
                 GraduatedGroupMessage.Visibility = Visibility.Visible;
             }
@@ -78,9 +74,9 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             _entityId = _group.Id;
 
             SpecialityInfo.Text = specialityName;
+            Name.Text = _group.Name;
             EnrollYear.Text = _group.EnrollYear.ToString();
             Cource.Text = _group.Cource.ToString();
-            Number.Text = _group.Number.ToString();
         }
 
         private void PromoteButton_Click(object sender, RoutedEventArgs e)
@@ -108,9 +104,18 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             this.Close();
         }
 
-        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            _groupService.Create(_group);
+            _group.Name = Name.Text;
+
+            if(_group.Id == Guid.Empty)
+            {
+                _groupService.Create(_group);
+            }
+            else
+            {
+                _groupService.Update(_group);
+            }
 
             OnSuccess?.Invoke(this, new CustomEventArgs(_group.Id));
             this.Close();

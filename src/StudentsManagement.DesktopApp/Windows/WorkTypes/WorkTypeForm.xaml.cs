@@ -1,24 +1,23 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Models;
 using System;
 using System.Windows;
 
-namespace StudentsManagement.DesktopApp.Windows.Specialities
+namespace StudentsManagement.DesktopApp.Windows.WorkTypes
 {
     /// <summary>
-    /// Interaction logic for SpecialitiesForm.xaml
+    /// Interaction logic for WorkTypeForm.xaml
     /// </summary>
-    public partial class SpecialitiesForm : Window
+    public partial class WorkTypeForm : Window
     {
         private Guid? entityId;
 
-        private readonly ISpecialitiesService _service;
+        private readonly IWorkTypesService _service;
 
         public event CustomEventHandler OnSuccess;
 
-        public SpecialitiesForm(string title, ISpecialitiesService service, SpecialityDto entityToUpdate = null)
+        public WorkTypeForm(string title, IWorkTypesService service, WorkTypeDto entityToUpdate = null)
         {
             InitializeComponent();
 
@@ -31,16 +30,16 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
             }
         }
 
-        private void FillForm(SpecialityDto entity)
+        private void FillForm(WorkTypeDto entity)
         {
             entityId = entity.Id;
             ShortNameTextBox.Text = entity.ShortName;
             FullNameTextBox.Text = entity.FullName;
         }
 
-        private SpecialityDto ParseForm()
+        private WorkTypeDto ParseForm()
         {
-            return new SpecialityDto()
+            return new WorkTypeDto()
             {
                 Id = entityId ?? Guid.Empty,
                 ShortName = ShortNameTextBox.Text,

@@ -3,20 +3,20 @@ using StudentsManagement.DataAccess;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Enums;
 using StudentsManagement.DataAccess.Repositories;
-using MT = StudentsManagement.DataAccess.Enums.MonitoringType;
 
 namespace StudentsManagement.DatabaseDataApp
 {
     public class Program
     {
         private static IRepository<Speciality> _specialityRepository;
-        private static IRepository<Subject> _SubjectRepository;
+        private static IRepository<Subject> _subjectRepository;
         private static IRepository<CurriculumUnit> _curUnitRepository;
         private static IRepository<Group> _groupRepository;
         private static IRepository<Attestation> _attestationRepository;
         private static IRepository<User> _userRepository;
         private static IRepository<Mark> _markRepository;
         private static IRepository<RetakeResult> _retakeResultRepository;
+        private static IRepository<WorkType> _workTypeRepository;
 
         static void CreateEntities()
         {
@@ -36,7 +36,7 @@ namespace StudentsManagement.DatabaseDataApp
             CreateEntities(specialities, _specialityRepository);
             Console.WriteLine($"Created specs");
 
-            var Subjects = new List<Subject>()
+            var subjects = new List<Subject>()
             {
                 new Subject { ShortName = "Матем", FullName = "Математика" },
                 new Subject { ShortName = "ЛАиАГ", FullName = "Линейная алгебра и аналитическая геометрия" },
@@ -49,18 +49,18 @@ namespace StudentsManagement.DatabaseDataApp
                 new Subject { ShortName = "КС", FullName = "Компьютерные сети" },
                 new Subject { ShortName = "Физ", FullName = "Физика" },
             };
-            DeleteEntities(_SubjectRepository);
-            CreateEntities(Subjects, _SubjectRepository);
+            DeleteEntities(_subjectRepository);
+            CreateEntities(subjects, _subjectRepository);
             Console.WriteLine($"Created discs");
 
             var groups = specialities.Select(x => new List<Group>()
             {
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 1, Number = 1, EnrollYear = 2023, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 1, Number = 2, EnrollYear = 2023, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 2, Number = 1, EnrollYear = 2022, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 2, Number = 2, EnrollYear = 2022, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 3, Number = 1, EnrollYear = 2021, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 3, Number = 2, EnrollYear = 2021, Graduated = false },
+                new Group { Name = "1гр", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+                new Group { Name = "2гр", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+                new Group { Name = "3гр", SpecialityId = x.Id, Cource = 2, EnrollYear = 2022, Graduated = false },
+                new Group { Name = "4гр", SpecialityId = x.Id, Cource = 2, EnrollYear = 2022, Graduated = false },
+                new Group { Name = "5гр", SpecialityId = x.Id, Cource = 3, EnrollYear = 2021, Graduated = false },
+                new Group { Name = "6гр", SpecialityId = x.Id, Cource = 3, EnrollYear = 2021, Graduated = false },
             });
 
             DeleteEntities(_groupRepository);
@@ -84,21 +84,6 @@ namespace StudentsManagement.DatabaseDataApp
             };
         }
 
-        static List<CurriculumUnit> CreateSpecialityCurriculum(List<Speciality> specialities, List<Subject> Subjects,
-            int specialityIndex, int SubjectIndex, (int cource, MonitoringType type)[] units)
-        {
-            var specialityId = specialities[specialityIndex].Id;
-            var SubjectId = Subjects[SubjectIndex].Id;
-
-            return units.Select(x =>
-                new CurriculumUnit {
-                    SpecialityId = specialityId,
-                    Cource = x.cource,
-                    SubjectId = SubjectId,
-                    Type = x.type
-                }).ToList();
-        }
-
         static void Main(string[] args)
         {
             var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Database=StudentsDb;" +
@@ -111,8 +96,8 @@ namespace StudentsManagement.DatabaseDataApp
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
             _specialityRepository = new GenericRepository<Speciality>(context);
-            _SubjectRepository = new GenericRepository<Subject>(context);
-            _facultyRepository = new GenericRepository<Faculty>(context);
+            _subjectRepository = new GenericRepository<Subject>(context);
+            _workTypeRepository = new GenericRepository<WorkType>(context);
             _curUnitRepository = new GenericRepository<CurriculumUnit>(context);
             _groupRepository = new GenericRepository<Group>(context);
             _attestationRepository = new GenericRepository<Attestation>(context);

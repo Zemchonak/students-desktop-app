@@ -61,9 +61,9 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Users.sql" />
-    <Build Include="Tables\Faculties.sql" />
+    <Build Include="Tables\WorkTypes.sql" />
     <Build Include="Tables\Specialities.sql" />
-    <Build Include="Tables\Disciplines.sql" />
+    <Build Include="Tables\Subjects.sql" />
     <Build Include="Tables\Groups.sql" />
     <Build Include="Tables\CurriculumUnits.sql" />
     <Build Include="Tables\Attestations.sql" />

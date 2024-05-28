@@ -1,8 +1,9 @@
-﻿using StudentsManagement.BusinessLogic.Dtos;
-using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DesktopApp.Windows.Subjects;
-using StudentsManagement.DesktopApp.Windows.Faculties;
+﻿using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Windows.CurriculumUnits;
 using StudentsManagement.DesktopApp.Windows.Groups;
+using StudentsManagement.DesktopApp.Windows.Specialities;
+using StudentsManagement.DesktopApp.Windows.Subjects;
+using StudentsManagement.DesktopApp.Windows.WorkTypes;
 using System;
 using System.Windows;
 
@@ -14,32 +15,42 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
     public partial class ProfileWindow : Window
     {
         private readonly Guid _currentUserId;
-        private readonly IFacultiesService _workTypesService;
+        private readonly IWorkTypesService _workTypesService;
         private readonly IGroupsService _groupsService;
         private readonly ISpecialitiesService _specialitiesService;
-        private readonly ISubjectsService _SubjectsService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
 
         public ProfileWindow(Guid currentUserId,
-            IWorkTypesService workTypesService,
             ISpecialitiesService specialitiesService,
-            ISubjectsService SubjectsService,
-            IGroupsService groupsService)
+            ISubjectsService subjectsService,
+            IGroupsService groupsService,
+            IWorkTypesService workTypesService,
+            ICurriculumUnitsService curriculumUnitsService)
         {
             InitializeComponent();
 
             _currentUserId = currentUserId;
 
-            _workTypesService = workTypesService;
             _specialitiesService = specialitiesService;
-            _SubjectsService = SubjectsService;
+            _subjectsService = subjectsService;
             _groupsService = groupsService;
+            _workTypesService = workTypesService;
+            _curriculumUnitsService = curriculumUnitsService;
         }
 
         private void UsersMenuItem_Click(object sender, RoutedEventArgs e)
         { }
 
         private void CurriculumUnitsMenuItem_Click(object sender, RoutedEventArgs e)
-        { }
+        {
+            var window = new CurriculumUnitsWindow(
+                _curriculumUnitsService,
+                _workTypesService,
+                _specialitiesService,
+                _subjectsService);
+            window.Show();
+        }
 
         private void GroupsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -50,16 +61,25 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
         private void AttestationsMenuItem_Click(object sender, RoutedEventArgs e)
         { }
 
-        private void FacultiesMenuItem_Click(object sender, RoutedEventArgs e)
+        private void GroupsListsMenuItem_Click(object sender, RoutedEventArgs e)
+        { }
+
+        private void WorkTypesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-        //    var facultiesWindow = new FacultiesWindow(_facultiesService, _specialitiesService);
-        //    facultiesWindow.Show();
+            var window = new WorkTypesWindow(_workTypesService);
+            window.Show();
+        }
+
+        private void SpecialitiesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SpecialitiesWindow(_specialitiesService);
+            window.Show();
         }
 
         private void SubjectsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var SubjectsWindow = new SubjectsWindow(_SubjectsService);
-            SubjectsWindow.Show();
+            var window = new SubjectsWindow(_subjectsService);
+            window.Show();
         }
     }
 }

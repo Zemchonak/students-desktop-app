@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentsManagement.DataAccess.Entities
 {
-    [Table("WorkType")]
+    [Table("WorkTypes")]
     public class WorkType : BaseEntity
     {
         [Required]

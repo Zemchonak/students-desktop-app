@@ -1,36 +1,52 @@
-﻿using System;
+﻿using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using StudentsManagement.DesktopApp.Utils;
+using StudentsManagement.DesktopApp.Windows.WorkTypes;
+using StudentsManagement.DesktopApp.Windows.Specialities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
 
-namespace StudentsManagement.DesktopApp.Windows.Subjects
+namespace StudentsManagement.DesktopApp.Windows.WorkTypes
 {
     /// <summary>
-    /// Interaction logic for SubjectWindow.xaml
+    /// Interaction logic for WorkTypesWindow.xaml
     /// </summary>
-    public partial class SubjectWindow : Window
+    public partial class WorkTypesWindow : Window
     {
-        private readonly ISpecialitiesService _specialitiesService;
-        private readonly IFacultiesService _entityService;
+        private readonly IWorkTypesService _entityService;
 
-        public SubjectWindow(ISubjectsService subjectsService)
+        public WorkTypesWindow(IWorkTypesService WorkTypesService)
         {
             InitializeComponent();
-            _entityService = subjectsService;
-            _specialitiesService = specialitiesService;
+            _entityService = WorkTypesService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new SubjectForm(AppLocalization.AddFacultyForm, _entityService);
+            var form = new WorkTypeForm(AppLocalization.AddWorkTypeForm, _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
 
         private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            var selectedItem = GetSelectedItem<FacultyDto>();
+            var selectedItem = GetSelectedItem<WorkTypeDto>();
             if (selectedItem == null) { return; }
 
-            var form = new FacultyForm(AppLocalization.UpdateFacultyForm, _entityService, selectedItem);
+            var form = new WorkTypeForm(AppLocalization.UpdateWorkTypeForm, _entityService, selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -39,13 +55,13 @@ namespace StudentsManagement.DesktopApp.Windows.Subjects
         {
             try
             {
-                var selectedItem = GetSelectedItem<FacultyDto>();
+                var selectedItem = GetSelectedItem<WorkTypeDto>();
                 if (selectedItem == null) { return; }
 
                 var form = new DeleteConfirmation(selectedItem.Id,
                     new List<string>
                     {
-                        $"Факультет",
+                        $"Вид работы",
                         $"Кр. назв.: {selectedItem.ShortName}",
                         $"Полное назв.: {selectedItem.FullName}",
                     });
@@ -58,15 +74,6 @@ namespace StudentsManagement.DesktopApp.Windows.Subjects
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void MainDataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            var selectedItem = GetSelectedItem<FacultyDto>();
-            if (selectedItem == null) { return; }
-
-            var specialitiesWindow = new SpecialitiesWindow(new InfoModel(selectedItem.Id, selectedItem.ShortName), _specialitiesService);
-            specialitiesWindow.Show();
         }
 
         // Common logic

@@ -14,12 +14,12 @@
         public static string WelcomeMessageText = "Рады приветствовать вас, ";
         public static string SignedInAsText = "Вы вошли как ";
 
-        public static string AddFacultyForm = "Добавление факультета";
-        public static string UpdateFacultyForm = "Обновление факультета";
+        public static string AddWorkTypeForm = "Добавление вида работ";
+        public static string UpdateWorkTypeForm = "Обновление вида работ";
         public static string AddSpecialityForm = "Добавление специальности";
         public static string UpdateSpecialityForm = "Обновление специальности";
-        public static string AddSubjectForm = "Добавление дисциплины";
-        public static string UpdateSubjectForm = "Обновление дисциплины";
+        public static string AddSubjectForm = "Добавление уч. предмета";
+        public static string UpdateSubjectForm = "Обновление уч. предмета";
         public static string AddUserForm = "Добавление пользователя";
         public static string UpdateUserForm = "Обновление пользователя";
         public static string AddGroupForm = "Добавление группы";
@@ -30,5 +30,8 @@
         public static string UpdateMarkForm = "Обновление оценки";
         public static string AddAttestationForm = "Добавление аттестации";
         public static string UpdateAttestationForm = "Обновление аттестации";
+
+        public static string IncorrectValueText = "Неверное значение в поле \"{0}\". Пожалуйста, измените его и повторите попытку!";
+        public static string IncorrectValueDropdownText = "Не выбрано значение в выпадающем списке \"{0}\". Пожалуйста, сделайте выбор и повторите попытку!";
     }
 }

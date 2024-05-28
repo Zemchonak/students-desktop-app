@@ -7,12 +7,9 @@ namespace StudentsManagement.DataAccess.Entities
     public class Group : BaseEntity
     {
         [Required]
-        public string SpecialityShortName { get; set; }
+        public string Name { get; set; }
 
         public int Cource { get; set; }
-
-        [Required]
-        public int Number { get; set; }
 
         [Required]
         public bool Graduated { get; set; }

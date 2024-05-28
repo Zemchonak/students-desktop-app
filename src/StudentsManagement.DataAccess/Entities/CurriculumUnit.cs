@@ -11,12 +11,14 @@ namespace StudentsManagement.DataAccess.Entities
         public Guid SpecialityId { get; set; }
 
         [Required]
-        public int Cource { get; set; }
+        public int Semester { get; set; }
 
         [Required]
         public Guid SubjectId { get; set; }
 
         [Required]
-        public MonitoringType Type { get; set; }
+        public Guid WorkTypeId { get; set; }
+
+        public string Name { get; set; }
     }
 }

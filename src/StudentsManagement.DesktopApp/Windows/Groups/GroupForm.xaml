@@ -43,12 +43,12 @@
         <TextBox Name="Cource" IsEnabled="False" Grid.Row="3" Grid.Column="2"/>
         <Button Content="Повысить курс" Name="PromoteButton" Grid.Column="3" Grid.Row="3" Click="PromoteButton_Click"/>
 
-        <Label Content="Номер:" Grid.Column="1" Grid.Row="4"/>
-        <TextBox Name="Number" IsEnabled="False" Grid.Row="4" Grid.Column="2"/>
+        <Label Content="Название группы:" Grid.Column="1" Grid.Row="4"/>
+        <TextBox Name="Name" Grid.Row="4" Grid.Column="2"/>
 
         <Button Content="Перевести в выпустившиеся" Name="GraduateButton"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" Click="GraduateButton_Click"/>
 
-        <Button Name="CreateButton" Content="Создать"  Grid.Column="1" Grid.Row="8" Click="CreateButton_Click"/>
+        <Button Name="SaveButton" Content="Сохранить"  Grid.Column="1" Grid.Row="8" Click="SaveButton_Click"/>
         <Button Content="Отмена"  Grid.Column="3" Grid.Row="8" Click="CancelButton_Click"/>
     </Grid>
 </Window>

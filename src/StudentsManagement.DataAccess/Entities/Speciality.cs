@@ -11,8 +11,5 @@ namespace StudentsManagement.DataAccess.Entities
 
         [Required]
         public string FullName { get; set; }
-
-        [Required]
-        public Guid FacultyId { get; set; }
     }
 }
