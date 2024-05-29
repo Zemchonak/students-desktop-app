@@ -9,8 +9,15 @@ namespace StudentsManagement.DataAccess.Entities
         [Required]
         public Guid StudentId { get; set; }
 
+        [Required]
         public Guid AttestationId { get; set; }
 
         public int? Value { get; set; }
+
+        [Required]
+        public bool NotAttended { get; set; }
+
+        [Required]
+        public bool NotAllowed { get; set; }
     }
 }

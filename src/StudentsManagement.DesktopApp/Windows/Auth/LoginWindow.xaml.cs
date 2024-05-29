@@ -44,7 +44,7 @@ namespace StudentsManagement.DesktopApp.Windows.Auth
                     EmailInput.Text,
                     AuthHelper.CreateSha256Hash(PasswordInput.Password));
 
-                OnSuccess?.Invoke(this, new CustomEventArgs(result, ));
+                OnSuccess?.Invoke(this, new CustomEventArgs(result));
 
                 this.Close();
             }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudentsManagement.Common.Enums;
 using StudentsManagement.DataAccess;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
+using System.Collections.Generic;
 
 namespace StudentsManagement.DatabaseDataApp
 {
@@ -19,67 +21,126 @@ namespace StudentsManagement.DatabaseDataApp
 
         static void CreateEntities()
         {
+            var workTypes = new List<WorkType>()
+            {
+                new WorkType() { ShortName = "ЛР", FullName = "Лабораторная работа" },
+                new WorkType() { ShortName = "СР", FullName = "Самостоятельная работа" },
+                new WorkType() { ShortName = "КР", FullName = "Контрольная работа" },
+                new WorkType() { ShortName = "ОКР", FullName = "Обязательная контрольная работа" },
+                new WorkType() { ShortName = "З", FullName = "Зачёт" },
+                new WorkType() { ShortName = "Э", FullName = "Экзамен" },
+                new WorkType() { ShortName = "КП", FullName = "Курсовое проектирование" },
+            };
+            CreateEntities(workTypes, _workTypeRepository);
+            Console.WriteLine($"Created work types");
+
             var specialities = new List<Speciality>
             {
                 new Speciality { ShortName = "ИП", FullName = "Информатика и программирование" },
-                new Speciality { ShortName = "БА", FullName = "Бизнес-аналитика" },
                 new Speciality { ShortName = "ЭТ", FullName = "Электротехника" },
                 new Speciality { ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
-                new Speciality { ShortName = "ИП", FullName = "Информатика и технологии программирования" },
-                new Speciality { ShortName = "АСОИ", FullName = "Автоматизированные сисемы обработки информации" },
-                new Speciality { ShortName = "ПЭ", FullName = "Промышленная электроника" },
-                new Speciality { ShortName = "СХ", FullName = "Сельскохозяйственные машины" },
-                new Speciality { ShortName = "РК", FullName = "Робототехника и автоматизированные комплексы" },
             };
-            DeleteEntities(_specialityRepository);
             CreateEntities(specialities, _specialityRepository);
             Console.WriteLine($"Created specs");
 
             var subjects = new List<Subject>()
             {
                 new Subject { ShortName = "Матем", FullName = "Математика" },
-                new Subject { ShortName = "ЛАиАГ", FullName = "Линейная алгебра и аналитическая геометрия" },
+                new Subject { ShortName = "Физ", FullName = "Физика" },
                 new Subject { ShortName = "СПЭ", FullName = "Современная политэкономия" },
                 new Subject { ShortName = "ИстБел", FullName = "История Беларуси в контексте мировой цивилизации" },
                 new Subject { ShortName = "Сопромат", FullName = "Сопротивление материалов" },
                 new Subject { ShortName = "ИГ", FullName = "Инженерная графика" },
                 new Subject { ShortName = "Инф", FullName = "Информатика" },
                 new Subject { ShortName = "Прогр", FullName = "Программирование" },
-                new Subject { ShortName = "КС", FullName = "Компьютерные сети" },
-                new Subject { ShortName = "Физ", FullName = "Физика" },
             };
-            DeleteEntities(_subjectRepository);
             CreateEntities(subjects, _subjectRepository);
-            Console.WriteLine($"Created discs");
+            Console.WriteLine($"Created subjects");
 
+            var groupsList = new List<Group>();
             var groups = specialities.Select(x => new List<Group>()
             {
-                new Group { Name = "1гр", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
-                new Group { Name = "2гр", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
-                new Group { Name = "3гр", SpecialityId = x.Id, Cource = 2, EnrollYear = 2022, Graduated = false },
-                new Group { Name = "4гр", SpecialityId = x.Id, Cource = 2, EnrollYear = 2022, Graduated = false },
-                new Group { Name = "5гр", SpecialityId = x.Id, Cource = 3, EnrollYear = 2021, Graduated = false },
-                new Group { Name = "6гр", SpecialityId = x.Id, Cource = 3, EnrollYear = 2021, Graduated = false },
+                new Group { Name = $"1{x.ShortName}21", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+                new Group { Name = $"1{x.ShortName}22", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
             });
 
-            DeleteEntities(_groupRepository);
-            foreach (var specialityGroup in groups)
+            foreach (var list in groups)
             {
-                CreateEntities(specialityGroup, _groupRepository);
+                groupsList.AddRange(list);
             };
+            CreateEntities(groupsList, _groupRepository);
             Console.WriteLine($"Created groups");
 
-            var units = new (int cource, int type)?[9][]
+            var users = GenerateUsers(50, UserRole.Student, groupsList.Select(x => x.Id).ToList());
+            for (int i = 0; i < 10; i++)
             {
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
+                users[i].Role = UserRole.Teacher;
+                users[i].GroupId = null;
+            }
+
+            CreateEntities(users, _userRepository);
+            Console.WriteLine($"Created users");
+
+            // Учебный план
+
+            var random = new Random();
+
+            var units = new List<CurriculumUnit>();
+
+            var unitsGroup = specialities.Select(sp =>
+                GetCurriculumUnits(sp.Id, subjects[random.Next(0, subjects.Count - 1)].Id, 1,
+                workTypes[0].Id, workTypes[3].Id, workTypes[4].Id, workTypes[5].Id, workTypes[6].Id).ToList());
+
+            foreach(var one in unitsGroup)
+            {
+                units.AddRange(one);
+            }
+
+            CreateEntities(units, _curUnitRepository);
+            Console.WriteLine($"Created cur units");
+
+            // аттестации
+            var teachers = users.Where(u => u.Role == UserRole.Teacher).ToList();
+            var futureDateTime = DateTime.Now.AddDays(3);
+
+            var attestations = new List<Attestation>();
+
+            for (int i = 0; i < 15; i++)
+            {
+                attestations.Add(
+                    new Attestation
+                    {
+                        Date = futureDateTime.AddDays(i*2),
+                        CurriculumUnitId = units[random.Next(0, units.Count-1)].Id,
+                        GroupId = groupsList[random.Next(0, groupsList.Count - 1)].Id,
+                        TeacherId = teachers[random.Next(0, teachers.Count - 1)].Id
+                    });
+            }
+
+            CreateEntities(attestations, _attestationRepository);
+            Console.WriteLine($"Created atts");
+        }
+
+        private static List<CurriculumUnit> GetCurriculumUnits(Guid specialityId, Guid subjectId, int sem,
+            Guid labId, Guid orkId, Guid zachId, Guid examId, Guid kursId)
+        {
+            var nextSem = sem + 1;
+            return new List<CurriculumUnit>
+            {
+                new CurriculumUnit { Name = "ЛР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 2", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 3", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 4", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 5", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ОКР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new CurriculumUnit { Name = "Зачёт", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = zachId  },
+                new CurriculumUnit { Name = "ЛР 5", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 6", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 7", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 8", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 9", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ОКР 2", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new CurriculumUnit { Name = "Экзамен", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = examId  },
             };
         }
 
@@ -127,6 +188,61 @@ namespace StudentsManagement.DatabaseDataApp
             {
                 repository.Delete(deleteItem.Id);
             }
+        }
+
+        public static List<User> GenerateUsers(int number, UserRole role, List<Guid> groupIds)
+        {
+            var surnames = new List<string>
+            {
+                "Иванов", "Петров", "Глаголев", "Сухов", "Мишин", "Туполев", "Пименов", "Болдырев", "Сапожников"
+            };
+
+            var neutralSurnames = new List<string>
+            {
+                "Сидоренко", "Дмитренко", "Зубко", "Миханович", "Попкович", "Тумар",
+            };
+
+            var maleNames = new List<string>
+            { "Алексей", "Иван", "Дмитрий", "Сергей", "Михаил", "Григорий", "Пётр", "Георгий", "Владимир", "Кирилл" };
+
+            var lastNames = new List<string>
+            { "Алексее", "Ивано", "Дмитрие", "Сергее", "Михаило", "Эдуардо", "Александро" };
+
+            var femaleNames = new List<string>
+            {
+                "Екатерина", "Анна", "Ольга", "Наталья", "Ирина", "Валерия", "Анастасия"
+            };
+
+            var random = new Random();
+
+            var range = Enumerable.Range(1, number+1);
+
+            var users = range.Select(x =>
+                new User { Email = $"user{x}@mail.box",
+                    FirstName = femaleNames[random.Next(0,femaleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)]+"вна",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)]+"а",
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                })
+                .ToList();
+
+            users.AddRange(
+                range.Select(x =>
+                new User
+                {
+                    Email = $"user{x}@mail.box",
+                    FirstName = maleNames[random.Next(0, maleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)] + "вич",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)],
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                }).ToList()
+                );
+
+            return users;
         }
     }
 }
