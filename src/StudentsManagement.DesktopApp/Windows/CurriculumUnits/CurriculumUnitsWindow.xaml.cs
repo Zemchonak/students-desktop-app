@@ -1,9 +1,8 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
-using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Groups;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,7 @@ namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
     /// </summary>
     public partial class CurriculumUnitsWindow : Window
     {
-        private InfoModel? _selectedSpeciality;
+        private InfoModel _selectedSpeciality;
 
         private readonly List<InfoModel> _workTypes;
         private readonly List<InfoModel> _subjects;

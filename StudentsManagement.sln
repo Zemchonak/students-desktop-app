@@ -9,11 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentsManagement.DesktopA
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "StudentsManagement.Database", "src\StudentsManagement.Database\StudentsManagement.Database.sqlproj", "{33CD6897-D040-4B4C-B9C1-50516F40EFE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsManagement.DatabaseDataApp", "src\StudentsManagement.DatabaseDataApp\StudentsManagement.DatabaseDataApp.csproj", "{A1433498-C1FA-4425-802D-4CC79CCE6C08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentsManagement.DatabaseDataApp", "src\StudentsManagement.DatabaseDataApp\StudentsManagement.DatabaseDataApp.csproj", "{A1433498-C1FA-4425-802D-4CC79CCE6C08}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentsManagement.DataAccess", "src\StudentsManagement.DataAccess\StudentsManagement.DataAccess.csproj", "{B6BBF096-573A-47FE-B1DC-DA383A8B96FD}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Database", "Database", "{C0249F15-ADF3-4C8A-9A12-2FDFDC4E08E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StudentsManagement.Common", "src\StudentsManagement.Common\StudentsManagement.Common.csproj", "{FC3E84B6-4D69-4493-B645-3918B0C15682}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{B6BBF096-573A-47FE-B1DC-DA383A8B96FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6BBF096-573A-47FE-B1DC-DA383A8B96FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6BBF096-573A-47FE-B1DC-DA383A8B96FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3E84B6-4D69-4493-B645-3918B0C15682}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3E84B6-4D69-4493-B645-3918B0C15682}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3E84B6-4D69-4493-B645-3918B0C15682}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3E84B6-4D69-4493-B645-3918B0C15682}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

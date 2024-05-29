@@ -1,6 +1,4 @@
-﻿using StudentsManagement.DataAccess.Enums;
-
-namespace StudentsManagement.BusinessLogic.Dtos
+﻿namespace StudentsManagement.BusinessLogic.Dtos
 {
     public class CurriculumUnitDto : BaseDto
     {

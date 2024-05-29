@@ -1,7 +1,7 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;

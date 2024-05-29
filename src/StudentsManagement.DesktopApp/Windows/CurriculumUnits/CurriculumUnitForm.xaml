@@ -31,7 +31,6 @@
         <Label Content="Специальность:" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
         <TextBox Name="SpecialityInfo" IsEnabled="False" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
 
-
         <Label Content="Предмет:" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
         <ComboBox Name="SubjectComboBox" DisplayMemberPath="Info"
                   Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"

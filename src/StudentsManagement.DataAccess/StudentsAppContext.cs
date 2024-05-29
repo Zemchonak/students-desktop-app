@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudentsManagement.Common.Enums;
 using StudentsManagement.DataAccess.Entities;
-using StudentsManagement.DataAccess.Enums;
 
 namespace StudentsManagement.DataAccess
 {
@@ -49,7 +49,7 @@ namespace StudentsManagement.DataAccess
                     PasswordHash = Constants.AdminPasswordHash,
                     FirstName = Constants.AdminFirstName,
                     LastName = Constants.AdminLastName,
-                    Role = UserRole.Admin
+                    Role = UserRole.MainAdmin
                 });
         }
 

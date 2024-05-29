@@ -1,5 +1,4 @@
-﻿using StudentsManagement.DataAccess.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentsManagement.DataAccess.Entities

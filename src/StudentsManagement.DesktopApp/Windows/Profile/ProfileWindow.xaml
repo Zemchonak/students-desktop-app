@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterScreen">
     <Grid>
         <Menu Height="25" VerticalAlignment="Top">
-            <MenuItem Header="Данные">
+            <MenuItem Name="AdminDataButton" Header="Данные">
                 <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
                 <MenuItem Header="Состав учебных групп" Click="GroupsListsMenuItem_Click"></MenuItem>
                 <Separator />
@@ -22,9 +22,12 @@
                 <MenuItem Header="Специальности" Click="SpecialitiesMenuItem_Click"></MenuItem>
                 <MenuItem Header="Учебные группы" Click="GroupsMenuItem_Click"></MenuItem>
                 <Separator />
-                <MenuItem Header="Exit" ></MenuItem>
+                <MenuItem Header="Выход" ></MenuItem>
             </MenuItem>
-            <MenuItem Header="Статистика" ></MenuItem>
+            <MenuItem Header="Мой аккаунт">
+                <MenuItem Header="Смена пароля"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Общая статистика" ></MenuItem>
         </Menu>
     </Grid>
 </Window>

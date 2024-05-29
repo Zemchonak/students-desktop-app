@@ -1,8 +1,8 @@
 ﻿using StudentsManagement.BusinessLogic.Exceptions;
 using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Helpers;
-using StudentsManagement.DesktopApp.Utils;
 using System.Windows;
 
 namespace StudentsManagement.DesktopApp.Windows.Auth
@@ -34,7 +34,7 @@ namespace StudentsManagement.DesktopApp.Windows.Auth
 
             if(string.IsNullOrEmpty(PasswordInput.Password))
             {
-                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Password\"");
+                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Пароль\"");
                 LoginButton.IsEnabled = true;
             }
 
@@ -44,7 +44,7 @@ namespace StudentsManagement.DesktopApp.Windows.Auth
                     EmailInput.Text,
                     AuthHelper.CreateSha256Hash(PasswordInput.Password));
 
-                OnSuccess?.Invoke(this, new CustomEventArgs(result));
+                OnSuccess?.Invoke(this, new CustomEventArgs(result, ));
 
                 this.Close();
             }

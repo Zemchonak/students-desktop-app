@@ -1,22 +1,12 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
-using StudentsManagement.DesktopApp.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
 {
@@ -79,20 +69,23 @@ namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
             var semesterParsed = int.TryParse(Semester.Text, out int semester);
             if (!semesterParsed)
             {
-                MessageBox.Show(string.Format(AppLocalization.IncorrectValueText, "Семестр"), AppLocalization.ErrorMessageText);
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueText, AppLocalization.CurriculumUnitFields.Semester),
+                    AppLocalization.ErrorMessageText);
                 return null;
             }
 
             if(SubjectComboBox.SelectedItem == null)
             {
-                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, "Предмет"), AppLocalization.ErrorMessageText);
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.SubjectFields.Subject),
+                    AppLocalization.ErrorMessageText);
                 return null;
             }
             var selectedSubject = SubjectComboBox.SelectedItem as InfoModel;
 
             if(WorkTypeComboBox.SelectedItem == null)
             {
-                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, "Вид работы"), AppLocalization.ErrorMessageText);
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.WorkTypeFields.WorkType),
+                    AppLocalization.ErrorMessageText);
                 return null;
             }
             var selectedWorkType = WorkTypeComboBox.SelectedItem as InfoModel;

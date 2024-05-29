@@ -1,7 +1,13 @@
-﻿namespace StudentsManagement.DesktopApp.Utils
+﻿using StudentsManagement.Common.Enums;
+using System.Collections.Generic;
+
+namespace StudentsManagement.DesktopApp.Common
 {
     public static class AppLocalization
     {
+        public const string Yes = "Да";
+        public const string No = "Нет";
+
         public static string DatabaseExceptionTitle = "Ошибка с базой данных. Пожалуйста, сообщите администратору!";
 
         public static string ErrorMessageText = "Ошибка";
@@ -33,5 +39,59 @@
 
         public static string IncorrectValueText = "Неверное значение в поле \"{0}\". Пожалуйста, измените его и повторите попытку!";
         public static string IncorrectValueDropdownText = "Не выбрано значение в выпадающем списке \"{0}\". Пожалуйста, сделайте выбор и повторите попытку!";
+
+        public class Roles
+        {
+            public const string Student = "Учащийся";
+            public const string Teacher = "Преподаватель";
+            public const string Admin = "Админ";
+
+            public static Dictionary<UserRole,string> Values = new()
+            {
+                [UserRole.Admin] = Admin,
+                [UserRole.Student] = Student,
+                [UserRole.Teacher] = Teacher,
+            };
+        }
+        public class SubjectFields
+        {
+            public const string Subject = "Уч. предмет";
+        }
+
+        public class WorkTypeFields
+        {
+            public const string WorkType = "Вид работы";
+        }
+
+        public class CurriculumUnitFields
+        {
+            public const string CurriculumUnit = "Единица уч. плана";
+            public const string Semester = "Семестр";
+        }
+
+        public class GroupFields
+        {
+            public const string Group = "Группа";
+        }
+
+        public class AttestationFields
+        {
+            public const string Teacher = "Преподаватель";
+            public const string Date = "Дата";
+        }
+
+        public class UserFields
+        {
+            public const string User = "Пользователь";
+            public const string FirstName = "Имя";
+            public const string MiddleName = "Отчество";
+            public const string LastName = "Фамилия";
+            public const string Email = "Email";
+            public const string IsDisabled = "Отключен";
+            public const string PasswordHash = "Пароль";
+            public const string Role = "Роль";
+            public const string Group = "Группа";
+            public const string Info = "Доп. информация";
+        }
     }
 }

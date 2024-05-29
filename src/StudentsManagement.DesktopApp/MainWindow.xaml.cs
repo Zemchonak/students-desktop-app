@@ -1,8 +1,7 @@
-﻿using StudentsManagement.BusinessLogic.Dtos;
-using StudentsManagement.BusinessLogic.Services;
+﻿using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows;
 using StudentsManagement.DesktopApp.Windows.Auth;
 using StudentsManagement.DesktopApp.Windows.Profile;
 using System;
@@ -81,12 +80,16 @@ namespace StudentsManagement.DesktopApp
         }
         else
         {
+            var currentUserRole = _usersService.GetById(CurrentUserId.Value).Role;
             var profileWindow = new ProfileWindow(CurrentUserId.Value,
+                currentUserRole == UserRole.Admin || currentUserRole == UserRole.MainAdmin,
                 _specialitiesService,
                 _subjectsService,
                 _groupsService,
                 _workTypesService,
-                _curriculumUnitsService);
+                _curriculumUnitsService,
+                _attestationsService,
+                _usersService);
             profileWindow.Show();
         }
     }

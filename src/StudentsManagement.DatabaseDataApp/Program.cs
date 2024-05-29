@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentsManagement.DataAccess;
 using StudentsManagement.DataAccess.Entities;
-using StudentsManagement.DataAccess.Enums;
 using StudentsManagement.DataAccess.Repositories;
 
 namespace StudentsManagement.DatabaseDataApp
@@ -22,10 +21,10 @@ namespace StudentsManagement.DatabaseDataApp
         {
             var specialities = new List<Speciality>
             {
-                new Speciality { ShortName = "ЭУП", FullName = "Экономика и управление проектами" },
-                new Speciality { ShortName = "МОЭ", FullName = "Маркетинг и отраслевая экономика" },
-                new Speciality { ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
+                new Speciality { ShortName = "ИП", FullName = "Информатика и программирование" },
+                new Speciality { ShortName = "БА", FullName = "Бизнес-аналитика" },
                 new Speciality { ShortName = "ЭТ", FullName = "Электротехника" },
+                new Speciality { ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
                 new Speciality { ShortName = "ИП", FullName = "Информатика и технологии программирования" },
                 new Speciality { ShortName = "АСОИ", FullName = "Автоматизированные сисемы обработки информации" },
                 new Speciality { ShortName = "ПЭ", FullName = "Промышленная электроника" },
