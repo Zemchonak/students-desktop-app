@@ -38,6 +38,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Path=Cource}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Год поступления" Width="Auto" Binding="{Binding Path=EnrollYear}" IsReadOnly="True"/>
                 <DataGridTextColumn Header="Выпустилась" Width="Auto" Binding="{Binding Path=GraduatedText}" IsReadOnly="True"/>
             </DataGrid.Columns>

@@ -5,14 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StudentsManagement.BusinessLogic;
 using StudentsManagement.BusinessLogic.Mapper;
-using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DataAccess.Repositories;
 using StudentsManagement.DesktopApp.Mapper;
-using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Auth;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 
 namespace StudentsManagement.DesktopApp
 {
@@ -42,19 +37,8 @@ namespace StudentsManagement.DesktopApp
 
                     services.AddSingleton<App>();
                     services.AddSingleton<MainWindow>();
-                    services.AddSingleton<LoginWindow>();
                 })
                 .Build();
-
-            //using (var scope = host.Services.CreateScope())
-            //{
-            //    var services = scope.ServiceProvider;
-
-            //    var usersRepository = services.GetRequiredService<IUsersRepository>();
-            //    var usersService = services.GetRequiredService<IUsersService>();
-
-            //    DatabaseInitializer.EnsureAdminExists(usersService);
-            //}
 
             var app = host.Services.GetService<App>();
 

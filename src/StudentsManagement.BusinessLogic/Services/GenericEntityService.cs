@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Exceptions;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
-using System.Linq.Expressions;
 
 namespace StudentsManagement.BusinessLogic.Services
 {

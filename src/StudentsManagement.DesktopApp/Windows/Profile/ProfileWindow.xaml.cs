@@ -1,8 +1,11 @@
-﻿using StudentsManagement.BusinessLogic.Dtos;
-using StudentsManagement.BusinessLogic.Services;
-using StudentsManagement.DesktopApp.Windows.Disciplines;
-using StudentsManagement.DesktopApp.Windows.Faculties;
+﻿using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Windows.Attestations;
+using StudentsManagement.DesktopApp.Windows.CurriculumUnits;
 using StudentsManagement.DesktopApp.Windows.Groups;
+using StudentsManagement.DesktopApp.Windows.Specialities;
+using StudentsManagement.DesktopApp.Windows.Subjects;
+using StudentsManagement.DesktopApp.Windows.Users;
+using StudentsManagement.DesktopApp.Windows.WorkTypes;
 using System;
 using System.Windows;
 
@@ -14,32 +17,53 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
     public partial class ProfileWindow : Window
     {
         private readonly Guid _currentUserId;
-        private readonly IFacultiesService _facultiesService;
+        private readonly IWorkTypesService _workTypesService;
         private readonly IGroupsService _groupsService;
         private readonly ISpecialitiesService _specialitiesService;
-        private readonly IDisciplinesService _disciplinesService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly IAttestationsService _attestationsService;
+        private readonly IUsersService _usersService;
 
-        public ProfileWindow(Guid currentUserId,
-            IFacultiesService facultiesService,
+        public ProfileWindow(Guid currentUserId, bool displayAdminDataButton,
             ISpecialitiesService specialitiesService,
-            IDisciplinesService disciplinesService,
-            IGroupsService groupsService)
+            ISubjectsService subjectsService,
+            IGroupsService groupsService,
+            IWorkTypesService workTypesService,
+            ICurriculumUnitsService curriculumUnitsService,
+            IAttestationsService attestationsService,
+            IUsersService usersService)
         {
             InitializeComponent();
 
+            AdminDataButton.Visibility = displayAdminDataButton ? Visibility.Visible : Visibility.Hidden;
+
             _currentUserId = currentUserId;
 
-            _facultiesService = facultiesService;
             _specialitiesService = specialitiesService;
-            _disciplinesService = disciplinesService;
+            _subjectsService = subjectsService;
             _groupsService = groupsService;
+            _workTypesService = workTypesService;
+            _curriculumUnitsService = curriculumUnitsService;
+            _attestationsService = attestationsService;
+            _usersService = usersService;
         }
 
         private void UsersMenuItem_Click(object sender, RoutedEventArgs e)
-        { }
+        {
+            var window = new UsersWindow(_usersService, _groupsService);
+            window.Show();
+        }
 
         private void CurriculumUnitsMenuItem_Click(object sender, RoutedEventArgs e)
-        { }
+        {
+            var window = new CurriculumUnitsWindow(
+                _curriculumUnitsService,
+                _workTypesService,
+                _specialitiesService,
+                _subjectsService);
+            window.Show();
+        }
 
         private void GroupsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -48,18 +72,36 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
         }
 
         private void AttestationsMenuItem_Click(object sender, RoutedEventArgs e)
-        { }
-
-        private void FacultiesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var facultiesWindow = new FacultiesWindow(_facultiesService, _specialitiesService);
-            facultiesWindow.Show();
+            var window = new AttestationWindow(
+                _attestationsService,
+                _curriculumUnitsService,
+                _workTypesService,
+                _subjectsService,
+                _usersService,
+                _groupsService);
+            window.Show();
         }
 
-        private void DisciplinesMenuItem_Click(object sender, RoutedEventArgs e)
+        private void GroupsListsMenuItem_Click(object sender, RoutedEventArgs e)
+        { }
+
+        private void WorkTypesMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            var disciplinesWindow = new DisciplinesWindow(_disciplinesService);
-            disciplinesWindow.Show();
+            var window = new WorkTypesWindow(_workTypesService);
+            window.Show();
+        }
+
+        private void SpecialitiesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SpecialitiesWindow(_specialitiesService);
+            window.Show();
+        }
+
+        private void SubjectsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubjectsWindow(_subjectsService);
+            window.Show();
         }
     }
 }

@@ -1,22 +1,14 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
-using StudentsManagement.DesktopApp.Utils;
-using StudentsManagement.DesktopApp.Windows.Specialities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace StudentsManagement.DesktopApp.Windows.Groups
 {
@@ -26,6 +18,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
     public partial class GroupsWindow : Window
     {
         private Guid? _selectedSpecialityId;
+        private string _selectedSpecialityName;
 
         private readonly IGroupsService _entityService;
         private readonly ISpecialitiesService _specialitiesService;
@@ -70,47 +63,39 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             }
 
             var selectedGroup = GetSelectedItem<GroupDto>();
+            if (selectedGroup == null) { return; }
 
             var form = new GroupForm(AppLocalization.UpdateGroupForm,
                 _entityService, _specialitiesService, _selectedSpecialityId.Value, selectedGroup);
             form.OnSuccess += HandleChanges;
             form.Show();
-
-            //var selectedItem = GetSelectedItem<SpecialityDto>();
-            //if (selectedItem == null) { return; }
-
-            //var form = new SpecialitiesForm(AppLocalization.UpdateFacultyForm,
-            //    _facultyInfo,
-            //    _entityService,
-            //    selectedItem);
-            //form.OnSuccess += HandleChanges;
-            //form.Show();
         }
 
         private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
         {
-            //try
-            //{
-            //    var selectedItem = GetSelectedItem<SpecialityDto>();
-            //    if (selectedItem == null) { return; }
+            try
+            {
+                var selectedItem = GetSelectedItem<GroupDto>();
+                if (selectedItem == null) { return; }
 
-            //    var form = new DeleteConfirmation(selectedItem.Id,
-            //        new List<string>
-            //        {
-            //            $"Специальность",
-            //            $"Факультет: {_facultyInfo.Info}",
-            //            $"Кр. назв.: {selectedItem.ShortName}",
-            //            $"Полное назв.: {selectedItem.FullName}",
-            //        });
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Группа (специальность: {_selectedSpecialityName})",
+                        $"Название: {selectedItem.Name}",
+                        $"Курс: {selectedItem.Cource}",
+                        $"Год поступления: {selectedItem.EnrollYear}",
+                        $"Выпустилась: {selectedItem.GraduatedText}",
+                    });
 
-            //    form.OnConfirm += HandleDelete;
+                form.OnConfirm += HandleDelete;
 
-            //    form.Show();
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //}
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
         private void SpecialitiesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -118,6 +103,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
 
             var selected = SpecialitiesComboBox.SelectedItem as InfoModel;
             _selectedSpecialityId = selected.Id;
+            _selectedSpecialityName = selected.Info;
 
             UpdateDatagrid();
         }

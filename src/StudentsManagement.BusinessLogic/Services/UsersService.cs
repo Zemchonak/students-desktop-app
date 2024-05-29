@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.Common.Enums;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
 
@@ -15,6 +16,12 @@ namespace StudentsManagement.BusinessLogic.Services
             _usersRepository = repository;
             _repository = repository;
             _mapper = mapper;
+        }
+
+        public List<UserDto> GetUsersWithRole(UserRole role)
+        {
+            return _mapper.Map<List<UserDto>>(
+                _repository.GetAll(x => x.Role == role).ToList());
         }
 
         public override void Validate(UserDto entity)

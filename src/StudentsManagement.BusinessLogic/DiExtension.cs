@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.DataAccess;
-using StudentsManagement.DataAccess.Entities;
 
 namespace StudentsManagement.BusinessLogic
 {
@@ -16,9 +14,9 @@ namespace StudentsManagement.BusinessLogic
                 .AddTransient<IUsersService, UsersService>()
                 .AddTransient<IAuthService, AuthService>()
 
-                .AddTransient<IFacultiesService, FacultiesService>()
+                .AddTransient<IWorkTypesService, WorkTypesService>()
                 .AddTransient<ISpecialitiesService, SpecialitiesService>()
-                .AddTransient<IDisciplinesService, DisciplinesService>()
+                .AddTransient<ISubjectsService, SubjectsService>()
                 .AddTransient<ICurriculumUnitsService, CurriculumUnitsService>()
                 .AddTransient<IGroupsService, GroupsService>()
                 .AddTransient<IAttestationsService, AttestationsService>()

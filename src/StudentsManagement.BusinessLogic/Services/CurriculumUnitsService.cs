@@ -13,6 +13,11 @@ namespace StudentsManagement.BusinessLogic.Services
             _mapper = mapper;
         }
 
+        public IReadOnlyCollection<CurriculumUnitDto> GetUnitsBySpecialityId(Guid specialityId)
+        {
+            return GetAll(g => g.SpecialityId == specialityId);
+        }
+
         public override void Validate(CurriculumUnitDto entity)
         { }
     }

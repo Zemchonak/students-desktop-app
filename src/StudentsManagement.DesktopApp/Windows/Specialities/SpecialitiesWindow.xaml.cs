@@ -1,13 +1,11 @@
 ﻿using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
-using StudentsManagement.DesktopApp.Models;
-using StudentsManagement.DesktopApp.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Input;
 
 namespace StudentsManagement.DesktopApp.Windows.Specialities
 {
@@ -16,26 +14,21 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
     /// </summary>
     public partial class SpecialitiesWindow : Window
     {
-        private InfoModel _facultyInfo;
-
         private readonly ISpecialitiesService _entityService;
 
-        public SpecialitiesWindow(InfoModel facultyInfo, ISpecialitiesService specialitiesService)
+        public SpecialitiesWindow(ISpecialitiesService specialitiesService)
         {
             InitializeComponent();
 
-            Title = $"Cпециальности факультета {facultyInfo.Info}";
+            Title = $"Cпециальности";
             HeaderText.Text = Title;
 
-            _facultyInfo = facultyInfo;
             _entityService = specialitiesService;
         }
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            var form = new SpecialitiesForm(AppLocalization.AddSpecialityForm,
-                _facultyInfo,
-                _entityService);
+            var form = new SpecialitiesForm(AppLocalization.AddSpecialityForm, _entityService);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -45,8 +38,7 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
             var selectedItem = GetSelectedItem<SpecialityDto>();
             if (selectedItem == null) { return; }
 
-            var form = new SpecialitiesForm(AppLocalization.UpdateFacultyForm,
-                _facultyInfo,
+            var form = new SpecialitiesForm(AppLocalization.UpdateSpecialityForm,
                 _entityService,
                 selectedItem);
             form.OnSuccess += HandleChanges;
@@ -64,7 +56,6 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
                     new List<string>
                     {
                         $"Специальность",
-                        $"Факультет: {_facultyInfo.Info}",
                         $"Кр. назв.: {selectedItem.ShortName}",
                         $"Полное назв.: {selectedItem.FullName}",
                     });
@@ -77,17 +68,6 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
             {
                 MessageBox.Show(ex.Message);
             }
-        }
-
-        private void MainDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var selectedItem = GetSelectedItem<SpecialityDto>();
-            if (selectedItem == null) { return; }
-
-            var childWindow = new SpecialitiesWindow(
-                new InfoModel(selectedItem.Id, selectedItem.ShortName),
-                _entityService);
-            childWindow.Show();
         }
 
         // Common logic

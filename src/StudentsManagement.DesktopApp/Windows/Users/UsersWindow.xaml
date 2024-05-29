@@ -1,0 +1,52 @@
+﻿<Window x:Class="StudentsManagement.DesktopApp.Windows.Users.UsersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Users"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="1200"
+        Title="Пользователи" Height="450" Width="1200" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.15*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="24,0,338,0">
+            Пользователи
+        </TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Роль" Width="Auto" Binding="{Binding Path=RoleName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Группа" Width="Auto" Binding="{Binding Path=GroupName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Фамилия" Width="Auto" Binding="{Binding Path=LastName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Имя" Width="Auto" Binding="{Binding Path=FirstName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Отчество" Width="Auto" Binding="{Binding Path=MiddleName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Email" Width="Auto" Binding="{Binding Path=Email}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Отключен" Width="Auto" Binding="{Binding Path=IsDisabledText}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Информация" Width="Auto" Binding="{Binding Path=Info}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Регистрация" Grid.Column="3" Grid.Row="3" Click="CreateNew_Click"/>
+        <Button x:Name="EditSelected" Content="Обновление данных" Grid.Column="3" Grid.Row="5" Click="EditSelected_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить выбранного" Grid.Column="3" Grid.Row="7" Click="DeleteSelected_Click"/>
+    </Grid>
+</Window>

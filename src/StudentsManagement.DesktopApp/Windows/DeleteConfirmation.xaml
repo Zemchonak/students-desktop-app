@@ -24,12 +24,14 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="EntityValues" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="4" Margin="0,26,0,0"/>
+        <TextBlock x:Name="EntityValues" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="5"/>
 
-        <Button x:Name="DeleteButton" Content="Удалить"  Grid.Column="1" Grid.Row="5" Click="DeleteButton_Click"/>
-        <Button x:Name="CancelButton" Content="Отмена"  Grid.Column="3" Grid.Row="5" Click="CancelButton_Click"/>
+        <Button x:Name="DeleteButton" Content="Удалить"  Grid.Column="1" Grid.Row="7" Click="DeleteButton_Click"/>
+        <Button x:Name="CancelButton" Content="Отмена"  Grid.Column="3" Grid.Row="7" Click="CancelButton_Click"/>
 
     </Grid>
 </Window>

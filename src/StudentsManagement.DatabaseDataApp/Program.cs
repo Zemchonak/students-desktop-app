@@ -1,183 +1,147 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using StudentsManagement.Common.Enums;
 using StudentsManagement.DataAccess;
 using StudentsManagement.DataAccess.Entities;
-using StudentsManagement.DataAccess.Enums;
 using StudentsManagement.DataAccess.Repositories;
-using MT = StudentsManagement.DataAccess.Enums.MonitoringType;
+using System.Collections.Generic;
 
 namespace StudentsManagement.DatabaseDataApp
 {
     public class Program
     {
-        private static IRepository<Faculty> _facultyRepository;
         private static IRepository<Speciality> _specialityRepository;
-        private static IRepository<Discipline> _disciplineRepository;
+        private static IRepository<Subject> _subjectRepository;
         private static IRepository<CurriculumUnit> _curUnitRepository;
         private static IRepository<Group> _groupRepository;
         private static IRepository<Attestation> _attestationRepository;
         private static IRepository<User> _userRepository;
         private static IRepository<Mark> _markRepository;
         private static IRepository<RetakeResult> _retakeResultRepository;
+        private static IRepository<WorkType> _workTypeRepository;
 
         static void CreateEntities()
         {
-            var faculties = new List<Faculty>
+            var workTypes = new List<WorkType>()
             {
-                new Faculty { ShortName = "ГФ", FullName = "Гуманитарный факультет" },
-                new Faculty { ShortName = "ЭФ", FullName = "Энергетический факультет" },
-                new Faculty { ShortName = "КСиС", FullName = "Факультет компьютерных сетей и систем" },
-                new Faculty { ShortName = "МСФ", FullName = "Машиностроительный факультет" },
+                new WorkType() { ShortName = "ЛР", FullName = "Лабораторная работа" },
+                new WorkType() { ShortName = "СР", FullName = "Самостоятельная работа" },
+                new WorkType() { ShortName = "КР", FullName = "Контрольная работа" },
+                new WorkType() { ShortName = "ОКР", FullName = "Обязательная контрольная работа" },
+                new WorkType() { ShortName = "З", FullName = "Зачёт" },
+                new WorkType() { ShortName = "Э", FullName = "Экзамен" },
+                new WorkType() { ShortName = "КП", FullName = "Курсовое проектирование" },
             };
-            DeleteEntities(_facultyRepository);
-            CreateEntities(faculties, _facultyRepository);
-            Console.WriteLine($"Created facs");
+            CreateEntities(workTypes, _workTypeRepository);
+            Console.WriteLine($"Created work types");
 
             var specialities = new List<Speciality>
             {
-                new Speciality { FacultyId = faculties[0].Id, ShortName = "ЭУП", FullName = "Экономика и управление проектами" },
-                new Speciality { FacultyId = faculties[0].Id, ShortName = "МОЭ", FullName = "Маркетинг и отраслевая экономика" },
-                new Speciality { FacultyId = faculties[1].Id, ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
-                new Speciality { FacultyId = faculties[1].Id, ShortName = "ЭТ", FullName = "Электротехника" },
-                new Speciality { FacultyId = faculties[2].Id, ShortName = "ИП", FullName = "Информатика и технологии программирования" },
-                new Speciality { FacultyId = faculties[2].Id, ShortName = "АСОИ", FullName = "Автоматизированные сисемы обработки информации" },
-                new Speciality { FacultyId = faculties[2].Id, ShortName = "ПЭ", FullName = "Промышленная электроника" },
-                new Speciality { FacultyId = faculties[3].Id, ShortName = "СХ", FullName = "Сельскохозяйственные машины" },
-                new Speciality { FacultyId = faculties[3].Id, ShortName = "РК", FullName = "Робототехника и автоматизированные комплексы" },
+                new Speciality { ShortName = "ИП", FullName = "Информатика и программирование" },
+                new Speciality { ShortName = "ЭТ", FullName = "Электротехника" },
+                new Speciality { ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
             };
-            DeleteEntities(_specialityRepository);
             CreateEntities(specialities, _specialityRepository);
             Console.WriteLine($"Created specs");
 
-            var disciplines = new List<Discipline>()
+            var subjects = new List<Subject>()
             {
-                new Discipline { ShortName = "ВМ", FullName = "Высшая математика" },
-                new Discipline { ShortName = "ЛАиАГ", FullName = "Линейная алгебра и аналитическая геометрия" },
-                new Discipline { ShortName = "СПЭ", FullName = "Современная политэкономия" },
-                new Discipline { ShortName = "ИстБел", FullName = "Истори Беларуси в контексте мировой цивилизации" },
-                new Discipline { ShortName = "Сопромат", FullName = "Сопротивление материалов" },
-                new Discipline { ShortName = "ИГ", FullName = "Инженерная графика" },
-                new Discipline { ShortName = "Инф", FullName = "Информатика" },
-                new Discipline { ShortName = "Прогр", FullName = "Программирование" },
-                new Discipline { ShortName = "КС", FullName = "Компьютерные сети" },
-                new Discipline { ShortName = "Физ", FullName = "Физика" },
+                new Subject { ShortName = "Матем", FullName = "Математика" },
+                new Subject { ShortName = "Физ", FullName = "Физика" },
+                new Subject { ShortName = "СПЭ", FullName = "Современная политэкономия" },
+                new Subject { ShortName = "ИстБел", FullName = "История Беларуси в контексте мировой цивилизации" },
+                new Subject { ShortName = "Сопромат", FullName = "Сопротивление материалов" },
+                new Subject { ShortName = "ИГ", FullName = "Инженерная графика" },
+                new Subject { ShortName = "Инф", FullName = "Информатика" },
+                new Subject { ShortName = "Прогр", FullName = "Программирование" },
             };
-            DeleteEntities(_disciplineRepository);
-            CreateEntities(disciplines, _disciplineRepository);
-            Console.WriteLine($"Created discs");
+            CreateEntities(subjects, _subjectRepository);
+            Console.WriteLine($"Created subjects");
 
+            var groupsList = new List<Group>();
             var groups = specialities.Select(x => new List<Group>()
             {
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 1, Number = 1, EnrollYear = 2023, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 1, Number = 2, EnrollYear = 2023, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 2, Number = 1, EnrollYear = 2022, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 2, Number = 2, EnrollYear = 2022, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 3, Number = 1, EnrollYear = 2021, Graduated = false },
-                new Group { SpecialityShortName = x.ShortName, SpecialityId = x.Id, Cource = 3, Number = 2, EnrollYear = 2021, Graduated = false },
+                new Group { Name = $"1{x.ShortName}21", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+                new Group { Name = $"1{x.ShortName}22", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
             });
 
-            DeleteEntities(_groupRepository);
-            foreach (var specialityGroup in groups)
+            foreach (var list in groups)
             {
-                CreateEntities(specialityGroup, _groupRepository);
+                groupsList.AddRange(list);
             };
+            CreateEntities(groupsList, _groupRepository);
             Console.WriteLine($"Created groups");
 
-            var units = new (int cource, int type)?[9][]
+            var users = GenerateUsers(50, UserRole.Student, groupsList.Select(x => x.Id).ToList());
+            for (int i = 0; i < 10; i++)
             {
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-                [ null, null, null, null, null ],
-            };
+                users[i].Role = UserRole.Teacher;
+                users[i].GroupId = null;
+            }
 
-            var curUnits = new List<CurriculumUnit>();
+            CreateEntities(users, _userRepository);
+            Console.WriteLine($"Created users");
 
-            curUnits.AddRange(CreateSpecialityCurriculum(specialities, disciplines, 0, 0, [
-                ,
-                (2, MonitoringType.Exam),
-            ]));
-            curUnits.AddRange(CreateSpecialityCurriculum(specialities, disciplines, 0, 0, [
-                (1, MonitoringType.Zach),
-                (2, MonitoringType.Exam),
-            ]));
-            /*
-                0 "Экономика и управление проектами" },
-                0 - 1z,2e,3z
-                2 - 1z,2c,2e,3z
-                3 - 1z,2z,3e
+            // Учебный план
 
+            var random = new Random();
 
-                1 "Маркетинг и отраслевая экономика" },
-                0 - 1z,2e,3z
-                2 - 1z,2c,2e,3z
-                3 - 1z,2z,3e
+            var units = new List<CurriculumUnit>();
 
-               2 "Историческое дело" },
-                0 - 1z,2e,3z
-                2 - 1z,2e,3z
-                3 - 1e,2c,2e,3e
+            var unitsGroup = specialities.Select(sp =>
+                GetCurriculumUnits(sp.Id, subjects[random.Next(0, subjects.Count - 1)].Id, 1,
+                workTypes[0].Id, workTypes[3].Id, workTypes[4].Id, workTypes[5].Id, workTypes[6].Id).ToList());
 
-               3 "Промышленная теплоэнергетика" },
+            foreach(var one in unitsGroup)
+            {
+                units.AddRange(one);
+            }
 
-                0 1e 2e 3z
-                1 1e
-                2 2z
+            CreateEntities(units, _curUnitRepository);
+            Console.WriteLine($"Created cur units");
 
+            // аттестации
+            var teachers = users.Where(u => u.Role == UserRole.Teacher).ToList();
+            var futureDateTime = DateTime.Now.AddDays(3);
 
-                new Discipline { ShortName = "ВМ", FullName = "Высшая математика" },
+            var attestations = new List<Attestation>();
 
-                new Discipline { ShortName = "ЛАиАГ", FullName = "Линейная алгебра и аналитическая геометрия" },
-                new Discipline { ShortName = "СПЭ", FullName = "Современная политэкономия" },
-                new Discipline { ShortName = "ИстБел", FullName = "Истори Беларуси в контексте мировой цивилизации" },
+            for (int i = 0; i < 15; i++)
+            {
+                attestations.Add(
+                    new Attestation
+                    {
+                        Date = futureDateTime.AddDays(i*2),
+                        CurriculumUnitId = units[random.Next(0, units.Count-1)].Id,
+                        GroupId = groupsList[random.Next(0, groupsList.Count - 1)].Id,
+                        TeacherId = teachers[random.Next(0, teachers.Count - 1)].Id
+                    });
+            }
 
-                new Discipline { ShortName = "Сопромат", FullName = "Сопротивление материалов" },
-                new Discipline { ShortName = "ИГ", FullName = "Инженерная графика" },
-                new Discipline { ShortName = "Инф", FullName = "Информатика" },
-
-                new Discipline { ShortName = "Прогр", FullName = "Программирование" },
-                new Discipline { ShortName = "КС", FullName = "Компьютерные сети" },
-                new Discipline { ShortName = "Физ", FullName = "Физика" },
-
-               4 "Электротехника" },
-
-               5 "Атомная энергетика" },
-
-               6 "Информатика и технологии программирования" },
-
-               7 "Автоматизированные сисемы обработки информации" },
-
-               8 "Промышленная электроника" },
-
-               9 "Сельскохозяйственные машины" },
-
-               10 "Робототехника и автоматизированные комплексы" },
-
-
-
-             */
-
-            DeleteEntities(_curUnitRepository);
-            CreateEntities(curUnits, _curUnitRepository);
+            CreateEntities(attestations, _attestationRepository);
+            Console.WriteLine($"Created atts");
         }
 
-        static List<CurriculumUnit> CreateSpecialityCurriculum(List<Speciality> specialities, List<Discipline> disciplines,
-            int specialityIndex, int disciplineIndex, (int cource, MonitoringType type)[] units)
+        private static List<CurriculumUnit> GetCurriculumUnits(Guid specialityId, Guid subjectId, int sem,
+            Guid labId, Guid orkId, Guid zachId, Guid examId, Guid kursId)
         {
-            var specialityId = specialities[specialityIndex].Id;
-            var disciplineId = disciplines[disciplineIndex].Id;
-
-            return units.Select(x =>
-                new CurriculumUnit {
-                    SpecialityId = specialityId,
-                    Cource = x.cource,
-                    DisciplineId = disciplineId,
-                    Type = x.type
-                }).ToList();
+            var nextSem = sem + 1;
+            return new List<CurriculumUnit>
+            {
+                new CurriculumUnit { Name = "ЛР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 2", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 3", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 4", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 5", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ОКР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new CurriculumUnit { Name = "Зачёт", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = zachId  },
+                new CurriculumUnit { Name = "ЛР 5", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 6", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 7", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 8", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ЛР 9", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new CurriculumUnit { Name = "ОКР 2", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new CurriculumUnit { Name = "Экзамен", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = examId  },
+            };
         }
 
         static void Main(string[] args)
@@ -191,9 +155,9 @@ namespace StudentsManagement.DatabaseDataApp
                     .UseSqlServer(connectionString)
                     .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
-            _facultyRepository = new GenericRepository<Faculty>(context);
             _specialityRepository = new GenericRepository<Speciality>(context);
-            _disciplineRepository = new GenericRepository<Discipline>(context);
+            _subjectRepository = new GenericRepository<Subject>(context);
+            _workTypeRepository = new GenericRepository<WorkType>(context);
             _curUnitRepository = new GenericRepository<CurriculumUnit>(context);
             _groupRepository = new GenericRepository<Group>(context);
             _attestationRepository = new GenericRepository<Attestation>(context);
@@ -224,6 +188,61 @@ namespace StudentsManagement.DatabaseDataApp
             {
                 repository.Delete(deleteItem.Id);
             }
+        }
+
+        public static List<User> GenerateUsers(int number, UserRole role, List<Guid> groupIds)
+        {
+            var surnames = new List<string>
+            {
+                "Иванов", "Петров", "Глаголев", "Сухов", "Мишин", "Туполев", "Пименов", "Болдырев", "Сапожников"
+            };
+
+            var neutralSurnames = new List<string>
+            {
+                "Сидоренко", "Дмитренко", "Зубко", "Миханович", "Попкович", "Тумар",
+            };
+
+            var maleNames = new List<string>
+            { "Алексей", "Иван", "Дмитрий", "Сергей", "Михаил", "Григорий", "Пётр", "Георгий", "Владимир", "Кирилл" };
+
+            var lastNames = new List<string>
+            { "Алексее", "Ивано", "Дмитрие", "Сергее", "Михаило", "Эдуардо", "Александро" };
+
+            var femaleNames = new List<string>
+            {
+                "Екатерина", "Анна", "Ольга", "Наталья", "Ирина", "Валерия", "Анастасия"
+            };
+
+            var random = new Random();
+
+            var range = Enumerable.Range(1, number+1);
+
+            var users = range.Select(x =>
+                new User { Email = $"user{x}@mail.box",
+                    FirstName = femaleNames[random.Next(0,femaleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)]+"вна",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)]+"а",
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                })
+                .ToList();
+
+            users.AddRange(
+                range.Select(x =>
+                new User
+                {
+                    Email = $"user{x}@mail.box",
+                    FirstName = maleNames[random.Next(0, maleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)] + "вич",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)],
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                }).ToList()
+                );
+
+            return users;
         }
     }
 }

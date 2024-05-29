@@ -1,0 +1,46 @@
+﻿<Window x:Class="StudentsManagement.DesktopApp.Windows.Subjects.SubjectsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Subjects"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Учебные предметы" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentUser" Grid.Column="3" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Учебные предметы</TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Короткое название" Width="Auto" Binding="{Binding Path=ShortName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=FullName}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>

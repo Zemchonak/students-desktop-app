@@ -12,21 +12,17 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
     /// </summary>
     public partial class SpecialitiesForm : Window
     {
-        private InfoModel _facultyInfo;
         private Guid? entityId;
 
         private readonly ISpecialitiesService _service;
 
         public event CustomEventHandler OnSuccess;
 
-        public SpecialitiesForm(string title, InfoModel facultyInfo, ISpecialitiesService service, SpecialityDto entityToUpdate = null)
+        public SpecialitiesForm(string title, ISpecialitiesService service, SpecialityDto entityToUpdate = null)
         {
             InitializeComponent();
 
             Title = title;
-            FacultyInfoTextBox.Text = facultyInfo.Info;
-
-            _facultyInfo = facultyInfo;
             _service = service;
 
             if (entityToUpdate != null)
@@ -49,7 +45,6 @@ namespace StudentsManagement.DesktopApp.Windows.Specialities
                 Id = entityId ?? Guid.Empty,
                 ShortName = ShortNameTextBox.Text,
                 FullName = FullNameTextBox.Text,
-                FacultyId = _facultyInfo.Id,
             };
         }
 
