@@ -4,11 +4,13 @@ using StudentsManagement.Common.Enums;
 using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
 using StudentsManagement.DesktopApp.Models;
+using StudentsManagement.DesktopApp.Windows.Marks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace StudentsManagement.DesktopApp.Windows.Attestations
 {
@@ -29,6 +31,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
         private readonly IUsersService _usersService;
         private readonly ISubjectsService _subjectsService;
         private readonly IGroupsService _groupsService;
+        private readonly IMarksService _marksService;
 
         public AttestationWindow(
             IAttestationsService entityService,
@@ -36,7 +39,8 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             IWorkTypesService workTypesService,
             ISubjectsService subjectsService,
             IUsersService usersService,
-            IGroupsService groupsService)
+            IGroupsService groupsService,
+            IMarksService marksService)
         {
             InitializeComponent();
 
@@ -46,6 +50,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             _subjectsService = subjectsService;
             _workTypesService = workTypesService;
             _groupsService = groupsService;
+            _marksService = marksService;
 
             UpdateEntities();
 
@@ -58,7 +63,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
         {
             UpdateEntities();
 
-            var form = new AttestationForm(AppLocalization.AddAttestationForm, _entityService,
+            var form = new AttestationForm(AppLocalization.AddAttestationForm, _entityService, _marksService,
                 _teachers, _groups, _curriculumUnits);
             form.OnSuccess += HandleChanges;
             form.Show();
@@ -71,8 +76,8 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
 
             UpdateEntities();
 
-            var form = new AttestationForm(AppLocalization.UpdateCurriculumUnitForm,
-                _entityService, _teachers, _groups, _curriculumUnits, selectedItem);
+            var form = new AttestationForm(AppLocalization.UpdateCurriculumUnitForm, _entityService, _marksService,
+                _teachers, _groups, _curriculumUnits, selectedItem);
             form.OnSuccess += HandleChanges;
             form.Show();
         }
@@ -130,7 +135,14 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             ClearDate.Visibility = DatePicker.SelectedDate != null ? Visibility.Visible : Visibility.Hidden;
         }
 
-        // Common logic
+        private void MainDataGrid_SelectionDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<AttestationDto>();
+            if(selectedItem == null)
+            {  return; }
+
+            var marksWindow = new AttestationMarksWindow();
+        }
 
         private void HandleDelete(object sender, CustomEventArgs e)
         {

@@ -22,11 +22,13 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
         private readonly List<InfoModel> _curriculumUnits;
 
         private readonly IAttestationsService _attestationService;
+        private readonly IMarksService _marksService;
 
         public event CustomEventHandler OnSuccess;
 
         public AttestationForm(string title,
             IAttestationsService attestationService,
+            IMarksService marksService,
             List<InfoModel> teachers,
             List<InfoModel> groups,
             List<InfoModel> curriculumUnits,
@@ -37,6 +39,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             Title = title;
 
             _attestationService = attestationService;
+            _marksService = marksService;
 
             _teachers = teachers;
             _groups = groups;
@@ -125,6 +128,8 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             if (_entityId == null)
             {
                 fromFormEntity.Id = _attestationService.Create(fromFormEntity);
+
+                _marksService.CreateMarks(fromFormEntity.Id, fromFormEntity.GroupId);
             }
             else
             {

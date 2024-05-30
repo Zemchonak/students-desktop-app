@@ -1,0 +1,4523 @@
+StudentsManagement.BusinessLogic\Constants.cs
+namespace StudentsManagement.BusinessLogic
+{
+    public static class Constants
+    {
+        public const string CannotBeEmptyMessage = "Поле \"{0}\" не может быть пустым";
+        public const string InvalidEmailPasswordMessage = "Неправильный логин или пароль!";
+    }
+}
+
+StudentsManagement.BusinessLogic\DiExtension.cs
+using Microsoft.Extensions.DependencyInjection;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DataAccess;
+namespace StudentsManagement.BusinessLogic
+{
+    public static class DiExtension
+    {
+        public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services, string connectionString = null)
+        {
+            return services
+                .AddDataAccessServices(connectionString)
+                .AddTransient<IUsersService, UsersService>()
+                .AddTransient<IAuthService, AuthService>()
+                .AddTransient<IWorkTypesService, WorkTypesService>()
+                .AddTransient<ISpecialitiesService, SpecialitiesService>()
+                .AddTransient<ISubjectsService, SubjectsService>()
+                .AddTransient<ICurriculumUnitsService, CurriculumUnitsService>()
+                .AddTransient<IGroupsService, GroupsService>()
+                .AddTransient<IAttestationsService, AttestationsService>()
+                .AddTransient<IMarksService, MarksService>()
+                .AddTransient<IRetakeResultsService, RetakeResultsService>();
+        }
+    }
+}
+
+StudentsManagement.BusinessLogic\StudentsManagement.BusinessLogic.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StudentsManagement.DataAccess\StudentsManagement.DataAccess.csproj" />
+  </ItemGroup>
+</Project>
+
+StudentsManagement.Common\AppLocalization.cs
+using StudentsManagement.Common.Enums;
+using System.Collections.Generic;
+namespace StudentsManagement.DesktopApp.Common
+{
+    public static class AppLocalization
+    {
+        public const string Yes = "Да";
+        public const string No = "Нет";
+        public static string DatabaseExceptionTitle = "Ошибка с базой данных. Пожалуйста, сообщите администратору!";
+        public static string ErrorMessageText = "Ошибка";
+        public static string SelectSomethingMessageText = "Не выбрана строка в таблице. Пожалуйста, сделайте выбор и повторите попытку!";
+        public static string SelectDropdownSomethingMessageText = "Пожалуйста, сделайте выбор в выпадающем списке и повторите попытку!";
+        public static string LoginButtonText = "Войти в учётную запись";
+        public static string ProfileButtonText = "Личный кабинет";
+        public static string NotFilledInMessageText = "Не заполнено поле ";
+        public static string WelcomeMessageText = "Рады приветствовать вас, ";
+        public static string SignedInAsText = "Вы вошли как ";
+        public static string AddWorkTypeForm = "Добавление вида работ";
+        public static string UpdateWorkTypeForm = "Обновление вида работ";
+        public static string AddSpecialityForm = "Добавление специальности";
+        public static string UpdateSpecialityForm = "Обновление специальности";
+        public static string AddSubjectForm = "Добавление уч. предмета";
+        public static string UpdateSubjectForm = "Обновление уч. предмета";
+        public static string AddUserForm = "Добавление пользователя";
+        public static string UpdateUserForm = "Обновление пользователя";
+        public static string AddGroupForm = "Добавление группы";
+        public static string UpdateGroupForm = "Обновление группы";
+        public static string AddCurriculumUnitForm = "Добавление единицы уч.плана";
+        public static string UpdateCurriculumUnitForm = "Обновление единицы уч.плана";
+        public static string AddMarkForm = "Добавление оценки";
+        public static string UpdateMarkForm = "Обновление оценки";
+        public static string AddAttestationForm = "Добавление аттестации";
+        public static string UpdateAttestationForm = "Обновление аттестации";
+        public static string IncorrectValueText = "Неверное значение в поле \"{0}\". Пожалуйста, измените его и повторите попытку!";
+        public static string IncorrectValueDropdownText = "Не выбрано значение в выпадающем списке \"{0}\". Пожалуйста, сделайте выбор и повторите попытку!";
+        public class Roles
+        {
+            public const string Student = "Учащийся";
+            public const string Teacher = "Преподаватель";
+            public const string Admin = "Админ";
+            public static Dictionary<UserRole,string> Values = new()
+            {
+                [UserRole.Admin] = Admin,
+                [UserRole.Student] = Student,
+                [UserRole.Teacher] = Teacher,
+            };
+        }
+        public class SubjectFields
+        {
+            public const string Subject = "Уч. предмет";
+        }
+        public class WorkTypeFields
+        {
+            public const string WorkType = "Вид работы";
+        }
+        public class CurriculumUnitFields
+        {
+            public const string CurriculumUnit = "Единица уч. плана";
+            public const string Semester = "Семестр";
+        }
+        public class GroupFields
+        {
+            public const string Group = "Группа";
+        }
+        public class AttestationFields
+        {
+            public const string Teacher = "Преподаватель";
+            public const string Date = "Дата";
+        }
+        public class UserFields
+        {
+            public const string User = "Пользователь";
+            public const string FirstName = "Имя";
+            public const string MiddleName = "Отчество";
+            public const string LastName = "Фамилия";
+            public const string Email = "Email";
+            public const string IsDisabled = "Отключен";
+            public const string PasswordHash = "Пароль";
+            public const string Role = "Роль";
+            public const string Group = "Группа";
+            public const string Info = "Доп. информация";
+        }
+    }
+}
+
+StudentsManagement.Common\StudentsManagement.Common.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+</Project>
+
+StudentsManagement.DataAccess\Constants.cs
+namespace StudentsManagement.DataAccess
+{
+    public static class Constants
+    {
+        public const string InvalidEmailPasswordMessage = "Неправильный логин или пароль!";
+        public const string AutoGuidModelBuilderValue = "NEWID()";
+        public const string AdminEmail = "admin@ya.ru";
+        public const string AdminFirstName = "Администратор";
+        public const string AdminLastName = "приложения";
+        public const string AdminPasswordHash = "236fcd343c3b841fae820cf63719b17b7ebb0d9d883c911e4afcd9971b530fe7";
+    }
+}
+
+StudentsManagement.DataAccess\DIExtension.cs
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.DataAccess
+{
+    public static class DiExtension
+    {
+        public static IServiceCollection AddDataAccessServices(
+            this IServiceCollection services,
+            string connectionString = null)
+        {
+            return services
+                .AddDbContext<StudentsAppContext>(options =>
+                {
+                    if (string.IsNullOrEmpty(connectionString))
+                    {
+                        options.UseInMemoryDatabase("StudentsDb");
+                    }
+                    else
+                    {
+                        options.UseSqlServer(connectionString);
+                        options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+                    }
+                })
+                .AddScoped(typeof(IRepository<>), typeof(GenericRepository<>))
+                .AddScoped<IUsersRepository, UsersRepository>();
+        }
+    }
+}
+
+StudentsManagement.DataAccess\StudentsAppContext.cs
+using Microsoft.EntityFrameworkCore;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DataAccess.Entities;
+namespace StudentsManagement.DataAccess
+{
+    public class StudentsAppContext : DbContext
+    {
+        public StudentsAppContext(DbContextOptions options)
+            : base(options)
+        {
+            Database.EnsureCreated();
+        }
+        public StudentsAppContext(DbContextOptionsBuilder optionsBulder)
+            : base(optionsBulder.Options)
+        {
+            Database.EnsureCreated();
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Speciality>(
+                //s => { s.HasKey(p => p.FacultyId); s.ToTable("Faculties")
+                )
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<WorkType>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Subject>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<User>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Group>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<CurriculumUnit>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Attestation>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<Mark>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<RetakeResult>()
+                .Property(e => e.Id).HasDefaultValueSql(Constants.AutoGuidModelBuilderValue);
+            modelBuilder.Entity<User>().HasData(
+                new User
+                {
+                    Id = Guid.Parse("0CAF4590-5AE3-4278-93CD-D4A7515065E4"),
+                    Email = Constants.AdminEmail,
+                    PasswordHash = Constants.AdminPasswordHash,
+                    FirstName = Constants.AdminFirstName,
+                    LastName = Constants.AdminLastName,
+                    Role = UserRole.MainAdmin
+                });
+        }
+        public DbSet<Speciality> Specialities { get; set; }
+        public DbSet<WorkType> WorkTypes { get; set; }
+        public DbSet<Subject> Subjects { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<CurriculumUnit> CurriculumUnits { get; set; }
+        public DbSet<Attestation> Attestations { get; set; }
+        public DbSet<Mark> Marks { get; set; }
+        public DbSet<RetakeResult> RetakeResult { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\StudentsManagement.DataAccess.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.26" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.26" />
+	  <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.26" />
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StudentsManagement.Common\StudentsManagement.Common.csproj" />
+  </ItemGroup>
+</Project>
+
+StudentsManagement.DatabaseDataApp\Program.cs
+using Microsoft.EntityFrameworkCore;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DataAccess;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+using System.Collections.Generic;
+namespace StudentsManagement.DatabaseDataApp
+{
+    public class Program
+    {
+        private static IRepository<Speciality> _specialityRepository;
+        private static IRepository<Subject> _subjectRepository;
+        private static IRepository<CurriculumUnit> _curUnitRepository;
+        private static IRepository<Group> _groupRepository;
+        private static IRepository<Attestation> _attestationRepository;
+        private static IRepository<User> _userRepository;
+        private static IRepository<Mark> _markRepository;
+        private static IRepository<RetakeResult> _retakeResultRepository;
+        private static IRepository<WorkType> _workTypeRepository;
+        static void CreateEntities()
+        {
+            var workTypes = new List<WorkType>()
+            {
+                new WorkType() { ShortName = "ЛР", FullName = "Лабораторная работа" },
+                new WorkType() { ShortName = "СР", FullName = "Самостоятельная работа" },
+                new WorkType() { ShortName = "КР", FullName = "Контрольная работа" },
+                new WorkType() { ShortName = "ОКР", FullName = "Обязательная контрольная работа" },
+                new WorkType() { ShortName = "З", FullName = "Зачёт" },
+                new WorkType() { ShortName = "Э", FullName = "Экзамен" },
+                new WorkType() { ShortName = "КП", FullName = "Курсовое проектирование" },
+            };
+            CreateEntities(workTypes, _workTypeRepository);
+            Console.WriteLine($"Created work types");
+            var specialities = new List<Speciality>
+            {
+                new Speciality { ShortName = "ИП", FullName = "Информатика и программирование" },
+                new Speciality { ShortName = "ЭТ", FullName = "Электротехника" },
+                new Speciality { ShortName = "ПТЭ", FullName = "Промышленная теплоэнергетика" },
+            };
+            CreateEntities(specialities, _specialityRepository);
+            Console.WriteLine($"Created specs");
+            var subjects = new List<Subject>()
+            {
+                new Subject { ShortName = "Матем", FullName = "Математика" },
+                new Subject { ShortName = "Физ", FullName = "Физика" },
+                new Subject { ShortName = "СПЭ", FullName = "Современная политэкономия" },
+                new Subject { ShortName = "ИстБел", FullName = "История Беларуси в контексте мировой цивилизации" },
+                new Subject { ShortName = "Сопромат", FullName = "Сопротивление материалов" },
+                new Subject { ShortName = "ИГ", FullName = "Инженерная графика" },
+                new Subject { ShortName = "Инф", FullName = "Информатика" },
+                new Subject { ShortName = "Прогр", FullName = "Программирование" },
+            };
+            CreateEntities(subjects, _subjectRepository);
+            Console.WriteLine($"Created subjects");
+            var groupsList = new List<Group>();
+            var groups = specialities.Select(x => new List<Group>()
+            {
+                new Group { Name = $"1{x.ShortName}21", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+                new Group { Name = $"1{x.ShortName}22", SpecialityId = x.Id, Cource = 1, EnrollYear = 2023, Graduated = false },
+            });
+            foreach (var list in groups)
+            {
+                groupsList.AddRange(list);
+            };
+            CreateEntities(groupsList, _groupRepository);
+            Console.WriteLine($"Created groups");
+            var users = GenerateUsers(50, UserRole.Student, groupsList.Select(x => x.Id).ToList());
+            for (int i = 0; i < 10; i++)
+            {
+                users[i].Role = UserRole.Teacher;
+                users[i].GroupId = null;
+            }
+            CreateEntities(users, _userRepository);
+            Console.WriteLine($"Created users");
+            // Учебный план
+            var random = new Random();
+            var units = new List<CurriculumUnit>();
+            var unitsGroup = specialities.Select(sp =>
+                GetCurriculumUnits(sp.Id, subjects[random.Next(0, subjects.Count - 1)].Id, 1,
+                workTypes[0].Id, workTypes[3].Id, workTypes[4].Id, workTypes[5].Id, workTypes[6].Id).ToList());
+            foreach(var one in unitsGroup)
+            {
+                units.AddRange(one);
+            }
+            CreateEntities(units, _curUnitRepository);
+            Console.WriteLine($"Created cur units");
+            // аттестации
+            var teachers = users.Where(u => u.Role == UserRole.Teacher).ToList();
+            var futureDateTime = DateTime.Now.AddDays(3);
+            var attestations = new List<Attestation>();
+            for (int i = 0; i < 15; i++)
+            {
+                attestations.Add(
+                    new Attestation
+                    {
+                        Date = futureDateTime.AddDays(i*2),
+                        CurriculumUnitId = units[random.Next(0, units.Count-1)].Id,
+                        GroupId = groupsList[random.Next(0, groupsList.Count - 1)].Id,
+                        TeacherId = teachers[random.Next(0, teachers.Count - 1)].Id
+                    });
+            }
+            CreateEntities(attestations, _attestationRepository);
+            Console.WriteLine($"Created atts");
+        }
+        private static List<CurriculumUnit> GetCurriculumUnits(Guid specialityId, Guid subjectId, int sem,
+            Guid labId, Guid orkId, Guid zachId, Guid examId, Guid kursId)
+        {
+            var nextSem = sem + 1;
+            return new List<CurriculumUnit>
+            {
+                new() { Name = "ЛР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 2", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 3", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 4", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 5", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ОКР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new() { Name = "Зачёт", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = zachId  },
+                new() { Name = "ЛР 5", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 6", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 7", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 8", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 9", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ОКР 2", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new() { Name = "Экзамен", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = examId  },
+            };
+        }
+        static void Main(string[] args)
+        {
+            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Database=StudentsDb;" +
+                "Integrated Security=True;Connect Timeout=30;Encrypt=False;" +
+                "Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+            using var context = new StudentsAppContext(
+                new DbContextOptionsBuilder()
+                    .UseSqlServer(connectionString)
+                    .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
+            _specialityRepository = new GenericRepository<Speciality>(context);
+            _subjectRepository = new GenericRepository<Subject>(context);
+            _workTypeRepository = new GenericRepository<WorkType>(context);
+            _curUnitRepository = new GenericRepository<CurriculumUnit>(context);
+            _groupRepository = new GenericRepository<Group>(context);
+            _attestationRepository = new GenericRepository<Attestation>(context);
+            _userRepository = new GenericRepository<User>(context);
+            _markRepository = new GenericRepository<Mark>(context);
+            _retakeResultRepository = new GenericRepository<RetakeResult>(context);
+            CreateEntities();
+            Console.WriteLine("Done!");
+        }
+        static void CreateEntities<T>(List<T> items, IRepository<T> repository)
+            where T : class, IEntity
+        {
+            foreach (var one in items)
+            {
+                var createdId = repository.Create(one);
+                one.Id = createdId;
+            }
+        }
+        static void DeleteEntities<T>(IRepository<T> repository)
+            where T : class, IEntity
+        {
+            var itemsToDelete = repository.GetAll();
+            foreach (var deleteItem in itemsToDelete)
+            {
+                repository.Delete(deleteItem.Id);
+            }
+        }
+        public static List<User> GenerateUsers(int number, UserRole role, List<Guid> groupIds)
+        {
+            var surnames = new List<string>
+            {
+                "Иванов", "Петров", "Глаголев", "Сухов", "Мишин", "Туполев", "Пименов", "Болдырев", "Сапожников"
+            };
+            var neutralSurnames = new List<string>
+            {
+                "Сидоренко", "Дмитренко", "Зубко", "Миханович", "Попкович", "Тумар",
+            };
+            var maleNames = new List<string>
+            { "Алексей", "Иван", "Дмитрий", "Сергей", "Михаил", "Григорий", "Пётр", "Георгий", "Владимир", "Кирилл" };
+            var lastNames = new List<string>
+            { "Алексее", "Ивано", "Дмитрие", "Сергее", "Михаило", "Эдуардо", "Александро" };
+            var femaleNames = new List<string>
+            {
+                "Екатерина", "Анна", "Ольга", "Наталья", "Ирина", "Валерия", "Анастасия"
+            };
+            var random = new Random();
+            var range = Enumerable.Range(1, number+1);
+            var users = range.Select(x =>
+                new User { Email = $"user{x}@mail.box",
+                    FirstName = femaleNames[random.Next(0,femaleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)]+"вна",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)]+"а",
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                })
+                .ToList();
+            users.AddRange(
+                range.Select(x =>
+                new User
+                {
+                    Email = $"user{x}@mail.box",
+                    FirstName = maleNames[random.Next(0, maleNames.Count - 1)],
+                    MiddleName = lastNames[random.Next(0, lastNames.Count - 1)] + "вич",
+                    LastName = surnames[random.Next(0, surnames.Count - 1)],
+                    Role = role,
+                    PasswordHash = "123321",
+                    GroupId = groupIds[random.Next(0, groupIds.Count - 1)]
+                }).ToList()
+                );
+            return users;
+        }
+    }
+}
+
+StudentsManagement.DatabaseDataApp\StudentsManagement.DatabaseDataApp.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Faker.Net" Version="2.0.163" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StudentsManagement.DataAccess\StudentsManagement.DataAccess.csproj" />
+  </ItemGroup>
+</Project>
+
+StudentsManagement.DesktopApp\App.cs
+using System.Windows;
+namespace StudentsManagement.DesktopApp
+{
+    public class App : Application
+    {
+        readonly MainWindow mainWindow;
+        public App(MainWindow mainWindow)
+        {
+            this.mainWindow = mainWindow;
+        }
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            mainWindow.Show();
+            base.OnStartup(e);
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\AssemblyInfo.cs
+using System.Windows;
+[assembly: ThemeInfo(
+    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
+                                     //(used if a resource is not found in the page,
+                                     // or application resource dictionaries)
+    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+                                              //(used if a resource is not found in the page,
+                                              // app, or any theme specific resource dictionaries)
+)]
+
+StudentsManagement.DesktopApp\MainWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp"
+        mc:Ignorable="d"
+        MinHeight="800" MinWidth="1200"
+        Title="Учёт успеваемости учащихся" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.35*"/>
+            <ColumnDefinition Width="0.30*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentUser" Grid.Column="4" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Ближайшие аттестационные мероприятия специальности</TextBlock>
+        <ComboBox Name="SpecialitiesComboBox" Grid.Column="2" Grid.Row="1" FontSize="15"></ComboBox>
+        <DataGrid Name="MainDataGrid" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Width="" Binding="{Binding Path=Date}"/>
+                <DataGridTextColumn Header="Вид аттестации" Binding="{Binding Path=Type}"/>
+                <DataGridHyperlinkColumn Header="Факультет, специальность" Binding="{Binding Path=FacultySpecialityInfo}"/>
+                <DataGridHyperlinkColumn Header="Группа" Binding="{Binding Path=GroupName}"/>
+                <DataGridTextColumn Header="Преподаватель" Binding="{Binding Path=TeacherInfo}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="ProfileButton" Grid.Column="4" Grid.Row="1" Click="ProfileButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\MainWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Windows.Auth;
+using StudentsManagement.DesktopApp.Windows.Profile;
+using System;
+using System.Text;
+using System.Windows;
+namespace StudentsManagement.DesktopApp
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        private Guid? CurrentUserId;
+        private readonly IAuthService _authService;
+        private readonly IUsersService _usersService;
+        private readonly IWorkTypesService _workTypesService;
+        private readonly ISpecialitiesService _specialitiesService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly IGroupsService _groupsService;
+        private readonly IAttestationsService _attestationsService;
+        private readonly IMarksService _marksService;
+        private readonly IRetakeResultsService _retakeResultsService;
+        public MainWindow(
+            IAuthService authService,
+            IUsersService usersService,
+            IWorkTypesService workTypesService,
+            ISpecialitiesService specialitiesService,
+            ISubjectsService subjectsService,
+            ICurriculumUnitsService curriculumUnitsService,
+            IGroupsService groupsService,
+            IAttestationsService attestationsService,
+            IMarksService marksService,
+            IRetakeResultsService retakeResultsService)
+        {
+            InitializeComponent();
+            ProfileButton.Content = AppLocalization.LoginButtonText;
+            _authService = authService;
+            _usersService = usersService;
+            _workTypesService = workTypesService;
+            _specialitiesService = specialitiesService;
+            _subjectsService = subjectsService;
+            _curriculumUnitsService = curriculumUnitsService;
+            _groupsService = groupsService;
+            _attestationsService = attestationsService;
+            _marksService = marksService;
+            _retakeResultsService = retakeResultsService;
+            CurrentUserId = null;
+            FillSpecialitiesComboBox();
+    }
+    private void FillSpecialitiesComboBox()
+    {
+        /*
+         TODO
+           Load faculties, specitialities, groups
+            Fill SpecialitiesComboBox with options
+         */
+    }
+    private void ProfileButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (CurrentUserId == null)
+        {
+            var loginWindow = new LoginWindow(_authService);
+            loginWindow.OnSuccess += HandleSuccessfulLogin;
+            loginWindow.Show();
+        }
+        else
+        {
+            var currentUserRole = _usersService.GetById(CurrentUserId.Value).Role;
+            var profileWindow = new ProfileWindow(CurrentUserId.Value,
+                currentUserRole == UserRole.Admin || currentUserRole == UserRole.MainAdmin,
+                _specialitiesService,
+                _subjectsService,
+                _groupsService,
+                _workTypesService,
+                _curriculumUnitsService,
+                _attestationsService,
+                _usersService,
+                _marksService);
+            profileWindow.Show();
+        }
+    }
+    private void HandleSuccessfulLogin(object sender, CustomEventArgs e)
+    {
+        ProfileButton.Content = AppLocalization.ProfileButtonText;
+        CurrentUserId = e.Id;
+        var user = _usersService.GetById(CurrentUserId.Value);
+        // получить ФИО пользователя
+        var userName = new StringBuilder($"{user.FirstName} ");
+        if (!string.IsNullOrEmpty(user.MiddleName))
+        {
+            userName.Append($"{user.MiddleName[0]}.");
+        }
+        userName.Append($"{user.LastName[0]}.");
+        CurrentUser.Text = AppLocalization.SignedInAsText + userName.ToString();
+        MessageBox.Show(AppLocalization.WelcomeMessageText + userName.ToString());
+    }
+}
+}
+
+StudentsManagement.DesktopApp\Program.cs
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using StudentsManagement.BusinessLogic;
+using StudentsManagement.BusinessLogic.Mapper;
+using StudentsManagement.DesktopApp.Mapper;
+using System;
+using System.IO;
+namespace StudentsManagement.DesktopApp
+{
+    public class Program
+    {
+        [STAThread]
+        public static void Main()
+        {
+            var host = Host.CreateDefaultBuilder()
+                .ConfigureServices(services =>
+                {
+                    var configuration = SetupSettingsJson();
+                    services.AddSingleton<IConfiguration>(configuration);
+                    var connectionString = configuration.GetConnectionString("StudentsDb");
+                    var mapperConfig = new MapperConfiguration(mc =>
+                    {
+                        mc.AddProfile(new BusinessLogicMappingProfile());
+                        mc.AddProfile(new DesktopAppMappingProfile());
+                    });
+                    var mapper = mapperConfig.CreateMapper();
+                    services.AddSingleton(mapper);
+                    services.AddBusinessLogicServices(connectionString);
+                    services.AddSingleton<App>();
+                    services.AddSingleton<MainWindow>();
+                })
+                .Build();
+            var app = host.Services.GetService<App>();
+            app?.Run();
+        }
+        protected static IConfiguration SetupSettingsJson()
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", false)
+                .AddEnvironmentVariables()
+                .Build();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\StudentsManagement.DesktopApp.csproj
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.26" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StudentsManagement.BusinessLogic\StudentsManagement.BusinessLogic.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>
+
+StudentsManagement.BusinessLogic\Dtos\AttestationDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class AttestationDto : BaseDto
+    {
+        public Guid TeacherId { get; set; }
+        public string TeacherInfo { get; set; }
+        public Guid GroupId { get; set; }
+        public string GroupInfo { get; set; }
+        public Guid CurriculumUnitId { get; set; }
+        public string CurriculutUnitInfo { get; set; }
+        public DateTime Date { get; set; }
+        public string FormattedDate { get => Date.ToString("D"); }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\BaseDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public abstract class BaseDto : IDto
+    {
+        public Guid Id { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\CurriculumUnitDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class CurriculumUnitDto : BaseDto
+    {
+        public Guid SpecialityId { get; set; }
+        public int Semester { get; set; }
+        public Guid SubjectId { get; set; }
+        public string SubjectName { get; set; }
+        public Guid WorkTypeId { get; set; }
+        public string WorkTypeName { get; set; }
+        public string Name { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\GroupDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class GroupDto : BaseDto
+    {
+        public int Cource { get; set; }
+        public string Name { get; set; }
+        public bool Graduated { get; set; }
+        public int EnrollYear { get; set; }
+        public Guid SpecialityId { get; set; }
+        public string GraduatedText { get => Graduated ? "Да" : "Нет"; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\IDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public interface IDto
+    {
+        public Guid Id { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\MarkDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class MarkDto : BaseDto
+    {
+        public Guid StudentId { get; set; }
+        public Guid AttestationId { get; set; }
+        public int? Value { get; set; }
+        public bool NotAttended { get; set; }
+        public bool NotAllowed { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\RetakeResultDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class RetakeResultDto : BaseDto
+    {
+        public Guid StudentId { get; set; }
+        public Guid AttestationId { get; set; }
+        public int? Value { get; set; }
+        public DateTime Date { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\SpecialityDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class SpecialityDto : BaseDto
+    {
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\SubjectDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class SubjectDto : BaseDto
+    {
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\UserDto.cs
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
+using System.Text;
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class UserDto : BaseDto
+    {
+        public string ShortenedName
+        { get
+            {
+                var sb = new StringBuilder($"{LastName} {FirstName[0]}.");
+                if (!string.IsNullOrEmpty(MiddleName))
+                    sb.Append($"{MiddleName[0]}.");
+                return sb.ToString();
+            }
+        }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
+        public string Email { get; set; }
+        public bool? IsDisabled { get; set; }
+        public string IsDisabledText { get =>
+                IsDisabled.HasValue && IsDisabled.Value ?
+                    AppLocalization.Yes : AppLocalization.No; }
+        public string PasswordHash { get; set; }
+        public UserRole Role { get; set; }
+        public string RoleName { get => AppLocalization.Roles.Values[Role]; }
+        public string Info { get; set; }
+        public Guid? GroupId { get; set; }
+        public string GroupName { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Dtos\WorkTypeDto.cs
+namespace StudentsManagement.BusinessLogic.Dtos
+{
+    public class WorkTypeDto : BaseDto
+    {
+        public string ShortName { get; set; }
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.BusinessLogic\Exceptions\BusinessLogicException.cs
+namespace StudentsManagement.BusinessLogic.Exceptions
+{
+    [Serializable]
+    public class BusinessLogicException : Exception
+    {
+        public BusinessLogicException() { }
+        public BusinessLogicException(string message)
+            : base(message)
+        { }
+        public BusinessLogicException(Exception ex)
+            : base(ex.Message, ex)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Exceptions\ValidationException.cs
+using System.Runtime.Serialization;
+namespace StudentsManagement.BusinessLogic.Exceptions
+{
+    [Serializable]
+    public class ValidationException : Exception
+    {
+        public ValidationException()
+        {
+        }
+        public ValidationException(string message) : base(message)
+        {
+        }
+        public ValidationException(string message, Exception innerException) : base(message, innerException)
+        {
+        }
+        protected ValidationException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
+}
+
+StudentsManagement.BusinessLogic\Mapper\BusinessLogicMappingProfile.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+namespace StudentsManagement.BusinessLogic.Mapper
+{
+    public class BusinessLogicMappingProfile : Profile
+    {
+        public BusinessLogicMappingProfile()
+        {
+            CreateMap<Speciality, SpecialityDto>().ReverseMap();
+            CreateMap<WorkType, WorkTypeDto>().ReverseMap();
+            CreateMap<Subject, SubjectDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<Group, GroupDto>().ReverseMap();
+            CreateMap<CurriculumUnit, CurriculumUnitDto>().ReverseMap();
+            CreateMap<Attestation, AttestationDto>().ReverseMap();
+            CreateMap<Mark, MarkDto>().ReverseMap();
+            CreateMap<RetakeResult, RetakeResultDto>().ReverseMap();
+        }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\AttestationsService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class AttestationsService : GenericEntityService<Attestation, AttestationDto>, IAttestationsService
+    {
+        public AttestationsService(IRepository<Attestation> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public override void Validate(AttestationDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\AuthService.cs
+using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class AuthService : IAuthService
+    {
+        private readonly IUsersRepository _userRepository;
+        public AuthService(IUsersRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+        public Guid Register(string email, string passwordhash)
+        {
+            try
+            {
+                var createdUserId = _userRepository.Create(new User { Email = email, PasswordHash = passwordhash  });
+                return createdUserId;
+            }
+            catch (Exception ex)
+            {
+                throw new BusinessLogicException(ex);
+            }
+        }
+        /// <summary>
+        /// Позволяет осуществлять вход в аккаунт
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="passwordhash"></param>
+        /// <returns>Id пользователя, для которого осуществлён вход</returns>
+        /// <exception cref="BusinessLogicException"/>
+        public Guid SignIn(string email, string passwordhash)
+        {
+            try
+            {
+                var user = _userRepository.GetByEmail(email);
+                if (user.PasswordHash != passwordhash)
+                {
+                    throw new BusinessLogicException(Constants.InvalidEmailPasswordMessage);
+                }
+                else
+                {
+                    return user.Id;
+                }
+            }
+            catch (ArgumentException)
+            {
+                throw new BusinessLogicException(Constants.InvalidEmailPasswordMessage);
+            }
+        }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\CurriculumUnitsService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class CurriculumUnitsService : GenericEntityService<CurriculumUnit, CurriculumUnitDto>, ICurriculumUnitsService
+    {
+        public CurriculumUnitsService(IRepository<CurriculumUnit> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public IReadOnlyCollection<CurriculumUnitDto> GetUnitsBySpecialityId(Guid specialityId)
+        {
+            return GetAll(g => g.SpecialityId == specialityId);
+        }
+        public override void Validate(CurriculumUnitDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\GenericEntityService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public abstract class  GenericEntityService<TEntity, TEntityDto> : IService<TEntityDto>
+        where TEntity : class, IEntity
+        where TEntityDto : class, IDto
+    {
+        private protected IRepository<TEntity> _repository;
+        private protected IMapper _mapper;
+        public Guid Create(TEntityDto entity)
+        {
+            return _repository.Create(_mapper.Map<TEntity>(entity));
+        }
+        public IReadOnlyCollection<TEntityDto> GetAll(Func<TEntityDto, bool> filter = null)
+        {
+            var allItems = _mapper.Map<List<TEntityDto>>(_repository.GetAll().ToList());
+            if(filter != null)
+            {
+                return allItems.Where(filter).ToList().AsReadOnly();
+            }
+            else
+            {
+                return allItems.AsReadOnly();
+            }
+        }
+        public TEntityDto GetById(Guid entityId)
+        {
+            try
+            {
+                return _mapper.Map<TEntityDto>(
+                    _repository.GetById(entityId));
+            }
+            catch (ArgumentException)
+            {
+                throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entityId}'.");
+            }
+        }
+        public void Update(TEntityDto entity)
+        {
+            try
+            {
+                var mappedEntity = _mapper.Map<TEntity>(entity);
+                _repository.Update(mappedEntity);
+            }
+            catch (ArgumentException)
+            {
+                throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entity.Id}' to update.");
+            }
+        }
+        public void Delete(Guid entityId)
+        {
+            try
+            {
+                _repository.Delete(entityId);
+            }
+            catch (ArgumentException)
+            {
+                throw new BusinessLogicException($"There is no {nameof(TEntity)} found by Id='{entityId}' to delete.");
+            }
+        }
+        public abstract void Validate(TEntityDto entity);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\GroupsService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class GroupsService : GenericEntityService<Group, GroupDto>, IGroupsService
+    {
+        public GroupsService(IRepository<Group> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public List<GroupDto> GetActiveGroups()
+        {
+            return _mapper.Map<List<GroupDto>>(
+                _repository.GetAll(x => !x.Graduated).ToList());
+        }
+        public IReadOnlyCollection<GroupDto> GetGroupsBySpecialityId(Guid specialityId)
+        {
+            return GetAll(g => g.SpecialityId == specialityId);
+        }
+        public override void Validate(GroupDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\IAttestationsService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IAttestationsService : IService<AttestationDto>
+    { }
+}
+
+StudentsManagement.BusinessLogic\Services\IAuthService.cs
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IAuthService
+    {
+        public Guid SignIn(string email, string passwordhash);
+        public Guid Register(string email, string passwordhash);
+        public void ChangePassword(string email, string oldPasswordhash, string newPasswordHash);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\ICurriculumUnitsService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface ICurriculumUnitsService : IService<CurriculumUnitDto>
+    {
+        public IReadOnlyCollection<CurriculumUnitDto> GetUnitsBySpecialityId(Guid specialityId);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\IGroupsService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IGroupsService : IService<GroupDto>
+    {
+        public List<GroupDto> GetActiveGroups();
+        public IReadOnlyCollection<GroupDto> GetGroupsBySpecialityId(Guid specialityId);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\IMarksService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IMarksService : IService<MarkDto>
+    {
+        void CreateMarks(Guid attestationId, Guid groupId);
+        List<MarkDto> GetMarksByAttestationId(Guid attestationId);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\IRetakeResultsService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IRetakeResultsService : IService<RetakeResultDto>
+    { }
+}
+
+StudentsManagement.BusinessLogic\Services\IService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using System.Linq.Expressions;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IService<TEntityDto>
+        where TEntityDto : class, IDto
+    {
+        Guid Create(TEntityDto entity);
+        IReadOnlyCollection<TEntityDto> GetAll(Func<TEntityDto, bool> filter = null);
+        TEntityDto GetById(Guid entityId);
+        void Update(TEntityDto entity);
+        void Delete(Guid entityId);
+        void Validate(TEntityDto entity);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\ISpecialitiesService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface ISpecialitiesService : IService<SpecialityDto>
+    { }
+}
+
+StudentsManagement.BusinessLogic\Services\ISubjectsService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface ISubjectsService : IService<SubjectDto>
+    { }
+}
+
+StudentsManagement.BusinessLogic\Services\IUsersService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.Common.Enums;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IUsersService : IService<UserDto>
+    {
+        List<UserDto> GetUsersWithRole(UserRole role);
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\IWorkTypesService.cs
+using StudentsManagement.BusinessLogic.Dtos;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public interface IWorkTypesService : IService<WorkTypeDto>
+    { }
+}
+
+StudentsManagement.BusinessLogic\Services\MarksService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class MarksService : GenericEntityService<Mark, MarkDto>, IMarksService
+    {
+        private readonly IRepository<User> _userRepository;
+        public MarksService(IRepository<Mark> repository, IRepository<User> userRepository, IMapper mapper)
+        {
+            _repository = repository;
+            _userRepository = userRepository;
+            _mapper = mapper;
+        }
+        public void CreateMarks(Guid attestationId, Guid groupId)
+        {
+            var groupUsers = _userRepository.GetAll(u =>
+                u.GroupId.Value == groupId
+                && !u.IsDisabled.Value).ToList();
+            var marks = groupUsers.Select(x => new Mark { AttestationId = attestationId, StudentId = x.Id, NotAllowed = false, NotAttended = false, Value = null });
+            foreach (var mark in marks)
+            {
+                _repository.Create(mark);
+            }
+        }
+        public List<MarkDto> GetMarksByAttestationId(Guid attestationId)
+        {
+            return _mapper.Map<List<MarkDto>>(_repository.GetAll(x => x.AttestationId == attestationId));
+        }
+        public override void Validate(MarkDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\RetakeResultsService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class RetakeResultsService : GenericEntityService<RetakeResult, RetakeResultDto>, IRetakeResultsService
+    {
+        public RetakeResultsService(IRepository<RetakeResult> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public override void Validate(RetakeResultDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\SpecialitiesService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class SpecialitiesService : GenericEntityService<Speciality, SpecialityDto>, ISpecialitiesService
+    {
+        public SpecialitiesService(IRepository<Speciality> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public override void Validate(SpecialityDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\SubjectsService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class SubjectsService : GenericEntityService<Subject, SubjectDto>, ISubjectsService
+    {
+        public SubjectsService(IRepository<Subject> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public override void Validate(SubjectDto entity)
+        { }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\UsersService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class UsersService : GenericEntityService<User, UserDto>, IUsersService
+    {
+        private IUsersRepository _usersRepository;
+        public UsersService(IUsersRepository repository, IMapper mapper)
+        {
+            _usersRepository = repository;
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public List<UserDto> GetUsersWithRole(UserRole role)
+        {
+            return _mapper.Map<List<UserDto>>(
+                _repository.GetAll(x => x.Role == role).ToList());
+        }
+        public override void Validate(UserDto entity)
+        {
+            if (string.IsNullOrEmpty(entity.FirstName))
+            {
+                throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Имя"));
+            }
+            if (string.IsNullOrEmpty(entity.MiddleName))
+            {
+                throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Отчество"));
+            }
+            if (string.IsNullOrEmpty(entity.LastName))
+            {
+                throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Фамилия"));
+            }
+            if (string.IsNullOrEmpty(entity.Email))
+            {
+                throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Email"));
+            }
+            if (string.IsNullOrEmpty(entity.PasswordHash))
+            {
+                throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Пароль"));
+            }
+        }
+    }
+}
+
+StudentsManagement.BusinessLogic\Services\WorkTypesService.cs
+using AutoMapper;
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DataAccess.Repositories;
+namespace StudentsManagement.BusinessLogic.Services
+{
+    public class WorkTypesService : GenericEntityService<WorkType, WorkTypeDto>, IWorkTypesService
+    {
+        public WorkTypesService(IRepository<WorkType> repository, IMapper mapper)
+        {
+            _repository = repository;
+            _mapper = mapper;
+        }
+        public override void Validate(WorkTypeDto entity)
+        {
+            var items = _repository.GetAll(f => f.Id != entity.Id && f.ShortName == entity.ShortName).ToList();
+            if (items.Count != 0)
+            {
+                throw new BusinessLogicException("Короткое имя уже занято!");
+            }
+        }
+    }
+}
+
+StudentsManagement.Common\Enums\UserRole.cs
+namespace StudentsManagement.Common.Enums
+{
+    public enum UserRole
+    {
+        MainAdmin = 0,
+        Student = 1,
+        Teacher = 2,
+        Admin = 3,
+    }
+}
+
+StudentsManagement.DataAccess\Entities\Attestation.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Attestations")]
+    public class Attestation : BaseEntity
+    {
+        [Required]
+        public Guid? TeacherId { get; set; }
+        [Required]
+        public Guid? GroupId { get; set; }
+        [Required]
+        public Guid? CurriculumUnitId { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\BaseEntity.cs
+using System.ComponentModel.DataAnnotations;
+namespace StudentsManagement.DataAccess.Entities
+{
+    public abstract class BaseEntity : IEntity
+    {
+        [Key]
+        public Guid Id { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\CurriculumUnit.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("CurriculumUnits")]
+    public class CurriculumUnit : BaseEntity
+    {
+        [Required]
+        public Guid SpecialityId { get; set; }
+        [Required]
+        public int Semester { get; set; }
+        [Required]
+        public Guid SubjectId { get; set; }
+        [Required]
+        public Guid WorkTypeId { get; set; }
+        public string Name { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\Group.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Groups")]
+    public class Group : BaseEntity
+    {
+        [Required]
+        public string Name { get; set; }
+        public int Cource { get; set; }
+        [Required]
+        public bool Graduated { get; set; }
+        [Required]
+        public int EnrollYear { get; set; }
+        [Required]
+        public Guid SpecialityId { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\IEntity.cs
+namespace StudentsManagement.DataAccess.Entities
+{
+    public interface IEntity
+    {
+        public Guid Id { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\Mark.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Marks")]
+    public class Mark : BaseEntity
+    {
+        [Required]
+        public Guid StudentId { get; set; }
+        [Required]
+        public Guid AttestationId { get; set; }
+        public int? Value { get; set; }
+        [Required]
+        public bool NotAttended { get; set; }
+        [Required]
+        public bool NotAllowed { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\RetakeResult.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("RetakeResults")]
+    public class RetakeResult : BaseEntity
+    {
+        [Required]
+        public string StudentId { get; set; }
+        [Required]
+        public string AttestationId { get; set; }
+        public int? Value { get; set; }
+        [Required]
+        public DateTime Date { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\Speciality.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Specialities")]
+    public class Speciality : BaseEntity
+    {
+        [Required]
+        public string ShortName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\Subject.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Subjects")]
+    public class Subject : BaseEntity
+    {
+        [Required]
+        public string ShortName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\User.cs
+using System.ComponentModel.DataAnnotations;
+using StudentsManagement.Common.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("Users")]
+    public class User : BaseEntity
+    {
+        [Required]
+        public string Email { get; set; }
+        [Required]
+        public string PasswordHash { get; set; }
+        [Required]
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        [Required]
+        public string LastName { get; set; }
+        public bool? IsDisabled { get; set; }
+        [Required]
+        public UserRole Role { get; set; }
+        public string Info { get; set; }
+        public Guid? GroupId { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Entities\WorkType.cs
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+namespace StudentsManagement.DataAccess.Entities
+{
+    [Table("WorkTypes")]
+    public class WorkType : BaseEntity
+    {
+        [Required]
+        public string ShortName { get; set; }
+        [Required]
+        public string FullName { get; set; }
+    }
+}
+
+StudentsManagement.DataAccess\Repositories\GenericEntityFrameworkRepository.cs
+using Microsoft.EntityFrameworkCore;
+using StudentsManagement.DataAccess.Entities;
+using System.Linq.Expressions;
+namespace StudentsManagement.DataAccess.Repositories
+{
+    public class GenericRepository<TEntity> : IRepository<TEntity>
+         where TEntity : class, IEntity
+    {
+        private readonly StudentsAppContext _context;
+        public GenericRepository(StudentsAppContext context)
+        {
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+        }
+        public virtual Guid Create(TEntity entity)
+        {
+            _context.Add(entity);
+            _context.SaveChanges();
+            _context.Entry(entity).State = EntityState.Detached;
+            return entity.Id;
+        }
+        public virtual TEntity GetById(Guid entityId)
+        {
+            var entity = _context.Set<TEntity>()
+                .FirstOrDefault(e => e.Id == entityId)
+                ?? throw new ArgumentException(nameof(entityId));
+            _context.Entry(entity).State = EntityState.Detached;
+            return entity;
+        }
+        public virtual IQueryable<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null)
+        {
+            var entities = _context.Set<TEntity>();
+            if (filter != null)
+            {
+                return entities.Where(filter).AsNoTracking();
+            }
+            else
+            {
+                return entities.AsNoTracking();
+            }
+        }
+        public virtual void Update(TEntity entity)
+        {
+            if (!_context.Set<TEntity>().Any(e => e.Id == entity.Id))
+            {
+                throw new ArgumentException(null, nameof(entity));
+            }
+            _context.Update(entity);
+            _context.SaveChanges();
+            _context.Entry(entity).State = EntityState.Detached;
+        }
+        public virtual void Delete(Guid entityId)
+        {
+            var entity = GetById(entityId)
+                ?? throw new ArgumentException(nameof(entityId));
+            _context.Remove(entity);
+            _context.SaveChanges();
+            _context.Entry(entity).State = EntityState.Detached;
+        }
+    }
+}
+
+StudentsManagement.DataAccess\Repositories\IRepository.cs
+using StudentsManagement.DataAccess.Entities;
+using System.Linq.Expressions;
+namespace StudentsManagement.DataAccess.Repositories
+{
+    public interface IRepository<TEntity>
+        where TEntity : class, IEntity
+    {
+        Guid Create(TEntity entity);
+        IQueryable<TEntity> GetAll(Expression<Func<TEntity,bool>> filter = null);
+        TEntity GetById(Guid entityId);
+        void Update(TEntity entity);
+        void Delete(Guid entityId);
+    }
+}
+
+StudentsManagement.DataAccess\Repositories\IUsersRepository.cs
+using StudentsManagement.DataAccess.Entities;
+namespace StudentsManagement.DataAccess.Repositories
+{
+    public interface IUsersRepository : IRepository<User>
+    {
+        public User GetByEmail(string email);
+    }
+}
+
+StudentsManagement.DataAccess\Repositories\UsersRepository.cs
+using Microsoft.EntityFrameworkCore;
+using StudentsManagement.DataAccess.Entities;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
+namespace StudentsManagement.DataAccess.Repositories
+{
+    public class UsersRepository : GenericRepository<User>, IUsersRepository
+    {
+        private readonly StudentsAppContext _context;
+        public UsersRepository(StudentsAppContext context)
+            : base(context)
+        {
+            _context = context;
+        }
+        public User GetByEmail(string email)
+        {
+            var entity = _context.Set<User>()
+                .FirstOrDefault(u => u.Email == email)
+                ?? throw new ArgumentException(nameof(email));
+            _context.Entry(entity).State = EntityState.Detached;
+            return entity;
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\EventHandlers\CustomEventHandler.cs
+using System;
+namespace StudentsManagement.DesktopApp.EventHandlers
+{
+    public class CustomEventArgs : EventArgs
+    {
+        public Guid Id { get; set; }
+        public string Message { get; set; }
+        public CustomEventArgs(Guid id, string message = null)
+        {
+            Id = id;
+            Message = message;
+        }
+    }
+    public delegate void CustomEventHandler(object sender, CustomEventArgs e);
+}
+
+StudentsManagement.DesktopApp\Helpers\AuthHelper.cs
+using System.Security.Cryptography;
+using System.Text;
+namespace StudentsManagement.DesktopApp.Helpers
+{
+    public class AuthHelper
+    {
+        public static string CreateSha256Hash(string value)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(value);
+                byte[] hashBytes = sha256.ComputeHash(inputBytes);
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    builder.Append(hashBytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Mapper\DesktopAppMappingProfile.cs
+using AutoMapper;
+namespace StudentsManagement.DesktopApp.Mapper
+{
+    public class DesktopAppMappingProfile : Profile
+    {
+        public DesktopAppMappingProfile()
+        {
+            /*
+            CreateMap<Speciality, SpecialityDto>().ReverseMap();
+            CreateMap<DataAccess.Enums.MonitoringType, BusinessLogic.Enums.MonitoringType>()
+                .ConvertUsingEnumMapping(opt => opt.MapByName()).ReverseMap();
+            */
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Models\DropdownModel.cs
+using System;
+namespace StudentsManagement.DesktopApp.Models
+{
+    public class DropdownModel
+    {
+        public Guid Id { get; set; }
+        public string Value { get; set; }
+    }
+}
+
+StudentsManagement.DesktopApp\Models\InfoModel.cs
+using System;
+namespace StudentsManagement.DesktopApp.Models
+{
+    public class InfoModel
+    {
+        public Guid Id { get; set; }
+        public string Info { get; set; }
+        public InfoModel(Guid id, string info)
+        {
+            Id = id;
+            Info = info;
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\DeleteConfirmation.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.DeleteConfirmation"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows"
+        mc:Ignorable="d"
+        Title="Подтвердите удаление"
+        MinHeight="200" MinWidth="400" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="EntityValues" Grid.Column="1" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="5"/>
+        <Button x:Name="DeleteButton" Content="Удалить"  Grid.Column="1" Grid.Row="7" Click="DeleteButton_Click"/>
+        <Button x:Name="CancelButton" Content="Отмена"  Grid.Column="3" Grid.Row="7" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\DeleteConfirmation.xaml.cs
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows
+{
+    /// <summary>
+    /// Interaction logic for DeleteConfirmation.xaml
+    /// </summary>
+    public partial class DeleteConfirmation : Window
+    {
+        private readonly Guid _entityId;
+        public event CustomEventHandler OnConfirm;
+        public DeleteConfirmation(Guid entityId, List<string> entityInfo)
+        {
+            InitializeComponent();
+            EntityValues.Text = string.Join("\n", entityInfo);
+            _entityId = entityId;
+        }
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            OnConfirm?.Invoke(this, new CustomEventArgs(_entityId));
+            this.Close();
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Attestations\AttestationForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Attestations.AttestationForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Attestations"
+        mc:Ignorable="d"
+        MinHeight="300" MinWidth="700"
+        Title="" Height="300" Width="600" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Преподаватель:" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+        <ComboBox Name="TeacherComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Label Content="Группа:" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
+        <ComboBox Name="GroupComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Label Content="Единица учебного плана:" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"/>
+        <ComboBox Name="UnitComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Label Content="Дата:" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"/>
+        <DatePicker IsTodayHighlighted="True" Name="DatePicker" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Button Name="SaveButton" Content="Сохранить"  Grid.Column="1" Grid.Row="6" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="6" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Attestations\AttestationForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+namespace StudentsManagement.DesktopApp.Windows.Attestations
+{
+    /// <summary>
+    /// Interaction logic for AttestationForm.xaml
+    /// </summary>
+    public partial class AttestationForm : Window
+    {
+        private Guid? _entityId;
+        private readonly List<InfoModel> _teachers;
+        private readonly List<InfoModel> _groups;
+        private readonly List<InfoModel> _curriculumUnits;
+        private readonly IAttestationsService _attestationService;
+        private readonly IMarksService _marksService;
+        public event CustomEventHandler OnSuccess;
+        public AttestationForm(string title,
+            IAttestationsService attestationService,
+            IMarksService marksService,
+            List<InfoModel> teachers,
+            List<InfoModel> groups,
+            List<InfoModel> curriculumUnits,
+            AttestationDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _attestationService = attestationService;
+            _marksService = marksService;
+            _teachers = teachers;
+            _groups = groups;
+            _curriculumUnits = curriculumUnits;
+            TeacherComboBox.ItemsSource = _teachers;
+            GroupComboBox.ItemsSource = _groups;
+            UnitComboBox.ItemsSource = _curriculumUnits;
+            if (entityToUpdate != null)
+            {
+                _entityId = entityToUpdate.Id;
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(AttestationDto entity)
+        {
+            TeacherComboBox.SelectedIndex = _teachers.FindIndex(x => x.Id == entity.TeacherId);
+            GroupComboBox.SelectedIndex = _groups.FindIndex(x => x.Id == entity.GroupId);
+            UnitComboBox.SelectedIndex = _curriculumUnits.FindIndex(x => x.Id == entity.CurriculumUnitId);
+            DatePicker.SelectedDate = DateTime.Now;
+        }
+        private AttestationDto ParseForm()
+        {
+            if (TeacherComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.AttestationFields.Teacher),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            var selectedTeacher = TeacherComboBox.SelectedItem as InfoModel;
+            if (GroupComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.GroupFields.Group),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            var selectedGroup = GroupComboBox.SelectedItem as InfoModel;
+            if (UnitComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.CurriculumUnitFields.CurriculumUnit),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            var selectedUnit = UnitComboBox.SelectedItem as InfoModel;
+            if (DatePicker.SelectedDate == null)
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueText, AppLocalization.AttestationFields.Date),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            };
+            return new AttestationDto
+            {
+                TeacherId = selectedTeacher.Id,
+                CurriculumUnitId = selectedUnit.Id,
+                GroupId = selectedGroup.Id,
+                Date = DatePicker.SelectedDate.Value,
+            };
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var fromFormEntity = ParseForm();
+            if (fromFormEntity == null)
+                return; // messagebox уже был показан
+            if (_entityId == null)
+            {
+                fromFormEntity.Id = _attestationService.Create(fromFormEntity);
+                _marksService.CreateMarks(fromFormEntity.Id, fromFormEntity.GroupId);
+            }
+            else
+            {
+                fromFormEntity.Id = _entityId.Value;
+                _attestationService.Update(fromFormEntity);
+            }
+            OnSuccess?.Invoke(this, new CustomEventArgs(fromFormEntity.Id));
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Attestations\AttestationWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Attestations.AttestationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Attestations"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="1000"
+        Title="Аттестационные мероприятия" Height="450" Width="1000" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="203*"/>
+            <ColumnDefinition Width="304*"/>
+            <ColumnDefinition Width="30*"/>
+            <ColumnDefinition Width="203*"/>
+            <ColumnDefinition Width="30*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" Grid.Column="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="4" Margin="30,0,30,0">
+            Аттестационные мероприятия
+        </TextBlock>
+        <GroupBox Grid.Column="2" Grid.Row="2" Header="Фильтры" Grid.RowSpan="7" Grid.ColumnSpan="2" Margin="0,1,0,270">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.3*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="0.6*"/>
+                    <ColumnDefinition Width="0.3*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.03*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.02*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.02*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.02*"/>
+                    <RowDefinition Height="0.2*"/>
+                    <RowDefinition Height="0.03*"/>
+                </Grid.RowDefinitions>
+                <Label Content="Преподаватель:" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+                <ComboBox Name="TeacherComboBox" DisplayMemberPath="Info"
+                  Grid.Column="3" Grid.Row="1" SelectionChanged="TeacherComboBox_SelectionChanged"/>
+                <Button Name="ClearTeacher" Visibility="Hidden"
+                        Grid.Column="4" Grid.Row="1" Content="X" FontSize="15"
+                        Click="ClearTeacher_Click"/>
+                <Label Content="Группа:" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"/>
+                <ComboBox Name="GroupComboBox" DisplayMemberPath="Info"
+                  Grid.Column="3" Grid.Row="3" SelectionChanged="GroupComboBox_SelectionChanged"/>
+                <Button Name="ClearGroup" Visibility="Hidden"
+                        Grid.Column="4" Grid.Row="3" Content="X" FontSize="15" Click="ClearGroup_Click"/>
+                <Label Content="Ед. уч. плана:" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center"/>
+                <ComboBox Name="UnitComboBox" DisplayMemberPath="Info"
+                  Grid.Column="3" Grid.Row="5" SelectionChanged="UnitComboBox_SelectionChanged"/>
+                <Button Name="ClearUnit" Visibility="Hidden"
+                        Grid.Column="4" Grid.Row="5" Content="X" FontSize="15" Click="ClearUnit_Click"/>
+                <Label Content="Дата:" Grid.Column="1" Grid.Row="7" VerticalAlignment="Center"/>
+                <DatePicker Name="DatePicker" Grid.Column="3" Grid.Row="7" SelectedDateChanged="DatePicker_SelectedDateChanged"
+                            DisplayDateStart="{Binding Mode=OneWay, Source={x:Static System:DateTime.Today}}"/>
+                <Button Name="ClearDate" Visibility="Hidden"
+                        Grid.Column="4" Grid.Row="7" Content="X" FontSize="15" Click="ClearDate_Click"/>
+            </Grid>
+        </GroupBox>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="2" Grid.Row="8" Grid.ColumnSpan="2" Margin="0,10,0,8" Grid.RowSpan="2" MouseDoubleClick="MainDataGrid_SelectionDoubleClicked">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Дата" Width="Auto" Binding="{Binding Path=FormattedDate}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Преподаватель" Width="Auto" Binding="{Binding Path=TeacherInfo}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Группа" Width="Auto" Binding="{Binding Path=GroupInfo}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Ед. учебного плана" Width="Auto" Binding="{Binding Path=CurriculutUnitInfo}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="5" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="5" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="5" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Attestations\AttestationWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using StudentsManagement.DesktopApp.Windows.Marks;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+namespace StudentsManagement.DesktopApp.Windows.Attestations
+{
+    /// <summary>
+    /// Interaction logic for AttestationWindow.xaml
+    /// </summary>
+    public partial class AttestationWindow : Window
+    {
+        private List<AttestationDto> _entities;
+        private List<InfoModel> _teachers;
+        private List<InfoModel> _groups;
+        private List<InfoModel> _curriculumUnits;
+        private readonly IAttestationsService _entityService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly IWorkTypesService _workTypesService;
+        private readonly IUsersService _usersService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly IGroupsService _groupsService;
+        private readonly IMarksService _marksService;
+        public AttestationWindow(
+            IAttestationsService entityService,
+            ICurriculumUnitsService curriculumUnitsService,
+            IWorkTypesService workTypesService,
+            ISubjectsService subjectsService,
+            IUsersService usersService,
+            IGroupsService groupsService,
+            IMarksService marksService)
+        {
+            InitializeComponent();
+            _entityService = entityService;
+            _curriculumUnitsService = curriculumUnitsService;
+            _usersService = usersService;
+            _subjectsService = subjectsService;
+            _workTypesService = workTypesService;
+            _groupsService = groupsService;
+            _marksService = marksService;
+            UpdateEntities();
+            UpdateDropdowns();
+            UpdateDatagrid();
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateEntities();
+            var form = new AttestationForm(AppLocalization.AddAttestationForm, _entityService, _marksService,
+                _teachers, _groups, _curriculumUnits);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<AttestationDto>();
+            if (selectedItem == null) { return; }
+            UpdateEntities();
+            var form = new AttestationForm(AppLocalization.UpdateCurriculumUnitForm, _entityService, _marksService,
+                _teachers, _groups, _curriculumUnits, selectedItem);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<AttestationDto>();
+                if (selectedItem == null) { return; }
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Аттестационное мероприятие",
+                        $"Ед. уч. плана: {selectedItem.CurriculutUnitInfo}",
+                        $"Преподаватель: {selectedItem.TeacherInfo}",
+                        $"Дата: {selectedItem.Date}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void TeacherComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateDatagrid();
+            ClearTeacher.Visibility = TeacherComboBox.SelectedItem != null ? Visibility.Visible : Visibility.Hidden;
+        }
+        private void GroupComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateDatagrid();
+            ClearGroup.Visibility = GroupComboBox.SelectedItem != null ? Visibility.Visible : Visibility.Hidden;
+    }
+        private void UnitComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateDatagrid();
+            ClearUnit.Visibility = UnitComboBox.SelectedItem != null ? Visibility.Visible : Visibility.Hidden;
+        }
+        private void DatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateDatagrid();
+            ClearDate.Visibility = DatePicker.SelectedDate != null ? Visibility.Visible : Visibility.Hidden;
+        }
+        private void MainDataGrid_SelectionDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<AttestationDto>();
+            if(selectedItem == null)
+            {  return; }
+            var marksWindow = new AttestationMarksWindow();
+        }
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateEntities();
+            UpdateDatagrid();
+        }
+        private void UpdateDropdowns()
+        {
+            TeacherComboBox.ItemsSource = _teachers;
+            GroupComboBox.ItemsSource= _groups;
+            UnitComboBox.ItemsSource = _curriculumUnits;
+        }
+        private void UpdateDatagrid()
+        {
+            IEnumerable<AttestationDto> listItems = _entities;
+            if (TeacherComboBox.SelectedItem != null)
+            {
+                var selectedTeacher = TeacherComboBox.SelectedItem as InfoModel;
+                listItems = listItems.Where(a => a.TeacherId == selectedTeacher.Id);
+            }
+            if (GroupComboBox.SelectedItem != null)
+            {
+                var selectedGroup = GroupComboBox.SelectedItem as InfoModel;
+                listItems = listItems.Where(a => a.GroupId == selectedGroup.Id);
+            }
+            if (UnitComboBox.SelectedItem != null)
+            {
+                var selectedUnit = UnitComboBox.SelectedItem as InfoModel;
+                listItems = listItems.Where(a => a.CurriculumUnitId == selectedUnit.Id);
+            }
+            if (DatePicker.SelectedDate != null)
+            {
+                var selectedDate = DatePicker.SelectedDate.Value;
+                listItems = listItems.Where(a =>
+                    a.Date.Day == selectedDate.Day
+                    && a.Date.Month == selectedDate.Month
+                    && a.Date.Year == selectedDate.Year);
+            };
+            MainDataGrid.ItemsSource = listItems;
+        }
+        private void UpdateEntities()
+        {
+            var workTypes = _workTypesService.GetAll();
+            var subjects = _subjectsService.GetAll();
+            _teachers = _usersService.GetUsersWithRole(UserRole.Teacher)
+                .Select(x => new InfoModel(x.Id, x.ShortenedName)).ToList();
+            _groups = _groupsService.GetActiveGroups()
+                .Select(x => new InfoModel(x.Id, x.Name)).ToList();
+            _curriculumUnits = _curriculumUnitsService.GetAll()
+                .Select(x => {
+                    var workType = workTypes.FirstOrDefault(w => w.Id == x.WorkTypeId).ShortName;
+                    var subject = subjects.FirstOrDefault(s => s.Id == x.SubjectId).ShortName;
+                    return new InfoModel(x.Id, $"{workType} по предмету {subject} ({x.Name})");
+                }).ToList();
+            _entities = _entityService.GetAll().ToList();
+            foreach(var entity in _entities)
+            {
+                entity.TeacherInfo = _teachers.FirstOrDefault(t => t.Id == entity.TeacherId).Info;
+                entity.CurriculutUnitInfo = _curriculumUnits.FirstOrDefault(u => u.Id == entity.CurriculumUnitId).Info;
+                entity.GroupInfo = _groups.FirstOrDefault(g => g.Id == entity.GroupId).Info;
+            }
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        { }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateEntities();
+            UpdateDropdowns();
+            UpdateDatagrid();
+        }
+        private void ClearTeacher_Click(object sender, RoutedEventArgs e)
+        {
+            TeacherComboBox.SelectedIndex = -1;
+            ClearTeacher.Visibility = Visibility.Hidden;
+        }
+        private void ClearGroup_Click(object sender, RoutedEventArgs e)
+        {
+            GroupComboBox.SelectedIndex = -1;
+            ClearGroup.Visibility = Visibility.Hidden;
+        }
+        private void ClearUnit_Click(object sender, RoutedEventArgs e)
+        {
+            UnitComboBox.SelectedIndex = -1;
+            ClearUnit.Visibility = Visibility.Hidden;
+        }
+        private void ClearDate_Click(object sender, RoutedEventArgs e)
+        {
+            DatePicker.SelectedDate = null;
+            ClearDate.Visibility = Visibility.Hidden;
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Auth\LoginWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Auth.LoginWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Auth"
+        mc:Ignorable="d"
+        Title="Вход в учётную запись" ResizeMode="NoResize" Height="200" Width="400"
+        WindowStartupLocation="CenterScreen">
+    <Grid Background="AntiqueWhite">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.05*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" Text="Войдите в систему, используя эл. почту и пароль"/>
+        <TextBlock Grid.Column="1" Grid.Row="2" Text="Email"/>
+        <TextBox Name="EmailInput" Grid.Column="2" Grid.Row="2"/>
+        <TextBlock Grid.Column="1" Grid.Row="4" Text="Пароль"/>
+        <PasswordBox PasswordChar="*" x:Name="PasswordInput" Grid.Column="2" Grid.Row="4" />
+        <Button x:Name="LoginButton" Content="Войти" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Click="LoginButton_Click"/>
+        <Button x:Name="LoginAsAdmin" Content="Admin!" Grid.Column="2" Grid.Row="7" Grid.ColumnSpan="2" Margin="133,0,30,5" Click="LoginAsAdmin_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Auth\LoginWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Exceptions;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Helpers;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Auth
+{
+    /// <summary>
+    /// Interaction logic for LoginWindow.xaml
+    /// </summary>
+    public partial class LoginWindow : Window
+    {
+        private readonly IAuthService _authService;
+        public event CustomEventHandler OnSuccess;
+        public LoginWindow(IAuthService authService)
+        {
+            InitializeComponent();
+            _authService = authService;
+        }
+        private void LoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            LoginButton.IsEnabled = false;
+            if (string.IsNullOrEmpty(EmailInput.Text))
+            {
+                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Email\"");
+                LoginButton.IsEnabled = true;
+            }
+            if(string.IsNullOrEmpty(PasswordInput.Password))
+            {
+                MessageBox.Show(AppLocalization.NotFilledInMessageText + "\"Пароль\"");
+                LoginButton.IsEnabled = true;
+            }
+            try
+            {
+                var result = _authService.SignIn(
+                    EmailInput.Text,
+                    AuthHelper.CreateSha256Hash(PasswordInput.Password));
+                OnSuccess?.Invoke(this, new CustomEventArgs(result));
+                this.Close();
+            }
+            catch(Microsoft.Data.SqlClient.SqlException ex)
+            {
+                LoginButton.IsEnabled = true;
+                MessageBox.Show(ex.Message, AppLocalization.DatabaseExceptionTitle, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch(BusinessLogicException ex)
+            {
+                LoginButton.IsEnabled = true;
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void LoginAsAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO REMOVE THIS WINDOW
+            EmailInput.Text = "admin@ya.ru";
+            PasswordInput.Password = "123456_Aa";
+            LoginButton_Click(sender, e);
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Auth\RegisterWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Auth.RegisterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Auth"
+        mc:Ignorable="d"
+        Title="RegisterWindow" Height="450" Width="800">
+    <Grid>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Auth\RegisterWindow.xaml.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+namespace StudentsManagement.DesktopApp.Windows.Auth
+{
+    /// <summary>
+    /// Interaction logic for RegisterWindow.xaml
+    /// </summary>
+    public partial class RegisterWindow : Window
+    {
+        public RegisterWindow()
+        {
+            InitializeComponent();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\CurriculumUnits\CurriculumUnitForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.CurriculumUnits.CurriculumUnitForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.CurriculumUnits"
+        mc:Ignorable="d"
+        MinHeight="400" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Специальность:" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+        <TextBox Name="SpecialityInfo" IsEnabled="False" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Label Content="Предмет:" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
+        <ComboBox Name="SubjectComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"
+                  SelectionChanged="SubjectComboBox_SelectionChanged"/>
+        <Label Content="Вид работы:" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"/>
+        <ComboBox Name="WorkTypeComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"
+                  SelectionChanged="WorkTypeComboBox_SelectionChanged"/>
+        <Label Content="Название:" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"/>
+        <TextBox Name="Name" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Label Content="Семестр:" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center"/>
+        <TextBox Name="Semester" Grid.Row="5" Grid.Column="2"/>
+        <Button Name="SaveButton" Content="Сохранить"  Grid.Column="1" Grid.Row="7" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="7" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\CurriculumUnits\CurriculumUnitForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
+{
+    /// <summary>
+    /// Interaction logic for CurriculumUnitForm.xaml
+    /// </summary>
+    public partial class CurriculumUnitForm : Window
+    {
+        private Guid? _entityId;
+        private readonly List<InfoModel> _workTypes;
+        private readonly List<InfoModel> _subjects;
+        private readonly InfoModel _speciality;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly ISpecialitiesService _specialitiesService;
+        public event CustomEventHandler OnSuccess;
+        public CurriculumUnitForm(string title,
+            ICurriculumUnitsService curriculumUnitsService,
+            List<InfoModel> workTypes,
+            List<InfoModel> subjects,
+            InfoModel speciality,
+            CurriculumUnitDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _speciality = speciality;
+            _curriculumUnitsService = curriculumUnitsService;
+            _workTypes = workTypes;
+            _subjects = subjects;
+            WorkTypeComboBox.ItemsSource = workTypes;
+            SubjectComboBox.ItemsSource = subjects;
+            SpecialityInfo.Text = speciality.Info;
+            if (entityToUpdate != null)
+            {
+                _entityId = entityToUpdate.Id;
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(CurriculumUnitDto entity)
+        {
+            Semester.Text = entity.Semester.ToString();
+            Name.Text = entity.Name;
+            WorkTypeComboBox.SelectedIndex = _workTypes.FindIndex(x => x.Id == entity.WorkTypeId);
+            SubjectComboBox.SelectedIndex = _subjects.FindIndex(x => x.Id == entity.SubjectId);
+        }
+        private CurriculumUnitDto ParseForm()
+        {
+            var semesterParsed = int.TryParse(Semester.Text, out int semester);
+            if (!semesterParsed)
+            {
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueText, AppLocalization.CurriculumUnitFields.Semester),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            if(SubjectComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.SubjectFields.Subject),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            var selectedSubject = SubjectComboBox.SelectedItem as InfoModel;
+            if(WorkTypeComboBox.SelectedItem == null)
+            {
+                MessageBox.Show(string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.WorkTypeFields.WorkType),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            var selectedWorkType = WorkTypeComboBox.SelectedItem as InfoModel;
+            return new CurriculumUnitDto
+            {
+                SpecialityId = _speciality.Id,
+                Semester = semester,
+                WorkTypeId = selectedWorkType.Id,
+                SubjectId = selectedSubject.Id,
+                Name = Name.Text,
+            };
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var unit = ParseForm();
+            if (unit == null)
+                return; // messagebox уже был показан
+            if (_entityId == null)
+            {
+                unit.Id = _curriculumUnitsService.Create(unit);
+            }
+            else
+            {
+                unit.Id = _entityId.Value;
+                _curriculumUnitsService.Update(unit);
+            }
+            OnSuccess?.Invoke(this, new CustomEventArgs(unit.Id));
+            this.Close();
+        }
+        private void WorkTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { }
+        private void SubjectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        { }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\CurriculumUnits\CurriculumUnitsWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.CurriculumUnits.CurriculumUnitsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.CurriculumUnits"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Учебные планы специальностей" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <ComboBox Name="SpecialitiesComboBox" DisplayMemberPath="Info"
+                  Grid.Column="1" FontSize="15" Grid.ColumnSpan="4" Margin="233,8,24,27" Grid.RowSpan="3"
+                  SelectionChanged="SpecialitiesComboBox_SelectionChanged"/>
+        <TextBlock Grid.Row="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="24,0,338,0">Учебные планы специальности</TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Семестр" Width="Auto" Binding="{Binding Path=Semester}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Предмет" Width="Auto" Binding="{Binding Path=SubjectName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Вид работы" Width="Auto" Binding="{Binding Path=WorkTypeName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=Name}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\CurriculumUnits\CurriculumUnitsWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+namespace StudentsManagement.DesktopApp.Windows.CurriculumUnits
+{
+    /// <summary>
+    /// Interaction logic for CurriculumUnitsWindow.xaml
+    /// </summary>
+    public partial class CurriculumUnitsWindow : Window
+    {
+        private InfoModel _selectedSpeciality;
+        private readonly List<InfoModel> _workTypes;
+        private readonly List<InfoModel> _subjects;
+        private readonly ICurriculumUnitsService _entityService;
+        private readonly IWorkTypesService _workTypesService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly ISpecialitiesService _specialitiesService;
+        public CurriculumUnitsWindow(
+            ICurriculumUnitsService entityService,
+            IWorkTypesService workTypesService,
+            ISpecialitiesService specialitiesService,
+            ISubjectsService subjectsService)
+        {
+            InitializeComponent();
+            _entityService = entityService;
+            _workTypesService = workTypesService;
+            _specialitiesService = specialitiesService;
+            _subjectsService = subjectsService;
+            _workTypes = _workTypesService.GetAll().Select(x => new InfoModel(x.Id, x.ShortName)).ToList();
+            _subjects = _subjectsService.GetAll().Select(x => new InfoModel(x.Id, x.ShortName)).ToList();
+            _selectedSpeciality = null;
+            var specialities = _specialitiesService.GetAll();
+            var specialitiesItems = specialities.Select(x => new InfoModel(x.Id, x.FullName)).ToList();
+            SpecialitiesComboBox.ItemsSource = specialitiesItems;
+            _subjectsService = subjectsService;
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedSpeciality == null)
+            {
+                SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
+                return;
+            }
+            var form = new CurriculumUnitForm(AppLocalization.AddCurriculumUnitForm,
+                _entityService, _workTypes, _subjects, _selectedSpeciality);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedSpeciality == null)
+            {
+                SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
+                return;
+            }
+            var selectedItem = GetSelectedItem<CurriculumUnitDto>();
+            if (selectedItem == null) { return; }
+            var form = new CurriculumUnitForm(AppLocalization.UpdateCurriculumUnitForm,
+                _entityService, _workTypes, _subjects, _selectedSpeciality, selectedItem);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<CurriculumUnitDto>();
+                if (selectedItem == null) { return; }
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Единица учебного плана",
+                        $"Специальность: {_selectedSpeciality.Info}",
+                        $"Семестр: {selectedItem.Semester}",
+                        $"{selectedItem.WorkTypeName} по предмету {selectedItem.SubjectName}",
+                        $"Название: {selectedItem.Name}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SpecialitiesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.White);
+            var selected = SpecialitiesComboBox.SelectedItem as InfoModel;
+            _selectedSpeciality = selected;
+            UpdateDatagrid();
+        }
+        // Common logic
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var entities = _entityService.GetUnitsBySpecialityId(_selectedSpeciality.Id);
+            foreach (var entity in entities)
+            {
+                entity.SubjectName = _subjects.FirstOrDefault(x => x.Id == entity.SubjectId).Info;
+                entity.WorkTypeName = _workTypes.FirstOrDefault(x => x.Id == entity.WorkTypeId).Info;
+            }
+            MainDataGrid.ItemsSource = entities;
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        { }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Groups\GroupForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Groups.GroupForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Groups"
+        mc:Ignorable="d"
+        MinHeight="400" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="GraduatedGroupMessage" Content="Группа выпустилась, обновления невозможны"
+               Grid.Column="0" HorizontalAlignment="Center" Grid.Row="0" Grid.ColumnSpan="5"
+               FontSize="14" FontWeight="Bold" Foreground="#FFB70909"/>
+        <Label Content="Специальность:" Grid.Column="1" Grid.Row="1"/>
+        <TextBox Name="SpecialityInfo" IsEnabled="False" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Label Content="Год поступления:" Grid.Column="1" Grid.Row="2"/>
+        <TextBox Name="EnrollYear" IsEnabled="False" Grid.Row="2" Grid.Column="2"/>
+        <Label Content="Курс:" Grid.Column="1" Grid.Row="3"/>
+        <TextBox Name="Cource" IsEnabled="False" Grid.Row="3" Grid.Column="2"/>
+        <Button Content="Повысить курс" Name="PromoteButton" Grid.Column="3" Grid.Row="3" Click="PromoteButton_Click"/>
+        <Label Content="Название группы:" Grid.Column="1" Grid.Row="4"/>
+        <TextBox Name="Name" Grid.Row="4" Grid.Column="2"/>
+        <Button Content="Перевести в выпустившиеся" Name="GraduateButton"  Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="3" Click="GraduateButton_Click"/>
+        <Button Name="SaveButton" Content="Сохранить"  Grid.Column="1" Grid.Row="8" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="8" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Groups\GroupForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DataAccess.Entities;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Linq;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Groups
+{
+    /// <summary>
+    /// Interaction logic for GroupForm.xaml
+    /// </summary>
+    public partial class GroupForm : Window
+    {
+        private Guid? _entityId;
+        private readonly GroupDto _group;
+        private readonly Guid _specialityId;
+        private readonly IGroupsService _groupService;
+        private readonly ISpecialitiesService _specialitiesService;
+        public event CustomEventHandler OnSuccess;
+        public GroupForm(string title, IGroupsService groupService, ISpecialitiesService specialitiesService, Guid specialityId, GroupDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            GraduatedGroupMessage.Visibility = Visibility.Hidden;
+            Title = title;
+            _groupService = groupService;
+            _specialitiesService = specialitiesService;
+            _specialityId = specialityId;
+            var speciality = _specialitiesService.GetById(specialityId);
+            if (entityToUpdate != null)
+            {
+                _group = entityToUpdate;
+            }
+            else
+            {
+                PromoteButton.IsEnabled = false;
+                GraduateButton.IsEnabled = false;
+                var currentYear = DateTime.Now.Year;
+                _group = new GroupDto
+                {
+                    Name = "",
+                    Cource = 1,
+                    EnrollYear = currentYear,
+                    Graduated = false,
+                    SpecialityId = _specialityId,
+                };
+            }
+            FillForm(speciality.FullName);
+            if(_group.Graduated)
+            {
+                PromoteButton.IsEnabled = false;
+                GraduateButton.IsEnabled = false;
+                SaveButton.IsEnabled = false;
+                GraduatedGroupMessage.Visibility = Visibility.Visible;
+            }
+        }
+        private void FillForm(string specialityName)
+        {
+            _entityId = _group.Id;
+            SpecialityInfo.Text = specialityName;
+            Name.Text = _group.Name;
+            EnrollYear.Text = _group.EnrollYear.ToString();
+            Cource.Text = _group.Cource.ToString();
+        }
+        private void PromoteButton_Click(object sender, RoutedEventArgs e)
+        {
+            _group.Cource += 1;
+            _groupService.Update(_group);
+            OnSuccess?.Invoke(this, new CustomEventArgs(_group.Id));
+            this.Close();
+        }
+        private void GraduateButton_Click(object sender, RoutedEventArgs e)
+        {
+            _group.Graduated = true;
+            _groupService.Update(_group);
+            OnSuccess?.Invoke(this, new CustomEventArgs(_group.Id));
+            this.Close();
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            _group.Name = Name.Text;
+            if(_group.Id == Guid.Empty)
+            {
+                _groupService.Create(_group);
+            }
+            else
+            {
+                _groupService.Update(_group);
+            }
+            OnSuccess?.Invoke(this, new CustomEventArgs(_group.Id));
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Groups\GroupsWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Groups.GroupsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Groups"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Учебные группы" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <ComboBox Name="SpecialitiesComboBox" DisplayMemberPath="Info"
+                  Grid.Column="1" FontSize="15" Grid.ColumnSpan="4" Margin="233,8,24,27" Grid.RowSpan="3"
+                  SelectionChanged="SpecialitiesComboBox_SelectionChanged"/>
+        <TextBlock Grid.Row="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="24,0,338,0">Учебные группы специальности</TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=Name}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Курс" Width="Auto" Binding="{Binding Path=Cource}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Год поступления" Width="Auto" Binding="{Binding Path=EnrollYear}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Выпустилась" Width="Auto" Binding="{Binding Path=GraduatedText}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Groups\GroupsWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+namespace StudentsManagement.DesktopApp.Windows.Groups
+{
+    /// <summary>
+    /// Interaction logic for GroupsWindow.xaml
+    /// </summary>
+    public partial class GroupsWindow : Window
+    {
+        private Guid? _selectedSpecialityId;
+        private string _selectedSpecialityName;
+        private readonly IGroupsService _entityService;
+        private readonly ISpecialitiesService _specialitiesService;
+        public GroupsWindow(IGroupsService entityService, ISpecialitiesService specialitiesService)
+        {
+            InitializeComponent();
+            _entityService = entityService;
+            _specialitiesService = specialitiesService;
+            _selectedSpecialityId = null;
+            var specialities = _specialitiesService.GetAll();
+            var specialitiesItems = specialities.Select(x => new InfoModel(x.Id, x.FullName)).ToList();
+            SpecialitiesComboBox.ItemsSource = specialitiesItems;
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(_selectedSpecialityId == null)
+            {
+                SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                MessageBox.Show(AppLocalization.SelectDropdownSomethingMessageText, AppLocalization.ErrorMessageText);
+                return;
+            }
+            var form = new GroupForm(AppLocalization.AddGroupForm,
+                _entityService, _specialitiesService, _selectedSpecialityId.Value);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_selectedSpecialityId == null)
+            {
+                SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
+                MessageBox.Show(AppLocalization.SelectDropdownSomethingMessageText, AppLocalization.ErrorMessageText);
+                return;
+            }
+            var selectedGroup = GetSelectedItem<GroupDto>();
+            if (selectedGroup == null) { return; }
+            var form = new GroupForm(AppLocalization.UpdateGroupForm,
+                _entityService, _specialitiesService, _selectedSpecialityId.Value, selectedGroup);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<GroupDto>();
+                if (selectedItem == null) { return; }
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Группа (специальность: {_selectedSpecialityName})",
+                        $"Название: {selectedItem.Name}",
+                        $"Курс: {selectedItem.Cource}",
+                        $"Год поступления: {selectedItem.EnrollYear}",
+                        $"Выпустилась: {selectedItem.GraduatedText}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void SpecialitiesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.White);
+            var selected = SpecialitiesComboBox.SelectedItem as InfoModel;
+            _selectedSpecialityId = selected.Id;
+            _selectedSpecialityName = selected.Info;
+            UpdateDatagrid();
+        }
+        // Common logic
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var groupsList = _entityService.GetGroupsBySpecialityId(_selectedSpecialityId.Value);
+            MainDataGrid.ItemsSource = groupsList;
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        { }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Profile\ProfileWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Profile.ProfileWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Profile"
+        mc:Ignorable="d"
+        MinHeight="200" MinWidth="400"
+        Title="Личный кабинет " Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Menu Height="25" VerticalAlignment="Top">
+            <MenuItem Name="AdminDataButton" Header="Данные">
+                <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
+                <MenuItem Header="Состав учебных групп" Click="GroupsListsMenuItem_Click"></MenuItem>
+                <Separator />
+                <MenuItem Header="Аттестационные мероприятия" Click="AttestationsMenuItem_Click"></MenuItem>
+                <MenuItem Header="Учебные планы" Click="CurriculumUnitsMenuItem_Click"></MenuItem>
+                <MenuItem Header="Учебные предметы" Click="SubjectsMenuItem_Click"></MenuItem>
+                <MenuItem Header="Виды работ" Click="WorkTypesMenuItem_Click"></MenuItem>
+                <Separator />
+                <MenuItem Header="Специальности" Click="SpecialitiesMenuItem_Click"></MenuItem>
+                <MenuItem Header="Учебные группы" Click="GroupsMenuItem_Click"></MenuItem>
+                <Separator />
+                <MenuItem Header="Выход" ></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Мой аккаунт">
+                <MenuItem Header="Смена пароля"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Общая статистика" ></MenuItem>
+        </Menu>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Profile\ProfileWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Windows.Attestations;
+using StudentsManagement.DesktopApp.Windows.CurriculumUnits;
+using StudentsManagement.DesktopApp.Windows.Groups;
+using StudentsManagement.DesktopApp.Windows.Specialities;
+using StudentsManagement.DesktopApp.Windows.Subjects;
+using StudentsManagement.DesktopApp.Windows.Users;
+using StudentsManagement.DesktopApp.Windows.WorkTypes;
+using System;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Profile
+{
+    /// <summary>
+    /// Interaction logic for ProfileWindow.xaml
+    /// </summary>
+    public partial class ProfileWindow : Window
+    {
+        private readonly Guid _currentUserId;
+        private readonly IWorkTypesService _workTypesService;
+        private readonly IGroupsService _groupsService;
+        private readonly ISpecialitiesService _specialitiesService;
+        private readonly ISubjectsService _subjectsService;
+        private readonly ICurriculumUnitsService _curriculumUnitsService;
+        private readonly IAttestationsService _attestationsService;
+        private readonly IUsersService _usersService;
+        private readonly IMarksService _marksService;
+        public ProfileWindow(Guid currentUserId, bool displayAdminDataButton,
+            ISpecialitiesService specialitiesService,
+            ISubjectsService subjectsService,
+            IGroupsService groupsService,
+            IWorkTypesService workTypesService,
+            ICurriculumUnitsService curriculumUnitsService,
+            IAttestationsService attestationsService,
+            IUsersService usersService,
+            IMarksService marksService)
+        {
+            InitializeComponent();
+            AdminDataButton.Visibility = displayAdminDataButton ? Visibility.Visible : Visibility.Hidden;
+            _currentUserId = currentUserId;
+            _specialitiesService = specialitiesService;
+            _subjectsService = subjectsService;
+            _groupsService = groupsService;
+            _workTypesService = workTypesService;
+            _curriculumUnitsService = curriculumUnitsService;
+            _attestationsService = attestationsService;
+            _usersService = usersService;
+            _marksService = marksService;
+        }
+        private void UsersMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new UsersWindow(_usersService, _groupsService);
+            window.Show();
+        }
+        private void CurriculumUnitsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new CurriculumUnitsWindow(
+                _curriculumUnitsService,
+                _workTypesService,
+                _specialitiesService,
+                _subjectsService);
+            window.Show();
+        }
+        private void GroupsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var groupsWindow = new GroupsWindow(_groupsService, _specialitiesService);
+            groupsWindow.Show();
+        }
+        private void AttestationsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new AttestationWindow(
+                _attestationsService,
+                _curriculumUnitsService,
+                _workTypesService,
+                _subjectsService,
+                _usersService,
+                _groupsService,
+                _marksService);
+            window.Show();
+        }
+        private void WorkTypesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new WorkTypesWindow(_workTypesService);
+            window.Show();
+        }
+        private void SpecialitiesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SpecialitiesWindow(_specialitiesService);
+            window.Show();
+        }
+        private void SubjectsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new SubjectsWindow(_subjectsService);
+            window.Show();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Specialities\SpecialitiesForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Specialities.SpecialitiesForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Specialities"
+        mc:Ignorable="d"
+        MinHeight="300" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Короткое имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <TextBox Name="ShortNameTextBox" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Label Content="Полное имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="3"/>
+        <TextBox Name="FullNameTextBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Button Content="Сохранить" Grid.Column="1" Grid.Row="6" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="6" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Specialities\SpecialitiesForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Specialities
+{
+    /// <summary>
+    /// Interaction logic for SpecialitiesForm.xaml
+    /// </summary>
+    public partial class SpecialitiesForm : Window
+    {
+        private Guid? entityId;
+        private readonly ISpecialitiesService _service;
+        public event CustomEventHandler OnSuccess;
+        public SpecialitiesForm(string title, ISpecialitiesService service, SpecialityDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _service = service;
+            if (entityToUpdate != null)
+            {
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(SpecialityDto entity)
+        {
+            entityId = entity.Id;
+            ShortNameTextBox.Text = entity.ShortName;
+            FullNameTextBox.Text = entity.FullName;
+        }
+        private SpecialityDto ParseForm()
+        {
+            return new SpecialityDto()
+            {
+                Id = entityId ?? Guid.Empty,
+                ShortName = ShortNameTextBox.Text,
+                FullName = FullNameTextBox.Text,
+            };
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parsedEntity = ParseForm();
+            try
+            {
+                _service.Validate(parsedEntity);
+                if (entityId == null)
+                {
+                    entityId = _service.Create(parsedEntity);
+                }
+                else
+                {
+                    _service.Update(parsedEntity);
+                }
+                OnSuccess?.Invoke(this, new CustomEventArgs(entityId.Value));
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Specialities\SpecialitiesWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Specialities.SpecialitiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Specialities"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Специальности факультета " Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentUser" Grid.Column="3" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Name="HeaderText" Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center"></TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Короткое название" Width="Auto" Binding="{Binding Path=ShortName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=FullName}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Specialities\SpecialitiesWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Specialities
+{
+    /// <summary>
+    /// Interaction logic for SpecialitiesWindow.xaml
+    /// </summary>
+    public partial class SpecialitiesWindow : Window
+    {
+        private readonly ISpecialitiesService _entityService;
+        public SpecialitiesWindow(ISpecialitiesService specialitiesService)
+        {
+            InitializeComponent();
+            Title = $"Cпециальности";
+            HeaderText.Text = Title;
+            _entityService = specialitiesService;
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new SpecialitiesForm(AppLocalization.AddSpecialityForm, _entityService);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<SpecialityDto>();
+            if (selectedItem == null) { return; }
+            var form = new SpecialitiesForm(AppLocalization.UpdateSpecialityForm,
+                _entityService,
+                selectedItem);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<SpecialityDto>();
+                if (selectedItem == null) { return; }
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Специальность",
+                        $"Кр. назв.: {selectedItem.ShortName}",
+                        $"Полное назв.: {selectedItem.FullName}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        // Common logic
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var items = _entityService.GetAll().OrderBy(x => x.FullName);
+            MainDataGrid.ItemsSource = items;
+        }
+        private T GetSelectedItem<T>()
+            where T: class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if(selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Subjects\SubjectForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Subjects.SubjectForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Subjects"
+        mc:Ignorable="d"
+        MinHeight="200" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Короткое имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
+        <TextBox Name="ShortNameTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Label Content="Полное имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"/>
+        <TextBox Name="FullNameTextBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Button Content="Сохранить" Grid.Column="1" Grid.Row="5" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="5" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Subjects\SubjectForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+namespace StudentsManagement.DesktopApp.Windows.Subjects
+{
+    /// <summary>
+    /// Interaction logic for SubjectForm.xaml
+    /// </summary>
+    public partial class SubjectForm : Window
+    {
+        private Guid? entityId;
+        private readonly ISubjectsService _service;
+        public event CustomEventHandler OnSuccess;
+        public SubjectForm(string title, ISubjectsService service, SubjectDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _service = service;
+            if (entityToUpdate != null)
+            {
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(SubjectDto entity)
+        {
+            entityId = entity.Id;
+            ShortNameTextBox.Text = entity.ShortName;
+            FullNameTextBox.Text = entity.FullName;
+        }
+        private SubjectDto ParseForm()
+        {
+            return new SubjectDto()
+            {
+                Id = entityId ?? Guid.Empty,
+                ShortName = ShortNameTextBox.Text,
+                FullName = FullNameTextBox.Text,
+            };
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parsedEntity = ParseForm();
+            try
+            {
+                _service.Validate(parsedEntity);
+                if (entityId == null)
+                {
+                    entityId = _service.Create(parsedEntity);
+                }
+                else
+                {
+                    _service.Update(parsedEntity);
+                }
+                OnSuccess?.Invoke(this, new CustomEventArgs(entityId.Value));
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Subjects\SubjectsWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Subjects.SubjectsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Subjects"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Учебные предметы" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentUser" Grid.Column="3" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Учебные предметы</TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Короткое название" Width="Auto" Binding="{Binding Path=ShortName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=FullName}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Subjects\SubjectsWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Subjects
+{
+    /// <summary>
+    /// Interaction logic for SubjectsWindow.xaml
+    /// </summary>
+    public partial class SubjectsWindow : Window
+    {
+        private readonly ISubjectsService _entityService;
+        public SubjectsWindow(ISubjectsService SubjectsService)
+        {
+            InitializeComponent();
+            _entityService = SubjectsService;
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new SubjectForm(AppLocalization.AddSubjectForm, _entityService);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<SubjectDto>();
+            if (selectedItem == null) { return; }
+            var form = new SubjectForm(AppLocalization.UpdateSubjectForm, _entityService, selectedItem);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<SubjectDto>();
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Дисциплина",
+                        $"Кр. назв.: {selectedItem.ShortName}",
+                        $"Полное назв.: {selectedItem.FullName}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        // Common logic
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var items = _entityService.GetAll();
+            MainDataGrid.ItemsSource = items;
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Users\PasswordWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Users.PasswordWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Users"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="400"
+        Title="Внимание!" Height="500" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.3*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="0.3*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Column="1" Grid.Row="1" TextWrapping="Wrap" FontSize="18">
+            Внимание! <LineBreak/>
+            Для создаваемого пользователя сейчас будет сгенерирован временный пароль.<LineBreak/> <LineBreak/>
+            При нажатии на кнопку "Скопировать" он будет помещён в Ваш буфер обмена<LineBreak/> <LineBreak/>
+            Пожалуйста, сохраните его в надёжном месте и передайте пользователю лично<LineBreak/> <LineBreak/>
+        </TextBlock>
+        <Button Name="CopyButton" Content="Скопировать сгенерированный пароль" Grid.Row="2" Grid.Column="1" FontSize="16" Click="CopyButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Users\PasswordWindow.xaml.cs
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Users
+{
+    /// <summary>
+    /// Interaction logic for PasswordWindow.xaml
+    /// </summary>
+    public partial class PasswordWindow : Window
+    {
+        public event CustomEventHandler OnSuccess;
+        public PasswordWindow()
+        {
+            InitializeComponent();
+        }
+        private void CopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            var guid = Guid.NewGuid().ToString()[..12];
+            Clipboard.SetText(guid);
+            OnSuccess?.Invoke(this, new CustomEventArgs(Guid.Empty, guid));
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Users\UserForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Users.UserForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Users"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="700"
+        Title="" Height="500" Width="700" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.3*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Email:" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+        <TextBox Name="EmailInput" Grid.Column="2" Grid.Row="1" Grid.ColumnSpan="2"/>
+        <Label Content="Фамилия:" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center"/>
+        <TextBox Name="LastNameInput" Grid.Column="2" Grid.Row="2" Grid.ColumnSpan="2"/>
+        <Label Content="Имя:" Grid.Column="1" Grid.Row="3" VerticalAlignment="Center"/>
+        <TextBox Name="FirstNameInput" Grid.Column="2" Grid.Row="3" Grid.ColumnSpan="2"/>
+        <Label Content="Отчество:" Grid.Column="1" Grid.Row="4" VerticalAlignment="Center"/>
+        <TextBox Name="MiddleNameInput" Grid.Column="2" Grid.Row="4" Grid.ColumnSpan="2"/>
+        <Label Content="Доп. информация:" Grid.Column="1" Grid.Row="5" VerticalAlignment="Center"/>
+        <TextBox Name="InfoInput" Grid.Column="2" Grid.Row="5" Grid.ColumnSpan="2"/>
+        <Label Content="Роль:" Grid.Column="1" Grid.Row="6" VerticalAlignment="Center"/>
+        <ComboBox Name="RoleComboBox" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="6" Grid.ColumnSpan="2" SelectionChanged="RoleComboBox_SelectionChanged"/>
+        <Label Name="GroupLabel" Visibility="Hidden" Content="Группа:" Grid.Column="1" Grid.Row="7" VerticalAlignment="Center"/>
+        <ComboBox Name="GroupComboBox" Visibility="Hidden" DisplayMemberPath="Info"
+                  Grid.Column="2" Grid.Row="7" Grid.ColumnSpan="2"/>
+        <Button Name="GeneratePasswordButton" Content="Сгнерировать пароль" Grid.Row="9" Grid.Column="1" Click="GeneratePasswordButton_Click"/>
+        <Button Name="SaveButton" Visibility="Hidden" Content="Сохранить" Grid.Row="9" Grid.Column="1" Click="SaveButton_Click"/>
+        <Button Content="Отмена" Grid.Column="3" Grid.Row="9" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Users\UserForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using StudentsManagement.DesktopApp.Helpers;
+using StudentsManagement.DesktopApp.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+namespace StudentsManagement.DesktopApp.Windows.Users
+{
+    /// <summary>
+    /// Interaction logic for UserForm.xaml
+    /// </summary>
+    public partial class UserForm : Window
+    {
+        private readonly Guid? _entityId;
+        private string _password;
+        private List<InfoModel> _groups;
+        private readonly List<InfoModel> _roles = new()
+        {
+            new InfoModel(Guid.NewGuid(), AppLocalization.Roles.Student),
+            new InfoModel(Guid.NewGuid(), "Преподаватель"),
+            new InfoModel(Guid.NewGuid(), "Администратор"),
+        };
+        private readonly IUsersService _usersService;
+        private readonly IGroupsService _groupsService;
+        public event CustomEventHandler OnSuccess;
+        public UserForm(string title, IUsersService usersService, IGroupsService groupsService, UserDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _usersService = usersService;
+            _groupsService = groupsService;
+            _groups = _groupsService.GetActiveGroups().Select(x => new InfoModel(x.Id, x.Name)).ToList();
+            RoleComboBox.ItemsSource = _roles;
+            if (entityToUpdate != null)
+            {
+                _entityId = entityToUpdate.Id;
+                _password = entityToUpdate.PasswordHash;
+                GeneratePasswordButton.Visibility = Visibility.Hidden;
+                SaveButton.Visibility = Visibility.Visible;
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(UserDto entity)
+        {
+            FirstNameInput.Text = entity.FirstName;
+            MiddleNameInput.Text = entity.MiddleName;
+            LastNameInput.Text = entity.LastName;
+            EmailInput.Text = entity.Email;
+            var role = (int)entity.Role;
+            RoleComboBox.SelectedIndex = role;
+            if (entity.Role == UserRole.Student)
+            {
+                GroupComboBox.SelectedIndex = _groups.FindIndex(x => x.Id == entity.GroupId);
+            }
+        }
+        private UserDto ParseForm()
+        {
+            var userDto = new UserDto();
+            if (string.IsNullOrEmpty(EmailInput.Text))
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueText, AppLocalization.UserFields.Email),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            userDto.Email = EmailInput.Text;
+            if (string.IsNullOrEmpty(FirstNameInput.Text))
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueText, AppLocalization.UserFields.FirstName),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            userDto.FirstName = FirstNameInput.Text;
+            if (string.IsNullOrEmpty(LastNameInput.Text))
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueText, AppLocalization.UserFields.LastName),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            userDto.LastName = LastNameInput.Text;
+            var selectedRole = RoleComboBox.SelectedItem as InfoModel;
+            if (selectedRole == null)
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.UserFields.Role),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            else
+            {
+                var roleValue = _roles.FindIndex(r => r.Id == selectedRole.Id);
+                var role = (UserRole)(roleValue+1);
+                if (role == UserRole.Student)
+                {
+                    var selectedGroup = GroupComboBox.SelectedItem as InfoModel;
+                    if (selectedGroup == null)
+                    {
+                        MessageBox.Show(
+                            string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.UserFields.Group),
+                            AppLocalization.ErrorMessageText);
+                        return null;
+                    }
+                    userDto.GroupId = selectedGroup.Id;
+                }
+                userDto.Role = role;
+            }
+            return userDto;
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var fromFormEntity = ParseForm();
+            if (fromFormEntity == null)
+                return; // messagebox уже был показан
+            if (string.IsNullOrEmpty(_password))
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueDropdownText, AppLocalization.UserFields.PasswordHash),
+                    AppLocalization.ErrorMessageText);
+                return;
+            }
+            fromFormEntity.PasswordHash = _password;
+            if (_entityId == null)
+            {
+                fromFormEntity.Id = _usersService.Create(fromFormEntity);
+            }
+            else
+            {
+                fromFormEntity.Id = _entityId.Value;
+                _usersService.Update(fromFormEntity);
+            }
+            OnSuccess?.Invoke(this, new CustomEventArgs(fromFormEntity.Id));
+            this.Close();
+        }
+        private void RoleComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var selectedItem = RoleComboBox.SelectedItem as InfoModel;
+            if (selectedItem.Id == _roles[0].Id)
+            {
+                GroupComboBox.Visibility = Visibility.Visible;
+                GroupLabel.Visibility = Visibility.Visible;
+                GroupComboBox.ItemsSource = _groups;
+            }
+            else if (GroupComboBox.Visibility != Visibility.Hidden)
+            {
+                GroupComboBox.Visibility = Visibility.Hidden;
+                GroupLabel.Visibility = Visibility.Hidden;
+            }
+        }
+        private void GeneratePasswordButton_Click(object sender, RoutedEventArgs e)
+        {
+            var passwordWindow = new PasswordWindow();
+            passwordWindow.OnSuccess += HandlePasswordGeneration;
+            passwordWindow.Show();
+            void HandlePasswordGeneration(object sender, CustomEventArgs e)
+            {
+                _password = AuthHelper.CreateSha256Hash(e.Message);
+                GeneratePasswordButton.Visibility = Visibility.Hidden;
+                SaveButton.Visibility = Visibility.Visible;
+            }
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\Users\UsersWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.Users.UsersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Users"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="1200"
+        Title="Пользователи" Height="450" Width="1200" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.15*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="1" FontSize="15" VerticalAlignment="Center" Grid.ColumnSpan="2" Margin="24,0,338,0">
+            Пользователи
+        </TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Роль" Width="Auto" Binding="{Binding Path=RoleName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Группа" Width="Auto" Binding="{Binding Path=GroupName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Фамилия" Width="Auto" Binding="{Binding Path=LastName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Имя" Width="Auto" Binding="{Binding Path=FirstName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Отчество" Width="Auto" Binding="{Binding Path=MiddleName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Email" Width="Auto" Binding="{Binding Path=Email}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Отключен" Width="Auto" Binding="{Binding Path=IsDisabledText}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Информация" Width="Auto" Binding="{Binding Path=Info}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Регистрация" Grid.Column="3" Grid.Row="3" Click="CreateNew_Click"/>
+        <Button x:Name="EditSelected" Content="Обновление данных" Grid.Column="3" Grid.Row="5" Click="EditSelected_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить выбранного" Grid.Column="3" Grid.Row="7" Click="DeleteSelected_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\Users\UsersWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.Common.Enums;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System.Linq;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.Users
+{
+    /// <summary>
+    /// Interaction logic for UsersWindow.xaml
+    /// </summary>
+    public partial class UsersWindow : Window
+    {
+        private readonly IUsersService _usersService;
+        private readonly IGroupsService _groupsService;
+        public UsersWindow(IUsersService usersService, IGroupsService groupsService)
+        {
+            InitializeComponent();
+            _usersService = usersService;
+            _groupsService = groupsService;
+            UpdateDatagrid();
+        }
+        private void EditSelected_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<UserDto>();
+            if (selectedItem == null) { return; }
+            //var form = new AttestationForm(AppLocalization.UpdateCurriculumUnitForm,
+            //    _entityService, _teachers, _groups, _curriculumUnits, selectedItem);
+            //form.OnSuccess += HandleChanges;
+            //form.Show();
+        }
+        private void CreateNew_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new UserForm(AppLocalization.AddUserForm, _usersService, _groupsService);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void DeleteSelected_Click(object sender, RoutedEventArgs e)
+        {
+        }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var users = _usersService.GetAll().Where(x => x.Role != UserRole.MainAdmin);
+            foreach (var user in users)
+            {
+                if(user.Role == UserRole.Student)
+                {
+                    var group = _groupsService.GetById(user.GroupId.Value);
+                    user.GroupId = group.Id;
+                    user.GroupName = group.Name;
+                }
+            }
+            MainDataGrid.ItemsSource = users;
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\WorkTypes\WorkTypeForm.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.WorkTypes.WorkTypeForm"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.WorkTypes"
+        mc:Ignorable="d"
+        MinHeight="200" MinWidth="400"
+        Title="" Height="200" Width="400" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.5*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Короткое имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0"/>
+        <TextBox Name="ShortNameTextBox" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Label Content="Полное имя:" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="2"/>
+        <TextBox Name="FullNameTextBox" Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3"/>
+        <Button Content="Сохранить" Grid.Column="1" Grid.Row="5" Click="SaveButton_Click"/>
+        <Button Content="Отмена"  Grid.Column="3" Grid.Row="5" Click="CancelButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\WorkTypes\WorkTypeForm.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.WorkTypes
+{
+    /// <summary>
+    /// Interaction logic for WorkTypeForm.xaml
+    /// </summary>
+    public partial class WorkTypeForm : Window
+    {
+        private Guid? entityId;
+        private readonly IWorkTypesService _service;
+        public event CustomEventHandler OnSuccess;
+        public WorkTypeForm(string title, IWorkTypesService service, WorkTypeDto entityToUpdate = null)
+        {
+            InitializeComponent();
+            Title = title;
+            _service = service;
+            if (entityToUpdate != null)
+            {
+                FillForm(entityToUpdate);
+            }
+        }
+        private void FillForm(WorkTypeDto entity)
+        {
+            entityId = entity.Id;
+            ShortNameTextBox.Text = entity.ShortName;
+            FullNameTextBox.Text = entity.FullName;
+        }
+        private WorkTypeDto ParseForm()
+        {
+            return new WorkTypeDto()
+            {
+                Id = entityId ?? Guid.Empty,
+                ShortName = ShortNameTextBox.Text,
+                FullName = FullNameTextBox.Text,
+            };
+        }
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var parsedEntity = ParseForm();
+            try
+            {
+                _service.Validate(parsedEntity);
+                if (entityId == null)
+                {
+                    entityId = _service.Create(parsedEntity);
+                }
+                else
+                {
+                    _service.Update(parsedEntity);
+                }
+                OnSuccess?.Invoke(this, new CustomEventArgs(entityId.Value));
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+    }
+}
+
+StudentsManagement.DesktopApp\Windows\WorkTypes\WorkTypesWindow.xaml
+<Window x:Class="StudentsManagement.DesktopApp.Windows.WorkTypes.WorkTypesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.WorkTypes"
+        mc:Ignorable="d"
+        MinHeight="500" MinWidth="800"
+        Title="Виды работ" Height="450" Width="800" Background="AntiqueWhite"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="0.1*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="CurrentUser" Grid.Column="3" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Виды работ</TextBlock>
+        <DataGrid Name="MainDataGrid" SelectionUnit="FullRow" AutoGenerateColumns="False" CanUserAddRows="false"
+                  Grid.Column="1" Grid.Row="3" Grid.RowSpan="6">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Width="Auto" Binding="{Binding Path=Id}" Visibility="Hidden" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Короткое название" Width="Auto" Binding="{Binding Path=ShortName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Название" Width="Auto" Binding="{Binding Path=FullName}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="CreateNew" Content="Добавить" Grid.Column="3" Grid.Row="3" Click="CreateButton_Click"/>
+        <Button x:Name="EditSelected" Content="Изменить" Grid.Column="3" Grid.Row="5" Click="EditSelectedButton_Click"/>
+        <Button x:Name="DeleteSelected" Content="Удалить" Grid.Column="3" Grid.Row="7" Click="DeleteSelectedButton_Click"/>
+    </Grid>
+</Window>
+
+StudentsManagement.DesktopApp\Windows\WorkTypes\WorkTypesWindow.xaml.cs
+using StudentsManagement.BusinessLogic.Dtos;
+using StudentsManagement.BusinessLogic.Services;
+using StudentsManagement.DesktopApp.Common;
+using StudentsManagement.DesktopApp.EventHandlers;
+using System;
+using System.Collections.Generic;
+using System.Windows;
+namespace StudentsManagement.DesktopApp.Windows.WorkTypes
+{
+    /// <summary>
+    /// Interaction logic for WorkTypesWindow.xaml
+    /// </summary>
+    public partial class WorkTypesWindow : Window
+    {
+        private readonly IWorkTypesService _entityService;
+        public WorkTypesWindow(IWorkTypesService WorkTypesService)
+        {
+            InitializeComponent();
+            _entityService = WorkTypesService;
+        }
+        private void CreateButton_Click(object sender, RoutedEventArgs e)
+        {
+            var form = new WorkTypeForm(AppLocalization.AddWorkTypeForm, _entityService);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void EditSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            var selectedItem = GetSelectedItem<WorkTypeDto>();
+            if (selectedItem == null) { return; }
+            var form = new WorkTypeForm(AppLocalization.UpdateWorkTypeForm, _entityService, selectedItem);
+            form.OnSuccess += HandleChanges;
+            form.Show();
+        }
+        private void DeleteSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var selectedItem = GetSelectedItem<WorkTypeDto>();
+                if (selectedItem == null) { return; }
+                var form = new DeleteConfirmation(selectedItem.Id,
+                    new List<string>
+                    {
+                        $"Вид работы",
+                        $"Кр. назв.: {selectedItem.ShortName}",
+                        $"Полное назв.: {selectedItem.FullName}",
+                    });
+                form.OnConfirm += HandleDelete;
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        // Common logic
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _entityService.Delete(e.Id);
+            UpdateDatagrid();
+        }
+        private void UpdateDatagrid()
+        {
+            var items = _entityService.GetAll();
+            MainDataGrid.ItemsSource = items;
+        }
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+            return selectedItem;
+        }
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+        private void HandleChanges(object sender, CustomEventArgs e)
+        {
+            UpdateDatagrid();
+        }
+    }
+}

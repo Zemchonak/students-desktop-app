@@ -43,7 +43,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             if(_selectedSpecialityId == null)
             {
                 SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
+                MessageBox.Show(AppLocalization.SelectDropdownSomethingMessageText, AppLocalization.ErrorMessageText);
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace StudentsManagement.DesktopApp.Windows.Groups
             if (_selectedSpecialityId == null)
             {
                 SpecialitiesComboBox.BorderBrush = new SolidColorBrush(Colors.Red);
-                MessageBox.Show(AppLocalization.ErrorMessageText, AppLocalization.SelectDropdownSomethingMessageText);
+                MessageBox.Show(AppLocalization.SelectDropdownSomethingMessageText, AppLocalization.ErrorMessageText);
                 return;
             }
 

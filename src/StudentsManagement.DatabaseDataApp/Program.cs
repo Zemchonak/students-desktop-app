@@ -127,20 +127,20 @@ namespace StudentsManagement.DatabaseDataApp
             var nextSem = sem + 1;
             return new List<CurriculumUnit>
             {
-                new CurriculumUnit { Name = "ЛР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 2", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 3", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 4", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 5", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ОКР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
-                new CurriculumUnit { Name = "Зачёт", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = zachId  },
-                new CurriculumUnit { Name = "ЛР 5", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 6", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 7", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 8", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ЛР 9", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
-                new CurriculumUnit { Name = "ОКР 2", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
-                new CurriculumUnit { Name = "Экзамен", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = examId  },
+                new() { Name = "ЛР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 2", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 3", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 4", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 5", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ОКР 1", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new() { Name = "Зачёт", Semester = sem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = zachId  },
+                new() { Name = "ЛР 5", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 6", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 7", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 8", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ЛР 9", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = labId  },
+                new() { Name = "ОКР 2", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = orkId  },
+                new() { Name = "Экзамен", Semester = nextSem, SpecialityId = specialityId, SubjectId = subjectId, WorkTypeId = examId  },
             };
         }
 

@@ -89,7 +89,8 @@ namespace StudentsManagement.DesktopApp
                 _workTypesService,
                 _curriculumUnitsService,
                 _attestationsService,
-                _usersService);
+                _usersService,
+                _marksService);
             profileWindow.Show();
         }
     }

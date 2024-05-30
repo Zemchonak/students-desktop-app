@@ -24,6 +24,7 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
         private readonly ICurriculumUnitsService _curriculumUnitsService;
         private readonly IAttestationsService _attestationsService;
         private readonly IUsersService _usersService;
+        private readonly IMarksService _marksService;
 
         public ProfileWindow(Guid currentUserId, bool displayAdminDataButton,
             ISpecialitiesService specialitiesService,
@@ -32,7 +33,8 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
             IWorkTypesService workTypesService,
             ICurriculumUnitsService curriculumUnitsService,
             IAttestationsService attestationsService,
-            IUsersService usersService)
+            IUsersService usersService,
+            IMarksService marksService)
         {
             InitializeComponent();
 
@@ -47,6 +49,7 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
             _curriculumUnitsService = curriculumUnitsService;
             _attestationsService = attestationsService;
             _usersService = usersService;
+            _marksService = marksService;
         }
 
         private void UsersMenuItem_Click(object sender, RoutedEventArgs e)
@@ -79,7 +82,8 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
                 _workTypesService,
                 _subjectsService,
                 _usersService,
-                _groupsService);
+                _groupsService,
+                _marksService);
             window.Show();
         }
 

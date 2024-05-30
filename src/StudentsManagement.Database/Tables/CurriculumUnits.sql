@@ -6,4 +6,7 @@
     SubjectId UNIQUEIDENTIFIER NOT NULL,
     WorkTypeId UNIQUEIDENTIFIER NOT NULL,
     Name NVARCHAR(75) NOT NULL,
+    FOREIGN KEY (SpecialityId) REFERENCES Specialities(Id),
+    FOREIGN KEY (SubjectId) REFERENCES Subjects(Id),
+    FOREIGN KEY (WorkTypeId) REFERENCES WorkTypes(Id),
 )
