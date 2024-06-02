@@ -45,17 +45,22 @@ namespace StudentsManagement.BusinessLogic.Services
                 return AppLocalization.Marks.NotProvided;
             }
 
-            if (mark.NotAttended)
+            if (mark.NotAttended.Value != null)
             {
                 return AppLocalization.Marks.NotAttended;
             }
 
-            if (mark.NotAllowed)
+            if (mark.NotAllowed.Value != null)
             {
                 return AppLocalization.Marks.NotAllowed;
             }
 
-            return mark.Value.Value.ToString();
+            if (mark.Value.Value != null)
+            {
+                return mark.Value.Value.ToString();
+            }
+
+            return AppLocalization.Marks.NotProvided;
         }
 
         public List<MarkDto> GetMarksByAttestationId(Guid attestationId)
