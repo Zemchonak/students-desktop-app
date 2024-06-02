@@ -2,6 +2,8 @@
 using StudentsManagement.BusinessLogic.Dtos;
 using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DataAccess.Repositories;
+using static StudentsManagement.DesktopApp.Common.AppLocalization;
+using StudentsManagement.DesktopApp.Common;
 
 namespace StudentsManagement.BusinessLogic.Services
 {
@@ -28,6 +30,32 @@ namespace StudentsManagement.BusinessLogic.Services
             {
                 _repository.Create(mark);
             }
+        }
+
+        public MarkDto GetMarkByUserIdInAttestation(Guid studentId, Guid attestationId)
+        {
+            return _mapper.Map<MarkDto>(
+                _repository.GetAll(m => m.StudentId == studentId && m.AttestationId == attestationId));
+        }
+
+        public string GetMarkString(MarkDto mark)
+        {
+            if (mark == null || mark.Value == null)
+            {
+                return AppLocalization.Marks.NotProvided;
+            }
+
+            if (mark.NotAttended)
+            {
+                return AppLocalization.Marks.NotAttended;
+            }
+
+            if (mark.NotAllowed)
+            {
+                return AppLocalization.Marks.NotAllowed;
+            }
+
+            return mark.Value.Value.ToString();
         }
 
         public List<MarkDto> GetMarksByAttestationId(Guid attestationId)

@@ -7,5 +7,9 @@ namespace StudentsManagement.BusinessLogic.Services
         void CreateMarks(Guid attestationId, Guid groupId);
 
         List<MarkDto> GetMarksByAttestationId(Guid attestationId);
+
+        MarkDto GetMarkByUserIdInAttestation(Guid studentId, Guid attestationId);
+
+        string GetMarkString(MarkDto mark);
     }
 }

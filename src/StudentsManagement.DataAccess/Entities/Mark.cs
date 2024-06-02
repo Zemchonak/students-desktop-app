@@ -14,10 +14,8 @@ namespace StudentsManagement.DataAccess.Entities
 
         public int? Value { get; set; }
 
-        [Required]
-        public bool NotAttended { get; set; }
+        public bool? NotAttended { get; set; }
 
-        [Required]
-        public bool NotAllowed { get; set; }
+        public bool? NotAllowed { get; set; }
     }
 }

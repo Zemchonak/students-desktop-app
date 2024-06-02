@@ -10,5 +10,7 @@
         public string CurriculutUnitInfo { get; set; }
         public DateTime Date { get; set; }
         public string FormattedDate { get => Date.ToString("D"); }
+
+        public string MarkValue { get; set; }
     }
 }

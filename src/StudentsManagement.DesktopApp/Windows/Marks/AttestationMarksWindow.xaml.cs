@@ -23,5 +23,20 @@ namespace StudentsManagement.DesktopApp.Windows.Marks
         {
             InitializeComponent();
         }
+
+        private void CreateNew_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void EditSelected_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void DeleteSelected_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

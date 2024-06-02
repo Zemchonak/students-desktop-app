@@ -40,6 +40,13 @@ namespace StudentsManagement.DesktopApp.Common
         public static string IncorrectValueText = "Неверное значение в поле \"{0}\". Пожалуйста, измените его и повторите попытку!";
         public static string IncorrectValueDropdownText = "Не выбрано значение в выпадающем списке \"{0}\". Пожалуйста, сделайте выбор и повторите попытку!";
 
+        public class Marks
+        {
+            public const string NotAttended = "неявка";
+            public const string NotAllowed = "недопуск";
+            public const string NotProvided = "не выставлена";
+        }
+
         public class Roles
         {
             public const string Student = "Учащийся";
