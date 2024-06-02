@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp"
         mc:Ignorable="d"
-        MinHeight="800" MinWidth="1200"
+        MinHeight="500" MinWidth="1150"
         Title="Учёт успеваемости учащихся" Height="450" Width="800" Background="AntiqueWhite"
         WindowStartupLocation="CenterScreen">
     <Grid>
@@ -19,23 +19,25 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.03*"/>
-            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.05*"/>
             <RowDefinition Height="0.03*"/>
             <RowDefinition Height="0.6*"/>
             <RowDefinition Height="0.03*"/>
         </Grid.RowDefinitions>
         <TextBlock x:Name="CurrentUser" Grid.Column="4" Grid.Row="0" Text="" VerticalAlignment="Bottom"/>
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Center">Ближайшие аттестационные мероприятия специальности</TextBlock>
-        <ComboBox Name="SpecialitiesComboBox" Grid.Column="2" Grid.Row="1" FontSize="15"></ComboBox>
-        <DataGrid Name="MainDataGrid" Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="2">
+        <ComboBox Name="SpecialitiesComboBox"  DisplayMemberPath="Info" SelectionChanged="SpecialitiesComboBox_SelectionChanged" Grid.Column="2" Grid.Row="1" FontSize="15"></ComboBox>
+        <DataGrid Name="MainDataGrid"
+                  AutoGenerateColumns="False" CanUserAddRows="false" SelectionUnit="FullRow"
+                  Grid.Column="1" Grid.Row="3" Grid.ColumnSpan="4" Grid.RowSpan="1">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Дата" Width="" Binding="{Binding Path=Date}"/>
-                <DataGridTextColumn Header="Вид аттестации" Binding="{Binding Path=Type}"/>
-                <DataGridHyperlinkColumn Header="Факультет, специальность" Binding="{Binding Path=FacultySpecialityInfo}"/>
-                <DataGridHyperlinkColumn Header="Группа" Binding="{Binding Path=GroupName}"/>
-                <DataGridTextColumn Header="Преподаватель" Binding="{Binding Path=TeacherInfo}"/>
+                <DataGridTextColumn Header="Дата" Width="80" Binding="{Binding Path=FormattedDate}"/>
+                <DataGridHyperlinkColumn Header="Группа" Width="80" Binding="{Binding Path=GroupInfo}"/>
+                <DataGridTextColumn Header="Преподаватель" Width="100" Binding="{Binding Path=TeacherInfo}"/>
+                <DataGridTextColumn Header="Вид работы (по уч. плану)" Width="300" Binding="{Binding Path=CurriculutUnitInfo}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="ProfileButton" Grid.Column="4" Grid.Row="1" Click="ProfileButton_Click"/>
+        <Button x:Name="ProfileButton" Grid.Column="3" Grid.Row="1" Click="ProfileButton_Click" Grid.ColumnSpan="2" Margin="59,0,97,0"/>
+        <Button x:Name="LogoutButton" Visibility="Hidden" Content="Выйти" Grid.Column="4" Grid.Row="1" Click="LogoutButton_Click" Margin="168,0,0,0"/>
     </Grid>
 </Window>

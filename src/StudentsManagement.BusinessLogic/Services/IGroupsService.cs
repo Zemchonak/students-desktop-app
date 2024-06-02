@@ -4,7 +4,7 @@ namespace StudentsManagement.BusinessLogic.Services
 {
     public interface IGroupsService : IService<GroupDto>
     {
-        public List<GroupDto> GetActiveGroups();
+        public List<GroupDto> GetActiveGroups(Guid? specialityId = null);
         public IReadOnlyCollection<GroupDto> GetGroupsBySpecialityId(Guid specialityId);
     }
 }

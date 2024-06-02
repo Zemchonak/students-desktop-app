@@ -13,10 +13,13 @@ namespace StudentsManagement.BusinessLogic.Services
             _mapper = mapper;
         }
 
-        public List<GroupDto> GetActiveGroups()
+        public List<GroupDto> GetActiveGroups(Guid? specialityId = null)
         {
-            return _mapper.Map<List<GroupDto>>(
-                _repository.GetAll(x => !x.Graduated).ToList());
+            var items = specialityId != null ?
+                _repository.GetAll(x => !x.Graduated && x.SpecialityId == specialityId).ToList()
+                : _repository.GetAll(x => !x.Graduated).ToList();
+
+            return _mapper.Map<List<GroupDto>>(items);
         }
 
         public IReadOnlyCollection<GroupDto> GetGroupsBySpecialityId(Guid specialityId)

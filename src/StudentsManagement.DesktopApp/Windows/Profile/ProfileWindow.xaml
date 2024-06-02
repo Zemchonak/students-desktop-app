@@ -5,11 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:StudentsManagement.DesktopApp.Windows.Profile"
         mc:Ignorable="d"
-        MinHeight="200" MinWidth="400"
-        Title="Личный кабинет " Height="200" Width="400" Background="AntiqueWhite"
+        MinHeight="400" MinWidth="800"
+        Title="Личный кабинет" Height="450" Width="800" Background="AntiqueWhite"
         WindowStartupLocation="CenterScreen">
     <Grid>
-        <Menu Height="25" VerticalAlignment="Top">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.03*"/>
+            <ColumnDefinition Width="0.65*"/>
+            <ColumnDefinition Width="0.05*"/>
+            <ColumnDefinition Width="0.20*"/>
+            <ColumnDefinition Width="0.03*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.03*"/>
+            <RowDefinition Height="0.04*"/>
+            <RowDefinition Height="0.6*"/>
+            <RowDefinition Height="0.03*"/>
+        </Grid.RowDefinitions>
+        <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="6">
             <MenuItem Name="AdminDataButton" Header="Данные">
                 <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
                 <MenuItem Header="Состав учебных групп" Click="GroupsListsMenuItem_Click"></MenuItem>
@@ -29,5 +42,19 @@
             </MenuItem>
             <MenuItem Header="Общая статистика" ></MenuItem>
         </Menu>
+        <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Bottom">
+            Ваши ближайшие аттестационные мероприятия
+</TextBlock>
+        <DataGrid Name="MainDataGrid"
+          AutoGenerateColumns="False" CanUserAddRows="false" SelectionUnit="FullRow"
+          Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" MouseDoubleClick="MainDataGrid_MouseDoubleClick">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Дата" Width="80" Binding="{Binding Path=FormattedDate}"/>
+                <DataGridHyperlinkColumn Header="Группа" Width="80" Binding="{Binding Path=GroupInfo}"/>
+                <DataGridTextColumn Header="Преподаватель" Width="100" Binding="{Binding Path=TeacherInfo}"/>
+                <DataGridTextColumn Header="Вид работы (по уч. плану)" Width="230" Binding="{Binding Path=CurriculutUnitInfo}"/>
+                <DataGridTextColumn x:Name="MarkColumn" Header="Оценка" Width="70" Binding="{Binding Path=MarkValue}"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>
