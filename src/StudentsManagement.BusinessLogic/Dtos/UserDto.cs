@@ -32,5 +32,7 @@ namespace StudentsManagement.BusinessLogic.Dtos
         public Guid? GroupId { get; set; }
 
         public string GroupName { get; set; }
+
+        public string MarkValue { get; set; }
     }
 }

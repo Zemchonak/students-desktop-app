@@ -10,6 +10,6 @@ namespace StudentsManagement.BusinessLogic.Services
 
         MarkDto GetMarkByUserIdInAttestation(Guid studentId, Guid attestationId);
 
-        string GetMarkString(MarkDto mark);
+        string GetMarkString(MarkDto mark, bool useBinaryMarks = false);
     }
 }

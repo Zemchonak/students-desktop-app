@@ -46,7 +46,6 @@
             </DataGrid.Columns>
         </DataGrid>
         <Button x:Name="CreateNew" Content="Регистрация" Grid.Column="3" Grid.Row="3" Click="CreateNew_Click"/>
-        <Button x:Name="EditSelected" Content="Обновление данных" Grid.Column="3" Grid.Row="5" Click="EditSelected_Click"/>
         <Button x:Name="DeleteSelected" Content="Удалить выбранного" Grid.Column="3" Grid.Row="7" Click="DeleteSelected_Click"/>
     </Grid>
 </Window>

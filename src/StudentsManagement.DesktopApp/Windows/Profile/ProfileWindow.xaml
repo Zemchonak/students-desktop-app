@@ -25,7 +25,6 @@
         <Menu Height="25" VerticalAlignment="Top" Grid.ColumnSpan="6">
             <MenuItem Name="AdminDataButton" Header="Данные">
                 <MenuItem Header="Пользователи" Click="UsersMenuItem_Click"></MenuItem>
-                <MenuItem Header="Состав учебных групп" Click="GroupsListsMenuItem_Click"></MenuItem>
                 <Separator />
                 <MenuItem Header="Аттестационные мероприятия" Click="AttestationsMenuItem_Click"></MenuItem>
                 <MenuItem Header="Учебные планы" Click="CurriculumUnitsMenuItem_Click"></MenuItem>
@@ -38,15 +37,14 @@
                 <MenuItem Header="Выход" ></MenuItem>
             </MenuItem>
             <MenuItem Header="Мой аккаунт">
-                <MenuItem Header="Смена пароля"></MenuItem>
+                <MenuItem Header="Смена пароля" Click="ChangePasswordMenuItem_Click"></MenuItem>
             </MenuItem>
-            <MenuItem Header="Общая статистика" ></MenuItem>
         </Menu>
         <TextBlock Grid.Column="1" Grid.Row="1" FontSize="15" VerticalAlignment="Bottom">
             Ваши ближайшие аттестационные мероприятия
 </TextBlock>
         <DataGrid Name="MainDataGrid"
-          AutoGenerateColumns="False" CanUserAddRows="false" SelectionUnit="FullRow"
+          AutoGenerateColumns="False" CanUserAddRows="false" SelectionUnit="FullRow" IsReadOnly="true"
           Grid.Column="1" Grid.Row="2" Grid.ColumnSpan="3" MouseDoubleClick="MainDataGrid_MouseDoubleClick">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Дата" Width="80" Binding="{Binding Path=FormattedDate}"/>

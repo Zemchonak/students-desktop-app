@@ -18,6 +18,12 @@ namespace StudentsManagement.BusinessLogic.Services
             _mapper = mapper;
         }
 
+        public List<UserDto> GetUsersByGroupId(Guid groupId)
+        {
+            return _mapper.Map<List<UserDto>>(
+                _repository.GetAll(x => x.GroupId == groupId).ToList());
+        }
+
         public List<UserDto> GetUsersWithRole(UserRole role)
         {
             return _mapper.Map<List<UserDto>>(
@@ -44,6 +50,11 @@ namespace StudentsManagement.BusinessLogic.Services
             if (string.IsNullOrEmpty(entity.Email))
             {
                 throw new ValidationException(string.Format(Constants.CannotBeEmptyMessage, "Email"));
+            }
+
+            if(!entity.Email.Contains('@'))
+            {
+                throw new ValidationException(Constants.InvalidEmailPasswordMessage);
             }
 
             if (string.IsNullOrEmpty(entity.PasswordHash))

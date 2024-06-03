@@ -136,13 +136,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
         }
 
         private void MainDataGrid_SelectionDoubleClicked(object sender, MouseButtonEventArgs e)
-        {
-            var selectedItem = GetSelectedItem<AttestationDto>();
-            if(selectedItem == null)
-            {  return; }
-
-            var marksWindow = new AttestationMarksWindow();
-        }
+        { }
 
         private void HandleDelete(object sender, CustomEventArgs e)
         {
@@ -207,8 +201,8 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
 
             _curriculumUnits = _curriculumUnitsService.GetAll()
                 .Select(x => {
-                    var workType = workTypes.FirstOrDefault(w => w.Id == x.WorkTypeId).ShortName;
-                    var subject = subjects.FirstOrDefault(s => s.Id == x.SubjectId).ShortName;
+                    var workType = workTypes.FirstOrDefault(w => w.Id == x.WorkTypeId).FullName;
+                    var subject = subjects.FirstOrDefault(s => s.Id == x.SubjectId).FullName;
 
                     return new InfoModel(x.Id, $"{workType} по предмету {subject} ({x.Name})");
                 }).ToList();

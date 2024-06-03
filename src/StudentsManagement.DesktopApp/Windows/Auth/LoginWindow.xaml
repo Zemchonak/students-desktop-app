@@ -31,6 +31,6 @@
         <PasswordBox PasswordChar="*" x:Name="PasswordInput" Grid.Column="2" Grid.Row="4" />
 
         <Button x:Name="LoginButton" Content="Войти" Grid.Column="1" Grid.Row="6" Grid.ColumnSpan="2" Click="LoginButton_Click"/>
-        <Button x:Name="LoginAsAdmin" Content="Admin!" Grid.Column="2" Grid.Row="7" Grid.ColumnSpan="2" Margin="133,0,30,5" Click="LoginAsAdmin_Click"/>
+        <Button x:Name="LoginAsAdmin" Visibility="Collapsed" Content="Admin!" Grid.Column="2" Grid.Row="7" Grid.ColumnSpan="2" Margin="133,0,30,5" Click="LoginAsAdmin_Click"/>
     </Grid>
 </Window>

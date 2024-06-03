@@ -11,6 +11,10 @@
         public DateTime Date { get; set; }
         public string FormattedDate { get => Date.ToString("D"); }
 
+        // для особых двух отметок у зачёта
+        public bool UseBinaryMarks { get; set; }
+
+        // для личного кабинета студента
         public string MarkValue { get; set; }
     }
 }

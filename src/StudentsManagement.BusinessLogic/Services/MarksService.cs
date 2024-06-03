@@ -34,29 +34,35 @@ namespace StudentsManagement.BusinessLogic.Services
 
         public MarkDto GetMarkByUserIdInAttestation(Guid studentId, Guid attestationId)
         {
-            return _mapper.Map<MarkDto>(
-                _repository.GetAll(m => m.StudentId == studentId && m.AttestationId == attestationId));
+            var item = _repository.GetAll(m => m.StudentId == studentId && m.AttestationId == attestationId)
+                .FirstOrDefault();
+            return _mapper.Map<MarkDto>(item);
         }
 
-        public string GetMarkString(MarkDto mark)
+        public string GetMarkString(MarkDto mark, bool useBinaryMarks = false)
         {
-            if (mark == null || mark.Value == null)
+            if (mark == null)
             {
                 return AppLocalization.Marks.NotProvided;
             }
 
-            if (mark.NotAttended.Value != null)
+            if (mark.NotAttended.HasValue)
             {
                 return AppLocalization.Marks.NotAttended;
             }
 
-            if (mark.NotAllowed.Value != null)
+            if (mark.NotAllowed.HasValue)
             {
                 return AppLocalization.Marks.NotAllowed;
             }
 
-            if (mark.Value.Value != null)
+            if (mark.Value.HasValue)
             {
+                if(useBinaryMarks)
+                {
+                    return mark.Value.Value == 0 ? Marks.NotAccepted : Marks.Accepted;
+                }
+
                 return mark.Value.Value.ToString();
             }
 

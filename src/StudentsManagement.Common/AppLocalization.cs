@@ -45,6 +45,9 @@ namespace StudentsManagement.DesktopApp.Common
             public const string NotAttended = "неявка";
             public const string NotAllowed = "недопуск";
             public const string NotProvided = "не выставлена";
+
+            public const string Accepted = "зачтено";
+            public const string NotAccepted = "не зачтено";
         }
 
         public class Roles

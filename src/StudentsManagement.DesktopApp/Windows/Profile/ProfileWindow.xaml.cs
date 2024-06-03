@@ -5,6 +5,7 @@ using StudentsManagement.DataAccess.Entities;
 using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.Models;
 using StudentsManagement.DesktopApp.Windows.Attestations;
+using StudentsManagement.DesktopApp.Windows.Auth;
 using StudentsManagement.DesktopApp.Windows.CurriculumUnits;
 using StudentsManagement.DesktopApp.Windows.Groups;
 using StudentsManagement.DesktopApp.Windows.Marks;
@@ -32,7 +33,7 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
 
         private List<InfoModel> _teachers;
         private List<InfoModel> _groups;
-        private List<InfoModel> _curriculumUnits;
+        private List<(bool, InfoModel)> _curriculumUnits;
 
         private readonly IWorkTypesService _workTypesService;
         private readonly IGroupsService _groupsService;
@@ -43,7 +44,7 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
         private readonly IUsersService _usersService;
         private readonly IMarksService _marksService;
 
-        public ProfileWindow(Guid currentUserId, bool displayAdminDataButton,
+        public ProfileWindow(Guid currentUserId, bool userIsAdmin,
             ISpecialitiesService specialitiesService,
             ISubjectsService subjectsService,
             IGroupsService groupsService,
@@ -56,10 +57,11 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
         {
             InitializeComponent();
 
-            AdminDataButton.Visibility = displayAdminDataButton ? Visibility.Visible : Visibility.Hidden;
+            AdminDataButton.Visibility = userIsAdmin ? Visibility.Visible : Visibility.Collapsed;
 
             _currentUserId = currentUserId;
             _groupId = groupId;
+
             _specialitiesService = specialitiesService;
             _subjectsService = subjectsService;
             _groupsService = groupsService;
@@ -69,9 +71,9 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
             _usersService = usersService;
             _marksService = marksService;
 
-            if(_groupId == null)
+            if (_groupId == null) // преподаватель
             {
-                MainDataGrid.Columns[MainDataGrid.Columns.Count - 1].Visibility = Visibility.Hidden;
+                MainDataGrid.Columns[MainDataGrid.Columns.Count - 1].Visibility = Visibility.Hidden; // не отображать колонку оценок
             }
 
             UpdateEntities();
@@ -95,7 +97,7 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
                 .Select(x => new InfoModel(x.Id, x.ShortenedName)).ToList();
 
             List<GroupDto> groups;
-            if(isStudent)
+            if (isStudent)
             {
                 groups = new List<GroupDto>();
                 groups.Add(_groupsService.GetById(_groupId.Value));
@@ -107,39 +109,50 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
 
             _groups = groups.Select(x => new InfoModel(x.Id, x.Name)).ToList();
 
-            _curriculumUnits = _curriculumUnitsService.GetAll()
-                .Select(x =>
-                {
-                    var workType = workTypes.FirstOrDefault(w => w.Id == x.WorkTypeId).ShortName;
-                    var subject = subjects.FirstOrDefault(s => s.Id == x.SubjectId).ShortName;
+            var curriculumUnits = _curriculumUnitsService.GetAll().ToList();
 
-                    return new InfoModel(x.Id, $"{workType} по предмету {subject} ({x.Name})");
-                }).ToList();
-
-            _attestations = new List<AttestationDto>();
-
-            var attestations = isStudent ?
-                _groups.Select(g => _attestationsService.GetActualAttestationsByGroupId(_groupId.Value))
-                : _groups.Select(g => _attestationsService.GetActualAttestationsByTeacherId(_currentUserId));
-
-            foreach (var att in attestations)
+            _curriculumUnits = curriculumUnits.Select(x =>
             {
-                _attestations.AddRange(att);
+                var workType = workTypes.FirstOrDefault(w => w.Id == x.WorkTypeId);
+                var subject = subjects.FirstOrDefault(s => s.Id == x.SubjectId).FullName;
+                var isBinaryMark = workType.FullName == "Зачёт";
+
+                return (isBinaryMark, new InfoModel(x.Id, $"{workType.ShortName} по предмету {subject} ({x.Name})"));
+            }).ToList();
+
+
+            if (isStudent)
+            {
+                _attestations = new List<AttestationDto>();
+
+                var attestations = _groups.Select(g => _attestationsService.GetActualAttestationsByGroupId(_groupId.Value));
+
+                foreach (var att in attestations)
+                {
+                    _attestations.AddRange(att);
+                }
+            }
+            else
+            {
+                _attestations = _attestationsService.GetActualAttestationsByTeacherId(_currentUserId);
             }
 
             _attestations = _attestations.OrderBy(x => x.Date).ToList();
 
             foreach (var att in _attestations)
             {
+                var curriculumInfo = _curriculumUnits.FirstOrDefault(u => u.Item2.Id == att.CurriculumUnitId);
+
                 att.TeacherInfo = _teachers.FirstOrDefault(t => t.Id == att.TeacherId).Info;
-                att.CurriculutUnitInfo = _curriculumUnits.FirstOrDefault(u => u.Id == att.CurriculumUnitId).Info;
+                att.CurriculutUnitInfo = curriculumInfo.Item2.Info;
                 att.GroupInfo = _groups.FirstOrDefault(g => g.Id == att.GroupId).Info;
 
-                if(isStudent && att.Date.Date >= DateTime.Now.Date.AddMonths(-5))
+                if (isStudent && att.Date.Date >= DateTime.Now.Date.AddMonths(-5))
                 {
                     // дата аттестации в пределах последних 5 месяцев
                     att.MarkValue = GetMarkValue(_currentUserId, att.Id);
                 }
+                att.UseBinaryMarks = curriculumInfo.Item1;
             }
         }
 
@@ -215,11 +228,39 @@ namespace StudentsManagement.DesktopApp.Windows.Profile
 
         private void MainDataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if(_groupId != null)
+            if (_groupId == null)
             {
-                var window = new AttestationMarksWindow();
+                var selectedAttestation = GetSelectedItem<AttestationDto>();
+                if (selectedAttestation == null)
+                    return;
+
+                var window = new AttestationMarksWindow(selectedAttestation.UseBinaryMarks,
+                    selectedAttestation, _groupsService, _usersService, _marksService);
                 window.Show();
             }
         }
+
+        private void ChangePasswordMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            var window = new ChangePasswordWindow(_currentUserId, _usersService);
+            window.Show();
+        }
+
+
+        private T GetSelectedItem<T>()
+            where T : class, IDto
+        {
+            var selectedItem = MainDataGrid.SelectedItem as T;
+
+            if (selectedItem == null)
+            {
+                MessageBox.Show(
+                    AppLocalization.SelectSomethingMessageText,
+                    AppLocalization.ErrorMessageText);
+            }
+
+            return selectedItem;
+        }
+
     }
 }

@@ -63,7 +63,7 @@ namespace StudentsManagement.DesktopApp.Windows.Attestations
             GroupComboBox.SelectedIndex = _groups.FindIndex(x => x.Id == entity.GroupId);
             UnitComboBox.SelectedIndex = _curriculumUnits.FindIndex(x => x.Id == entity.CurriculumUnitId);
 
-            DatePicker.SelectedDate = DateTime.Now;
+            DatePicker.SelectedDate = entity.Date;
         }
 
         private AttestationDto ParseForm()

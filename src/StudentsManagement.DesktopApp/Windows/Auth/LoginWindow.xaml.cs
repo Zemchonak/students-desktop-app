@@ -64,11 +64,6 @@ namespace StudentsManagement.DesktopApp.Windows.Auth
 
         private void LoginAsAdmin_Click(object sender, RoutedEventArgs e)
         {
-            // TODO REMOVE THIS WINDOW
-            EmailInput.Text = "admin@ya.ru";
-            PasswordInput.Password = "123456_Aa";
-
-            LoginButton_Click(sender, e);
         }
     }
 }

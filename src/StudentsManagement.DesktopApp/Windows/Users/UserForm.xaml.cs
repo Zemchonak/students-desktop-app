@@ -105,6 +105,15 @@ namespace StudentsManagement.DesktopApp.Windows.Users
             }
             userDto.FirstName = FirstNameInput.Text;
 
+            if (string.IsNullOrEmpty(MiddleNameInput.Text))
+            {
+                MessageBox.Show(
+                    string.Format(AppLocalization.IncorrectValueText, AppLocalization.UserFields.MiddleName),
+                    AppLocalization.ErrorMessageText);
+                return null;
+            }
+            userDto.MiddleName = MiddleNameInput.Text;
+
             if (string.IsNullOrEmpty(LastNameInput.Text))
             {
                 MessageBox.Show(

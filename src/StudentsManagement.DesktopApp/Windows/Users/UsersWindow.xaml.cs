@@ -3,6 +3,8 @@ using StudentsManagement.BusinessLogic.Services;
 using StudentsManagement.Common.Enums;
 using StudentsManagement.DesktopApp.Common;
 using StudentsManagement.DesktopApp.EventHandlers;
+using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Windows;
 
@@ -60,7 +62,33 @@ namespace StudentsManagement.DesktopApp.Windows.Users
 
         private void DeleteSelected_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                var selectedUser = GetSelectedItem<UserDto>();
+                if (selectedUser == null)
+                    return;
 
+                var form = new DeleteConfirmation(selectedUser.Id,
+                    new List<string>
+                    {
+                        $"Пользователь: {selectedUser.ShortenedName}",
+                        $"Роль: {selectedUser.RoleName}"
+                    });
+
+                form.OnConfirm += HandleDelete;
+
+                form.Show();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void HandleDelete(object sender, CustomEventArgs e)
+        {
+            _usersService.Delete(e.Id);
+            UpdateDatagrid();
         }
 
         private void HandleChanges(object sender, CustomEventArgs e)
